@@ -1,11 +1,8 @@
 // Pure model for the Hunt section: anatomy profiles, stage text, choreography, plan-view geometry.
 // No DOM access. All lengths in units of the crocodile's total length L unless noted.
 
-export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-export const lerp = (a, b, t) => a + (b - a) * t;
-export const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
-export const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-export const easeOut = t => 1 - Math.pow(1 - t, 3);
+import { clamp, lerp, seg, ease, easeOut } from "./math.mjs";
+export { clamp, lerp, seg, ease, easeOut };
 
 // ---------- side profile (u: 0 = snout tip, 1 = tail tip) ----------
 // top/bot are offsets from the body's midline; negative = up.

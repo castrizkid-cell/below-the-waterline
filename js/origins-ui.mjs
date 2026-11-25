@@ -2,8 +2,9 @@
 import { SPAN, PERIODS, EXTINCTIONS, SPINE, SPECIES, CROC_TREE, scale, periodAt, formatMa, ticks, layoutBranches, layoutTree } from "./origins.mjs";
 
 const NS = "http://www.w3.org/2000/svg";
+let D = null, DEFER = null; // document + timer, injected by mount()
 function el(tag, attrs = {}, parent, text) {
-  const n = document.createElementNS(NS, tag);
+  const n = D.createElementNS(NS, tag);
   for (const k in attrs) n.setAttribute(k, attrs[k]);
   if (text != null) n.textContent = text;
   if (parent) parent.appendChild(n);
@@ -15,7 +16,7 @@ const fmtSpan = b => b.living
 
 /* ---------------- Deep-time tree ---------------- */
 function deepTree() {
-  const svg = document.getElementById("og-tree");
+  const svg = D.getElementById("og-tree");
   if (!svg) return;
   const { rows, spineRow } = layoutBranches();
   const W = 1200, X0 = 26, X1 = 948, top = 74, rowH = 30;
@@ -96,7 +97,7 @@ function deepTree() {
   svg.addEventListener("pointerleave", () => scr.setAttribute("opacity", 0));
 
   // card
-  const card = { when: document.getElementById("ogc-when"), name: document.getElementById("ogc-name"), who: document.getElementById("ogc-who"), text: document.getElementById("ogc-text"), box: document.getElementById("og-card") };
+  const card = { when: D.getElementById("ogc-when"), name: D.getElementById("ogc-name"), who: D.getElementById("ogc-who"), text: D.getElementById("ogc-text"), box: D.getElementById("og-card") };
   const THREAD = {
     when: "≈252 Ma to today · unbroken",
     name: "The line to the Nile crocodile",
@@ -110,7 +111,7 @@ function deepTree() {
     svg.classList.toggle("focus", !!item.b);
     const d = item.b ? { when: (item.b.first < item.b.from ? `Splits off ≈${item.b.from} Ma · fossils ` : "") + fmtSpan(item.b), name: item.b.name, who: item.b.who, text: item.b.text } : THREAD;
     card.box.classList.add("out");
-    setTimeout(() => {
+    DEFER(() => {
       card.when.textContent = d.when; card.name.textContent = d.name; card.who.textContent = d.who; card.text.textContent = d.text;
       card.box.classList.remove("out");
     }, focus ? 0 : 180);
@@ -125,7 +126,7 @@ function deepTree() {
 
 /* ---------------- Crocodylus cladogram ---------------- */
 function clade() {
-  const svg = document.getElementById("og-clade");
+  const svg = D.getElementById("og-clade");
   if (!svg) return;
   const { tips, nodes } = layoutTree(CROC_TREE);
   const W = 900, X0 = 150, X1 = 520, top = 40, rowH = 31;
@@ -158,7 +159,7 @@ function clade() {
     }
   }
 
-  const card = { box: document.getElementById("og-sp"), name: document.getElementById("ogs-name"), latin: document.getElementById("ogs-latin"), where: document.getElementById("ogs-where"), len: document.getElementById("ogs-len"), bar: document.getElementById("ogs-bar"), fact: document.getElementById("ogs-fact") };
+  const card = { box: D.getElementById("og-sp"), name: D.getElementById("ogs-name"), latin: D.getElementById("ogs-latin"), where: D.getElementById("ogs-where"), len: D.getElementById("ogs-len"), bar: D.getElementById("ogs-bar"), fact: D.getElementById("ogs-fact") };
   const groups = tips.map(t => {
     const s = SPECIES[t.id], y = Y(t.y);
     const g = el("g", { class: "c-tip" + (t.id === "niloticus" ? " nile" : ""), tabindex: 0, role: "button", "aria-label": `${s.common}, ${s.latin}` }, svg);
@@ -172,7 +173,7 @@ function clade() {
     const s = SPECIES[id];
     groups.forEach(o => o.g.classList.toggle("on", o.id === id));
     card.box.classList.add("out");
-    setTimeout(() => {
+    DEFER(() => {
       card.name.textContent = s.common; card.latin.textContent = s.latin; card.where.textContent = s.where;
       card.len.textContent = `up to ≈${s.len} m`; card.bar.style.setProperty("--w", (s.len / 6.3 * 100).toFixed(1) + "%");
       card.fact.textContent = s.fact; card.box.classList.remove("out");
@@ -186,5 +187,4 @@ function clade() {
   select("niloticus");
 }
 
-deepTree();
-clade();
+export function mount({ doc = globalThis.document, defer = (f, ms) => setTimeout(f, ms) } = {}) { D = doc; DEFER = defer; deepTree(); clade(); }

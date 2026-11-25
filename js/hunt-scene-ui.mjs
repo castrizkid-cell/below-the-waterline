@@ -1,10 +1,19 @@
 // Canvas renderer + scroll wiring for the Hunt scene. Geometry and choreography live in hunt-model.mjs.
-import { STAGES, SCENE, pose, sideAt, mouthAt, clamp, lerp, seg } from "./hunt-model.mjs";
+import { STAGES, SCENE, pose, sideAt, mouthAt } from "./hunt-model.mjs";
+import { clamp, lerp, seg, hash01 } from "./math.mjs";
+import { mulberry32 } from "./rng.mjs";
+import { reducedMotion } from "./dom.mjs";
 
-const RM = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+let RM = false; // set by mount()
 const TAU = Math.PI * 2;
 // deterministic noise
-const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const rnd = hash01;
+// Path2D comes from the environment (set by mount, or passed as o.Path2D) so drawing runs against a fake canvas.
+let PATH = null;
+const newPath = o => new ((o && o.Path2D) || PATH || globalThis.Path2D)();
+// 2D affine matrix helpers ({a,b,c,d,e,f}), so nothing depends on DOMPoint/DOMMatrix.
+export const applyM = (m, x, y) => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f];
+export const invertM = m => { const det = m.a * m.d - m.b * m.c; return { a: m.d / det, b: -m.b / det, c: -m.c / det, d: m.a / det, e: (m.c * m.f - m.d * m.e) / det, f: (m.b * m.e - m.a * m.f) / det }; };
 
 /* ================= crocodile, side view, facing right ================= */
 function drawCroc(ctx, o, anchors) {
@@ -65,7 +74,7 @@ function drawCroc(ctx, o, anchors) {
   leg(.47, true, true); leg(.275, false, true);
 
   // ---- body (u .18 → 1) ----
-  const body = new Path2D();
+  const body = newPath(o);
   body.moveTo(X(.18), Y(.18, 0));
   for (let i = Math.round(.18 * N); i <= N; i++) { const u = i / N; body.lineTo(X(u), Y(u, 0)); }
   for (let i = N; i >= Math.round(.18 * N); i--) { const u = i / N; body.lineTo(X(u), Y(u, 1)); }
@@ -186,7 +195,7 @@ function drawCroc(ctx, o, anchors) {
 
   if (anchors) {
     const m = ctx.getTransform();
-    const pt = (x, y) => { const p = new DOMPoint(x, y).matrixTransform(m); return [p.x, p.y]; };
+    const pt = (x, y) => applyM(m, x, y);
     anchors.eye = pt(X(.148), Y(.148, .2)); anchors.jaw = pt(X(.07), Y(.07, .75)); anchors.throat = pt(X(.2), Y(.2, .8));
     anchors.tail = pt(X(.8), Y(.8, .4)); anchors.snout = pt(X(.01), Y(.01, .3)); anchors.body = pt(X(.38), Y(.38, .2));
   }
@@ -219,7 +228,7 @@ function drawGnu(ctx, o) {
   };
   drawLeg(legs[0]); drawLeg(legs[1]);
   // body
-  const body = new Path2D();
+  const body = newPath(o);
   body.moveTo(...P(-.1, -.66));
   body.bezierCurveTo(...P(-.11, -.55), ...P(-.06, -.49), ...P(.02, -.48));
   body.bezierCurveTo(...P(.25, -.44), ...P(.55, -.45), ...P(.78, -.5));
@@ -313,7 +322,7 @@ function paintBackground(ctx) {
 function paintBank(ctx) {
   const { W, H, WY } = SCENE;
   // near bank: mud slope that runs from the riverbed up past the waterline
-  const bank = new Path2D();
+  const bank = newPath();
   bank.moveTo(640, H); bank.bezierCurveTo(760, 520, 860, 380, 925, WY + 4); bank.bezierCurveTo(955, 282, 985, 268, 1030, 266); bank.lineTo(W + 2000, 258); bank.lineTo(W + 2000, H + 500); bank.lineTo(640, H + 500); bank.closePath();
   let g = ctx.createLinearGradient(900, 250, 760, 620); g.addColorStop(0, "#56452c"); g.addColorStop(.25, "#3d3120"); g.addColorStop(1, "#18140c");
   ctx.fillStyle = g; ctx.fill(bank);
@@ -401,40 +410,41 @@ function callout(ctx, p, text, dx, dy, a) {
 }
 
 /* ================= wiring ================= */
-export function mountHunt() {
-  const track = document.getElementById("hunt-track"), cv = document.getElementById("hunt-c");
+export function mount({ doc = globalThis.document, env = globalThis, now = () => performance.now(), raf = f => requestAnimationFrame(f), rng = mulberry32(7), defer = (f, ms) => setTimeout(f, ms) } = {}) {
+  RM = reducedMotion(env); PATH = env.Path2D || null;
+  const track = doc.getElementById("hunt-track"), cv = doc.getElementById("hunt-c");
   if (!track || !cv) return;
-  const lis = [...document.querySelectorAll("#stages li")];
-  const romanEl = document.getElementById("h-roman"), bodyEl = document.getElementById("h-body");
+  const lis = [...doc.querySelectorAll("#stages li")];
+  const romanEl = doc.getElementById("h-roman"), bodyEl = doc.getElementById("h-body");
   const { W, H, WY, L, M } = SCENE;
   let bgCanvas = null, bgKey = "";
   const ripples = new Ripples(), splash = [];
-  let cur = -1, last = performance.now(), T = 0, nextRipple = 0;
+  let cur = -1, last = now(), T = 0, nextRipple = 0;
 
   function setStage(i) {
     if (i === cur) return; cur = i;
     lis.forEach((li, k) => li.classList.toggle("on", k === i));
     [romanEl, bodyEl].forEach(e => e.classList.add("out"));
-    setTimeout(() => {
+    defer(() => {
       const st = STAGES[i];
       romanEl.textContent = st.n;
       bodyEl.innerHTML = `<p class="h-kicker">${st.t}</p><h3>${st.h}</h3><p>${st.p}</p><p class="h-note">${st.note}</p>`;
       [romanEl, bodyEl].forEach(e => e.classList.remove("out"));
     }, RM ? 0 : 180);
   }
-  const progress = () => { const r = track.getBoundingClientRect(), span = r.height - innerHeight; return span <= 0 ? 0 : clamp(-r.top / span, 0, 1); };
-  const visible = () => { const r = track.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+  const progress = () => { const r = track.getBoundingClientRect(), span = r.height - env.innerHeight; return span <= 0 ? 0 : clamp(-r.top / span, 0, 1); };
+  const visible = () => { const r = track.getBoundingClientRect(); return r.bottom > 0 && r.top < env.innerHeight; };
 
   function frame(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    requestAnimationFrame(frame);
+    raf(frame);
     if (!visible()) return;
     T += RM ? 0 : dt;
     const p = progress(), s = Math.min(6.999, p * 7);
     setStage(Math.floor(s));
     lis.forEach((li, k) => li.querySelector("b").style.transform = `scaleX(${clamp(s - k, 0, 1)})`);
 
-    const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
+    const r = cv.getBoundingClientRect(), d = Math.min(env.devicePixelRatio || 1, 2);
     const cw = Math.max(1, Math.round(r.width * d)), ch = Math.max(1, Math.round(r.height * d));
     if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
     const ctx = cv.getContext("2d");
@@ -443,13 +453,13 @@ export function mountHunt() {
     const ox = (r.width - W * sc) / 2, oy = (r.height - H * sc) * .3;
     const key = `${cw}x${ch}`;
     if (bgKey !== key) {
-      bgKey = key; bgCanvas = document.createElement("canvas"); bgCanvas.width = cw; bgCanvas.height = ch;
+      bgKey = key; bgCanvas = doc.createElement("canvas"); bgCanvas.width = cw; bgCanvas.height = ch;
       const b = bgCanvas.getContext("2d"); b.setTransform(d * sc, 0, 0, d * sc, d * ox, d * oy); paintBackground(b); paintBank(b);
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cw, ch); ctx.drawImage(bgCanvas, 0, 0);
     ctx.setTransform(d * sc, 0, 0, d * sc, d * ox, d * oy);
-    const base = ctx.getTransform(), inv = base.inverse();
-    const toScene = q => q && (() => { const p = new DOMPoint(q[0], q[1]).matrixTransform(inv); return [p.x, p.y]; })();
+    const inv = invertM(ctx.getTransform());
+    const toScene = q => q && applyM(inv, q[0], q[1]);
 
     const { c, g, c2, fx } = pose(s, T);
     // second crocodile (behind)
@@ -460,9 +470,9 @@ export function mountHunt() {
     drawCroc(ctx, { L, x: c.x, y: c.y, pitch: c.pitch, jaw: c.jaw, roll: c.roll, limbs: c.limbs, swim: c.swim, eye: c.eye, membrane: c.membrane, tailKick: c.tailKick, T }, anchors);
     // re-draw the wildebeest head over the jaws during the strike so the grip reads
     fx.bx = gm.mx; fx.by = Math.max(gm.my, WY + 20); fx.sx = c.x - 120; fx.sy = c.y + 10;
-    if (fx.ripple && T > nextRipple && !RM) { ripples.add(gm.mx, 60, 2.6); nextRipple = T + 1.1 + Math.random(); }
-    if (s < 1 && T > nextRipple - .5 && !RM && Math.random() < dt * .5) ripples.add(c.x - .14 * L, 40, 2.2);
-    if (fx.splash > .2 && !RM && splash.length < 140) for (let i = 0; i < 6; i++) splash.push({ x: c.x - 40 + Math.random() * 140, y: WY, vx: (Math.random() - .25) * 220, vy: -150 - Math.random() * 330, t: 0, r: .6 + Math.random() * 1.6 });
+    if (fx.ripple && T > nextRipple && !RM) { ripples.add(gm.mx, 60, 2.6); nextRipple = T + 1.1 + rng(); }
+    if (s < 1 && T > nextRipple - .5 && !RM && rng() < dt * .5) ripples.add(c.x - .14 * L, 40, 2.2);
+    if (fx.splash > .2 && !RM && splash.length < 140) for (let i = 0; i < 6; i++) splash.push({ x: c.x - 40 + rng() * 140, y: WY, vx: (rng() - .25) * 220, vy: -150 - rng() * 330, t: 0, r: .6 + rng() * 1.6 });
     paintWater(ctx, T, ripples, fx, RM ? 0 : dt);
     // splash
     for (let i = splash.length - 1; i >= 0; i--) { const q = splash[i]; q.t += dt; q.vy += 700 * dt; q.x += q.vx * dt; q.y += q.vy * dt; if (q.y > WY + 4 || q.t > 2) { splash.splice(i, 1); continue; } ctx.strokeStyle = `rgba(245,232,200,${.7 - q.t * .3})`; ctx.lineWidth = q.r; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(q.x - q.vx * .018, q.y - q.vy * .018); ctx.stroke(); }
@@ -485,6 +495,7 @@ export function mountHunt() {
     ctx.fillRect(40, H - 26, M, 1); ctx.fillRect(40, H - 31, 1, 10); ctx.fillRect(40 + M, H - 31, 1, 10); ctx.fillText("1 M · TO SCALE", 48 + M, H - 22);
     void fitW;
   }
-  requestAnimationFrame(frame);
+  raf(frame);
 }
-mountHunt();
+
+export { drawCroc, drawGnu, paintWater, Ripples, callout };

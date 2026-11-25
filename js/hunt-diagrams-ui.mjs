@@ -1,12 +1,13 @@
 // Renders the plan-view crocodiles and the year ring for the Hunt field notes.
 import { planCroc, YEAR, MONTHS, arc, monthAngle } from "./hunt-model.mjs";
+import { hash01 as rnd } from "./math.mjs";
 
 const NS = "http://www.w3.org/2000/svg";
-const el = (tag, attrs, parent, text) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; parent && parent.appendChild(n); return n; };
-const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+let D = null; // document, injected by mount()
+const el = (tag, attrs, parent, text) => { const n = D.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; parent && parent.appendChild(n); return n; };
 
 function crocs() {
-  document.querySelectorAll("g.pc").forEach(g => {
+  D.querySelectorAll("g.pc").forEach(g => {
     const n = k => parseFloat(g.dataset[k] || "0");
     const L = n("l") || 100, kh = n("kh"), kt = n("kt"), k = n("k");
     const pc = planCroc({ x: n("x"), y: n("y"), heading: n("h") * Math.PI / 180, L, legs: g.dataset.legs == null ? 1 : n("legs"),
@@ -21,13 +22,13 @@ function crocs() {
 }
 
 function scatter() {
-  const herd = document.getElementById("herd");
+  const herd = D.getElementById("herd");
   if (herd) for (let i = 0; i < 46; i++) {
     const t = i / 46, x = 140 + rnd(i) * 50 + Math.sin(t * 9) * 6, y = 168 - t * 150 - rnd(i + 3) * 6;
     el("ellipse", { cx: x.toFixed(1), cy: y.toFixed(1), rx: 2.6, ry: 4.6, transform: `rotate(${(rnd(i + 5) * 30 - 15).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})`, class: "w-herd" }, herd);
   }
   const fish = (id, n, x0, y0, w, h, ang) => {
-    const g = document.getElementById(id); if (!g) return;
+    const g = D.getElementById(id); if (!g) return;
     for (let i = 0; i < n; i++) {
       const x = x0 + rnd(i + 11) * w, y = y0 + rnd(i + 17) * h;
       el("path", { d: `M${x.toFixed(1)},${y.toFixed(1)}l6,-2.2l0,4.4z m-3,2.2l-3,-2l0,4z`, transform: `rotate(${ang + (rnd(i) - .5) * 30} ${x.toFixed(1)} ${y.toFixed(1)})`, class: "w-fish" }, g);
@@ -38,7 +39,7 @@ function scatter() {
 }
 
 function year() {
-  const svg = document.getElementById("year"); if (!svg) return;
+  const svg = D.getElementById("year"); if (!svg) return;
   const c = 170, R = 128;
   el("circle", { cx: c, cy: c, r: R, class: "y-ring" }, svg);
   MONTHS.forEach((m, i) => {
@@ -51,4 +52,4 @@ function year() {
   el("text", { x: c, y: c + 14, "text-anchor": "middle", class: "y-c2" }, svg, "Kenya–Tanzania");
 }
 
-crocs(); scatter(); year();
+export function mount({ doc = globalThis.document } = {}) { D = doc; crocs(); scatter(); year(); }

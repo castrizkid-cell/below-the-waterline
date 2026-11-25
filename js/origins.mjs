@@ -2,6 +2,8 @@
 // Ages are in millions of years ago (Ma), rounded. Where studies disagree we use a
 // middle value and say so in the text.
 
+import { groupThousands } from "./math.mjs";
+
 export const SPAN = [260, 0];
 
 export const PERIODS = [
@@ -144,7 +146,7 @@ export function periodAt(ma, periods = PERIODS) {
 
 export function formatMa(ma) {
   if (ma <= 0.0005) return "Today";
-  if (ma < 1) return `${Math.round(ma * 1000).toLocaleString("en")} thousand years ago`;
+  if (ma < 1) return `${groupThousands(ma * 1000)} thousand years ago`;
   if (ma < 10) return `${ma.toFixed(1)} million years ago`;
   return `${Math.round(ma)} million years ago`;
 }
