@@ -1,0 +1,3 @@
+#!/bin/sh
+# Convenience only: CI is the real gate (hooks can be skipped with --no-verify).
+exec npx --no-install commitlint --edit "$1"
