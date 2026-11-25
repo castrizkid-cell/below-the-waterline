@@ -389,12 +389,6 @@ section{position:relative}
 .after-line li::before{border-color:var(--c);background:color-mix(in srgb,var(--c) 30%,#060c0a)}
 .after-line b{color:color-mix(in srgb,var(--c) 70%,#fff)}
 
-/* full-bleed photo after hunt */
-.bleed{position:relative;margin:0}
-.bleed img{width:100%;height:min(88vh,62vw);min-height:340px;object-fit:cover;filter:saturate(.9)}
-.bleed figcaption{position:absolute;left:0;right:0;bottom:0;padding-block:5rem 1.5rem;background:linear-gradient(transparent,rgba(6,12,10,.85))}
-.bleed figcaption .wrap{display:flex;justify-content:space-between;gap:1rem 2rem;flex-wrap:wrap;align-items:end}
-.bleed figcaption p{font-size:var(--s1);max-width:38ch;line-height:1.35}
 .credit{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed)}
 .credit a{text-decoration:none;border-bottom:1px solid var(--line-2)}
 
@@ -669,36 +663,69 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .grow-cols li.gray{opacity:.28}
 #len{--track:linear-gradient(90deg,var(--iris) var(--pct,50%),var(--line) var(--pct,50%))}
 
-/* ---------- RIVERBANK (photo essay) ---------- */
-#bank{background:var(--deep)}
-.essay{display:grid;gap:clamp(1rem,2vw,1.5rem);grid-template-columns:repeat(12,minmax(0,1fr))}
-.shot{margin:0;grid-column:span 12;display:grid;gap:.6rem;align-content:start}
-.shot .img{overflow:hidden;background:var(--silt)}
-.shot img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s var(--ease),filter .6s}
-.shot:hover img{transform:scale(1.035)}
-.shot figcaption{display:grid;gap:.15rem}
-.shot figcaption p{font-size:.98rem;color:var(--bone);line-height:1.4}
-@media (min-width:820px){
-  .shot.a{grid-column:1/span 7}.shot.a .img{aspect-ratio:4/3}
-  .shot.b{grid-column:9/span 4;margin-top:8rem}.shot.b .img{aspect-ratio:3/4}
-  .shot.c{grid-column:2/span 5}.shot.c .img{aspect-ratio:1/1}
-  .shot.d{grid-column:7/span 6;margin-top:5rem}.shot.d .img{aspect-ratio:3/2}
-  .shot.e{grid-column:1/span 12}.shot.e .img{aspect-ratio:2.4/1}
-  .shot.f{grid-column:1/span 5;margin-top:3rem}.shot.f .img{aspect-ratio:4/5}
-  .shot.g{grid-column:7/span 6}.shot.g .img{aspect-ratio:4/3}
-}
-@media (max-width:819px){.shot .img{aspect-ratio:4/3}}
-
-/* ---------- LORE ---------- */
-#lore{background:var(--river)}
-.lore{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:0;border-top:1px solid var(--line)}
-.lore article{padding:1.75rem 1.75rem 2rem 0;border-bottom:1px solid var(--line);display:grid;gap:.7rem;align-content:start}
-.lore .verdict{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;width:max-content;padding:.25rem .5rem;border:1px solid}
-.lore .verdict.myth{color:var(--rust);border-color:var(--rust)}
-.lore .verdict.true{color:var(--ok);border-color:var(--ok)}
-.lore .verdict.legend{color:var(--warn);border-color:var(--warn)}
-.lore h3{font-size:2rem;letter-spacing:.01em}
-.lore p{color:var(--dim)}
+/* ---------- LORE: stories, checked ---------- */
+#lore{background:radial-gradient(110% 60% at 15% 0%,#14110a,var(--deep) 60%)}
+.lr-tiles{margin-bottom:clamp(4rem,8vw,6rem)}
+.lr-deck{display:grid;gap:2rem;grid-template-columns:1fr}
+@media (min-width:980px){.lr-deck{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:start}}
+.lr-card{--v:#e8e0cc;position:relative;border:1px solid var(--line-2);border-top:4px solid var(--v);background:linear-gradient(180deg,color-mix(in srgb,var(--v) 9%,#0a120f),#08100d 70%);padding:clamp(1.3rem,3vw,2.2rem);display:grid;gap:1.1rem;min-height:30rem;transition:border-color .4s,background .4s}
+.lr-top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--reed)}
+.lr-claim{font-family:var(--f-body);font-style:italic;font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1.2;color:var(--bone);max-width:30ch}
+.lr-you{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--v)}
+.lr-guess{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
+@media (max-width:620px){.lr-guess{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lr-g{appearance:none;border:1px solid var(--c);background:transparent;color:var(--c);font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:.9rem .6rem;cursor:pointer;transition:background .2s,color .2s,opacity .3s}
+.lr-g:hover:not(:disabled){background:var(--c);color:#0a0f0c}
+.lr-g:disabled{cursor:default;opacity:.28}
+.lr-g.answer{opacity:1;background:var(--c);color:#0a0f0c}
+.lr-g.picked:not(.answer){opacity:1;text-decoration:line-through}
+.lr-g:focus-visible{outline:2px solid var(--bone);outline-offset:2px}
+.lr-reveal{display:grid;gap:.6rem;min-height:9rem}
+.lr-verdict{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,5vw,4rem);line-height:.85;text-transform:uppercase;color:var(--v)}
+.lr-text{color:var(--bone);font-size:1.08rem;line-height:1.6;max-width:62ch}
+.lr-card.revealed .lr-verdict,.lr-card.revealed .lr-text{animation:lr-in .5s var(--ease)}
+@keyframes lr-in{from{opacity:0;transform:translateY(8px)}}
+.lr-nav{display:flex;gap:.5rem;justify-content:space-between}
+.lr-nav button[disabled]{opacity:.3;cursor:default}
+.hot-v{border-color:var(--v);color:var(--v)}
+.lr-side{display:grid;gap:1.2rem;align-content:start}
+.lr-score{font-family:var(--f-display);font-weight:700;font-size:1.7rem;line-height:1.05;text-transform:uppercase;color:var(--bone)}
+.lr-dots{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.5rem;max-width:300px}
+.lr-dot{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line-2);background:var(--c);cursor:pointer;transition:transform .2s}
+.lr-dot.cur{transform:scale(1.18);border-color:var(--bone)}
+.lr-dot.wrong{box-shadow:0 0 0 3px #060c0a,0 0 0 4.5px #e8e0cc}
+.lr-small{font-size:.92rem;color:var(--dim)}
+.lr-egypt{display:grid;gap:2rem;grid-template-columns:1fr}
+@media (min-width:980px){.lr-egypt{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center}}
+.lr-egypt-copy{display:grid;gap:1rem}
+.lr-egypt-copy p{color:var(--dim);line-height:1.6;font-size:1.05rem}
+.lr-egypt-copy p.first{color:var(--bone);font-size:1.2rem;line-height:1.5}
+.lr-mummy-fig{margin:0;display:grid;gap:.7rem;background:radial-gradient(80% 90% at 50% 40%,#2a2113,#100c07);border:1px solid rgba(201,164,106,.3);padding:1.4rem}
+#lr-mummy{width:100%;height:auto;display:block}
+.lr-l{transition:opacity .6s var(--ease)}
+#lr-unwrap{--track:linear-gradient(90deg,#c9a46a,#e6d2a0,#efe6cf)}
+.lr-steps{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#c9a46a}
+.lr-mummy-fig figcaption{display:grid;gap:.4rem;min-height:7.5rem}
+.lr-mummy-fig figcaption b{font-family:var(--f-display);font-weight:900;font-size:1.9rem;line-height:.9;text-transform:uppercase}
+.lr-mummy-fig figcaption span{color:var(--bone);line-height:1.55}
+.lr-places{display:grid;gap:1.5rem;grid-template-columns:1fr}
+@media (min-width:900px){.lr-places{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:start}}
+.lr-tabs{display:grid;gap:.5rem}
+.lr-tab{appearance:none;text-align:left;border:1px solid var(--line-2);border-left:4px solid var(--c);background:transparent;color:var(--bone);padding:1rem 1.1rem;cursor:pointer;display:grid;gap:.2rem;transition:background .2s}
+.lr-tab b{font-family:var(--f-display);font-weight:700;font-size:1.5rem;text-transform:uppercase;line-height:1}
+.lr-tab span{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--reed)}
+.lr-tab[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 16%,transparent)}
+.lr-tab:focus-visible{outline:2px solid var(--iris);outline-offset:2px}
+.lr-place{--c:#6fb3ad;border-top:4px solid var(--c);padding-top:1.2rem;display:grid;gap:.7rem}
+.lr-pond{width:100%;max-width:420px;height:auto}
+.lr-pond .pond{fill:color-mix(in srgb,var(--c) 22%,#16241f)}
+.lr-pond .pond-in{fill:color-mix(in srgb,var(--c) 14%,#0d1915)}
+.lr-pond .pc-mini{fill:#4e5230}
+.lr-pond .eye{fill:#f0c040}
+.lr-pond .ripple{fill:none;stroke:color-mix(in srgb,var(--c) 60%,#fff);stroke-width:1.2;opacity:.6}
+.lr-place h4{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,4vw,3.2rem);text-transform:uppercase;line-height:.9;margin:0;color:color-mix(in srgb,var(--c) 55%,#fff)}
+.lr-p-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--reed)}
+.lr-place p:last-child{color:var(--bone);font-size:1.08rem;line-height:1.6;max-width:60ch}
 
 /* ---------- FOOT ---------- */
 footer{background:var(--deep);padding-block:5rem 7rem;border-top:1px solid var(--line)}
@@ -713,8 +740,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
   .hunt-text{grid-template-columns:1fr;gap:.3rem;min-height:10.5em}
   .hunt-text .roman{font-size:2.4rem}
   .stages li{font-size:0;gap:0}
-    .lore article{padding-right:0}
-  .tl{grid-template-columns:1fr;gap:.3rem}
+      .tl{grid-template-columns:1fr;gap:.3rem}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -733,7 +759,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </button>
 
 <nav class="index" id="index" aria-label="Sections">
-  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
+  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#lore">Lore</a>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -990,10 +1016,6 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       </div>
     </div>
   </div>
-  <figure class="bleed">
-    <img class="rv" src="img/feast.jpg" alt="Several Nile crocodiles tearing at a wildebeest carcass in the brown water of the Mara River." width="1600" height="1066" loading="lazy">
-    <figcaption><div class="wrap"><p>Mara River crossing. Several crocodiles share one wildebeest. One holds while another rolls, so the carcass tears.</p><span class="credit">Arturo de Frias Marques · <a href="https://commons.wikimedia.org/wiki/File:Crocodile_Feast_AdF.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span></div></figcaption>
-  </figure>
 
   <div class="hx band">
     <div class="wrap">
@@ -1424,40 +1446,72 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
   </div>
 </section>
 
-<!-- ============ RIVERBANK ============ -->
-<section id="bank" class="band">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow">07 &nbsp;·&nbsp; Field photographs</p>
-      <h2 class="fade">Riverbank</h2>
-    </header>
-    <div class="essay">
-      <figure class="shot a"><div class="img rv"><img src="img/head.jpg" alt="Close-up of a Nile crocodile's head resting on wet sand, its eye half-closed." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Masai Mara, Kenya · 2024 · Diego Delso · <a href="https://commons.wikimedia.org/wiki/File:Cocodrilo_del_Nilo_(Crocodylus_niloticus),_reserva_natural_Mas%C3%A1i_Mara,_Kenia,_2024-05-20,_DD_70.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Look at the dark pits along the lips. Those are the pressure sensors.</p></figcaption></figure>
-      <figure class="shot b"><div class="img rv"><img src="img/jaws.jpg" alt="A Kenyan Nile crocodile basking with jaws wide open, rows of teeth visible." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Kenya · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Kenyan_crocodile_(Crocodylus_niloticus_pauciscutatus).jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Gaping. An open mouth lets heat escape. It isn't a threat.</p></figcaption></figure>
-      <figure class="shot c"><div class="img rv"><img src="img/zambezi.jpg" alt="A Nile crocodile lying low among rocks in the Zambezi river, with water around it." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Zambezi River · Bernard Gagnon · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_in_the_Zambezi.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Among the rocks, the outline disappears.</p></figcaption></figure>
-      <figure class="shot d"><div class="img rv"><img src="img/geese.jpg" alt="A Nile crocodile on a sandy bank with a group of Egyptian geese standing a few metres away." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Serengeti, Tanzania · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_(Crocodylus_niloticus)_and_Egyptian_geese_Serengeti.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Egyptian geese keep a careful distance on land. The crocodile hunts in water.</p></figcaption></figure>
-      <figure class="shot e"><div class="img rv"><img src="img/chobe.jpg" alt="A Nile crocodile resting in golden grass on the bank of the Chobe River, blue water behind." loading="lazy" width="1600" height="767"></div><figcaption><span class="credit">Chobe National Park, Botswana · 2018 · Diego Delso · <a href="https://commons.wikimedia.org/wiki/File:Cocodrilo_del_Nilo_(Crocodylus_niloticus),_parque_nacional_de_Chobe,_Botsuana,_2018-07-28,_DD_72.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>A July morning in the dry season. It basks to warm up after a cold night in the water.</p></figcaption></figure>
-      <figure class="shot f"><div class="img rv"><img src="img/juveniles.jpg" alt="Seven young Nile crocodiles spread across wet sand and shallow water at a river's edge." loading="lazy" width="1600" height="1200"></div><figcaption><span class="credit">Juveniles · Mark Jordahl · <a href="https://commons.wikimedia.org/wiki/File:Juvenile_Nile_Crocodiles_(14345392644).jpg" target="_blank" rel="noopener">CC BY 2.0</a></span><p>A crèche. Young from one nest stay together near the mother for weeks to months.</p></figcaption></figure>
-      <figure class="shot g"><div class="img rv"><img src="img/basking.jpg" alt="A Nile crocodile basking on green grass at the water's edge, its reflection in the water below." loading="lazy" width="1600" height="800"></div><figcaption><span class="credit">Mlilwane, Eswatini · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_(Crocodylus_niloticus)_Mlilwane_2.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Near the cold southern edge of the range, crocodiles spend more of the day basking.</p></figcaption></figure>
-    </div>
-  </div>
-</section>
-
 <!-- ============ LORE ============ -->
-<section id="lore" class="band">
+<section id="lore" class="band" aria-label="Lore: stories about crocodiles, checked">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">08 &nbsp;·&nbsp; Stories, checked</p>
+      <p class="eyebrow">07 &nbsp;·&nbsp; Stories, checked</p>
       <h2 class="fade">Lore</h2>
+      <p class="lede fade">People have told stories about this animal for as long as they have written anything down. Some were careful observations. Some were guesses that outlived the people who made them. A few are still open.</p>
     </header>
-    <div class="lore">
-      <article class="fade"><span class="verdict myth">Myth, probably</span><h3>The toothpick bird</h3><p>Herodotus wrote that a bird walks into the crocodile's open mouth to eat leeches. The Egyptian plover is often named. Nobody has reliably photographed or filmed it happening.</p></article>
-      <article class="fade"><span class="verdict true">True</span><h3>They fish as a team</h3><p>Crocodiles have been seen lining up across a channel or forming a semicircle to herd fish, each taking what swims past. At a large carcass, one anchors it while others roll.</p></article>
-      <article class="fade"><span class="verdict true">True</span><h3>Cave crocodiles</h3><p>In Ankarana, in northern Madagascar, crocodiles retreat into flooded caves during the dry season, sometimes far from daylight.</p></article>
-      <article class="fade"><span class="verdict true">True</span><h3>Saved by bad skin</h3><p>Lake Turkana's crocodiles have skin so full of bone plates that it was nearly worthless to hide hunters. In the 1960s a survey counted roughly 12,000 there, one of the densest populations ever recorded.</p></article>
-      <article class="fade"><span class="verdict legend">Legend</span><h3>Gustave</h3><p>A huge male in Burundi's Rusizi River and on the shores of Lake Tanganyika, often estimated at around 6 m. The many killings blamed on him have never been verified, and he hasn't been reliably seen in years.</p></article>
-      <article class="fade"><span class="verdict true">True</span><h3>Salt tolerance</h3><p>Salt glands on the tongue let Nile crocodiles live in estuaries like St Lucia in South Africa, and sometimes along the coast.</p></article>
+
+    <div class="nb-tiles lr-tiles">
+      <div class="nb-tile fade" style="--c:#d9b26f"><span class="k">First detailed account</span><b class="num">c. 450 BCE</b><span class="s">Herodotus, Histories, Book II</span></div>
+      <div class="nb-tile fade" style="--c:#c9a46a"><span class="k">Temple mummies</span><b>Thousands</b><span class="s">of crocodiles, from eggs to adults, offered to Sobek</span></div>
+      <div class="nb-tile fade" style="--c:#8fb36a"><span class="k">Claims checked</span><b class="num">12</b><span class="s">true, partly true, myth or unverified</span></div>
+      <div class="nb-tile fade" style="--c:#b48ad6"><span class="k">Still open</span><b>Gustave</b><span class="s">one legend nobody has settled</span></div>
     </div>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#d0683f">A</span><div><p class="eyebrow">Make your call</p><h3>Myth or true?</h3></div></div>
+      <div class="lr-deck">
+        <div class="lr-card" id="lr-card" aria-live="polite">
+          <div class="lr-top"><span class="lr-num" id="lr-num"></span><span class="lr-who" id="lr-who"></span></div>
+          <p class="lr-claim" id="lr-claim"></p>
+          <p class="lr-you" id="lr-you"></p>
+          <div class="lr-guess" id="lr-guess" role="group" aria-label="Your verdict"></div>
+          <div class="lr-reveal"><b class="lr-verdict" id="lr-verdict"></b><p class="lr-text" id="lr-text"></p></div>
+          <div class="lr-nav"><button type="button" class="nb-btn" id="lr-prev">← Previous</button><button type="button" class="nb-btn hot-v" id="lr-next">Next claim →</button></div>
+        </div>
+        <aside class="lr-side">
+          <p class="lr-score" id="lr-score"></p>
+          <div class="lr-dots" id="lr-dots" aria-label="All claims"></div>
+          <p class="nb-key lr-key"><span><i style="background:#8fb36a"></i>True</span><span><i style="background:#e2a83c"></i>Partly true</span><span><i style="background:#d0683f"></i>Myth</span><span><i style="background:#b48ad6"></i>Unverified</span></p>
+          <p class="lr-small">A ring marks a claim you got wrong. Sources for each verdict are listed at the foot of the page.</p>
+        </aside>
+      </div>
+    </article>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#c9a46a">B</span><div><p class="eyebrow">Egypt</p><h3>Sobek's crocodiles</h3></div></div>
+      <div class="lr-egypt">
+        <div class="lr-egypt-copy">
+          <p class="first">Sobek was the crocodile god of the Nile's waters, worshipped above all in the Faiyum, at Shedet, which the Greeks called Crocodilopolis, and at Kom Ombo, a double temple he shared with the falcon god Horus.</p>
+          <p>Herodotus wrote that at Thebes and around Lake Moeris one crocodile was kept tame and adorned with earrings of glass and gold and bracelets on its forefeet, and that it was mummified when it died. Visitors to Shedet in Roman times fed the sacred crocodile cakes, meat and wine.</p>
+          <p>Ordinary crocodiles were mummified and offered by the thousand. Drag the slider to unwrap one.</p>
+        </div>
+        <figure class="lr-mummy-fig">
+          <svg id="lr-mummy" role="img" aria-label="A crocodile mummy in three layers: patterned linen wrappings, reused papyri, and the skeleton inside."></svg>
+          <label class="eyebrow" for="lr-unwrap">Unwrap</label>
+          <input type="range" id="lr-unwrap" min="0" max="2" step="1" value="0">
+          <div class="lr-steps"><span>Linen</span><span>Papyri</span><span>Crocodile</span></div>
+          <figcaption><b id="lr-layer"></b><span id="lr-layer-text"></span></figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#6fb3ad">C</span><div><p class="eyebrow">Living with them</p><h3>Sacred ponds</h3></div></div>
+      <div class="lr-places">
+        <div class="lr-tabs" id="lr-places" role="group" aria-label="Choose a place"></div>
+        <div class="lr-place" id="lr-place" aria-live="polite">
+          <svg class="lr-pond" viewBox="0 0 300 120" aria-hidden="true"><ellipse cx="150" cy="66" rx="140" ry="44" class="pond"/><ellipse cx="150" cy="66" rx="112" ry="32" class="pond-in"/><g class="pc-mini"><ellipse cx="128" cy="62" rx="40" ry="6"/><ellipse cx="88" cy="62" rx="10" ry="5"/><circle cx="166" cy="59" r="2.6" class="eye"/></g><path d="M40 66q10-5 20 0t20 0M210 74q10-5 20 0t20 0" class="ripple"/></svg>
+          <h4 id="lr-p-name"></h4>
+          <p class="lr-p-meta"><span id="lr-p-where"></span> · <span id="lr-p-sp"></span></p>
+          <p id="lr-p-text"></p>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -1494,18 +1548,18 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <li>Dinets, V. (2015). Apparent coordination and collaboration in cooperatively hunting crocodilians. <em>Ethology Ecology &amp; Evolution</em> 27.</li>
           <li>Manolis, S.C. &amp; Stevenson, C. (eds) (2010). <em>Crocodiles: Status Survey and Conservation Action Plan</em>, 3rd ed. IUCN/SSC Crocodile Specialist Group.</li>
           <li>Britton, A. Crocodilian species accounts, crocodilian.com. Lolong measured at 6.17 m and weighed at 1,075 kg, 2011.</li>
+          <li>Shaner, D.M. &amp; Vliet, K.A. (2007). Crocodile tears: and thei(r) cause. <em>BioScience</em> 57.</li>
+          <li>Dinets, V., Britton, A. &amp; Shirley, M. (2014). Climbing behaviour in extant crocodilians. <em>Herpetology Notes</em> 7.</li>
+          <li>Kelly, M.L. et al. (2015). Unihemispheric sleep in crocodilians? <em>J. Exp. Biol.</em> 218.</li>
+          <li>Strabo, <em>Geography</em>, Book XVII, on the sacred crocodile at Arsinoe (Shedet).</li>
+          <li>Grenfell, B.P., Hunt, A.S. &amp; Smyly, J.G. (1902). <em>The Tebtunis Papyri</em>, Part I.</li>
           <li>Herodotus, <em>Histories</em>, Book II.</li>
         </ol>
       </div>
       <div>
         <h2>Photographs</h2>
         <ul>
-          <li>Diego Delso, Masai Mara and Chobe. CC BY-SA 4.0</li>
-          <li>Arturo de Frias Marques, Mara River feast. CC BY-SA 4.0</li>
-          <li>Charles J. Sharp, Kenya, Serengeti, Mlilwane. CC BY-SA 4.0</li>
-          <li>Bernard Gagnon, Zambezi. CC BY-SA 4.0</li>
           <li>La Ferme aux Crocodiles, hatchling. CC BY-SA 3.0</li>
-          <li>Mark Jordahl, juveniles. CC BY 2.0</li>
           <li>All via Wikimedia Commons.</li>
         </ul>
         <p class="credit" style="margin-top:2rem">Figures are rounded. Where surveys disagree, ranges are given.</p>
