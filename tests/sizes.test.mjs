@@ -76,3 +76,23 @@ test("size ranking matches the literature: saltwater > Nile > Orinoco > American
   assert.ok(t("niloticus") >= t("acutus"));
   assert.deepEqual(order("length").slice(0, 4), ["porosus", "niloticus", "intermedius", "acutus"]);
 });
+
+test("skin: every species has colouring and a matching pattern", async () => {
+  const { SKIN, crossbands, spots, teeth, topEdge, eyeAt, scutes } = await import("../js/sizes.mjs");
+  assert.deepEqual(Object.keys(SKIN).sort(), [...IDS].sort());
+  for (const [id, k] of Object.entries(SKIN)) {
+    for (const c of [k.back, k.flank, k.belly, k.band]) assert.match(c, /^#[0-9a-f]{6}$/, id);
+    assert.ok(["bands", "blotch", "speckle", "plain"].includes(k.pattern));
+    assert.ok(k.note.length > 20);
+  }
+  assert.equal(SKIN.rhombifer.pattern, "speckle"); // the Cuban crocodile's yellow speckles
+  assert.equal((crossbands(0, 50, 500, 10).match(/Z/g) || []).length, 10);
+  assert.equal(crossbands(0, 50, 500, 0), "");
+  assert.equal(spots(0, 50, 500, "speckle").length, 140);
+  assert.deepEqual(spots(0, 50, 500, "blotch", 3), spots(0, 50, 500, "blotch", 3)); // deterministic
+  assert.equal(spots(0, 50, 500, "plain").length, 0);
+  assert.ok(teeth(0, 50, 500).split("Z").length > 6);
+  assert.ok(scutes(0, 50, 500).length > 60);
+  assert.ok(topEdge(0, 50, 500).startsWith("M"));
+  const [ex, ey] = eyeAt(0, 50, 500); assert.ok(ex > 400 && ey < 50);
+});

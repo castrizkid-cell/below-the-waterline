@@ -379,8 +379,12 @@ section{position:relative}
 .sz-row:hover .hit,.sz-row:focus-visible .hit{fill:rgba(29,31,22,.05)}
 .sz-row .typ{fill:rgba(154,65,35,.13);stroke:rgba(154,65,35,.35);stroke-width:.8;stroke-dasharray:3 3}
 .sz-row .ink,#sz-balance .ink,.sz-head .ink,#sz-over .ink{fill:var(--ink)}
-.sz-row .detail{fill:none;stroke:var(--paper);stroke-width:1.1;opacity:.55;stroke-linecap:round}
-.sz-row .eye{fill:var(--paper)}
+.specimen .sheen{fill:none;stroke:rgba(255,246,214,.55);stroke-width:1.1;stroke-linecap:round}
+.specimen .jawline{fill:none;stroke:rgba(26,18,8,.75);stroke-width:1;stroke-linecap:round}
+.specimen .tooth{fill:#f3ead0}
+.scale-cell{fill:none;stroke:rgba(12,10,4,.2);stroke-width:.6}
+.head-rim{fill:none;stroke:rgba(20,16,8,.5);stroke-width:.8}
+.sz-row.short .specimen{filter:grayscale(.85)}
 .sz-row .body{transition:opacity .35s}
 .sz-row.short .body{opacity:.22}
 .sz-row .rec{stroke:var(--rust-ink);stroke-width:1.2}
@@ -389,7 +393,7 @@ section{position:relative}
 .sz-row .n-latin{font-family:var(--f-body);font-style:italic;font-size:13px;fill:var(--pencil)}
 .sz-row.sel .n-common{fill:var(--rust-ink);font-weight:500}
 .sz-row.sel .hit{fill:rgba(154,65,35,.07)}
-.sz-row.ref .ink{fill:var(--rust-ink);opacity:.85}
+.sz-row.ref .ink{fill:#8f8672}
 .sz-tape{cursor:ew-resize;outline:none}
 .sz-tape .t-line{stroke:var(--rust-ink);stroke-width:2}
 .sz-tape .t-tab{fill:var(--rust-ink)}
@@ -417,6 +421,9 @@ section{position:relative}
 .sz-dl div{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(29,31,22,.18)}
 .sz-dl dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--pencil)}
 .sz-dl dd{margin:0;font-family:var(--f-display);font-weight:700;font-size:1.6rem;color:var(--ink)}
+.sz-skin{display:flex;gap:.8rem;align-items:center;color:var(--ink);font-size:.98rem;line-height:1.45}
+.sz-swatch{display:inline-flex;flex:none;border:1px solid rgba(29,31,22,.4)}
+.sz-swatch i{width:16px;height:22px;display:block}
 .sz-note{font-family:var(--f-mono);font-size:12px;color:var(--rust-ink);letter-spacing:.02em}
 .sz-fact{color:var(--ink);font-size:1.02rem;line-height:1.55}
 .sz-bal{display:grid;gap:.6rem;align-content:start;position:relative}
@@ -427,6 +434,7 @@ section{position:relative}
 #sz-balance .b-pin{fill:var(--paper);stroke:var(--ink);stroke-width:2}
 #sz-balance .b-string{stroke:var(--ink);stroke-width:1;fill:none}
 #sz-balance .b-tray{fill:var(--ink)}
+#sz-balance .person{fill:#8f8672}
 #sz-balance .b-beam,#sz-balance .b-pan{transform-box:view-box;transition:transform .9s cubic-bezier(.3,1.5,.5,1)}
 #sz-balance.level .b-bar{fill:var(--rust-ink)}
 .sz-bal-ctl{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
@@ -1114,7 +1122,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         <div class="sz-read"><b id="sz-read" class="num">4.60 m</b><span id="sz-sentence">7 of 12 species reach 4.60 m</span></div>
         <div class="sz-presets" id="sz-presets" aria-label="Put the tape at"></div>
       </div>
-      <p class="plate-key"><span><i class="k-ink"></i>Largest reliably reported</span><span><i class="k-typ"></i>Typical large male</span><span><i class="k-rec"></i>Record</span><span>Females of every species are smaller. Tap a row to study it.</span></p>
+      <p class="plate-key"><span><i class="k-ink"></i>Largest reliably reported</span><span><i class="k-typ"></i>Typical large male</span><span><i class="k-rec"></i>Record</span><span>Colours follow each species' typical adult skin. Females of every species are smaller. Tap a row to study it.</span></p>
     </div>
 
     <div class="plate plate-2">
@@ -1127,6 +1135,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <div><dt>Largest reported</dt><dd id="sz-max" class="num"></dd></div>
           <div><dt>Weight at the top of typical</dt><dd id="sz-kg" class="num"></dd></div>
         </dl>
+        <p class="sz-skin"><span id="sz-swatch" class="sz-swatch" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sz-skin"></span></p>
         <p class="sz-note" id="sz-note"></p>
         <p class="sz-fact" id="sz-fact"></p>
       </div>

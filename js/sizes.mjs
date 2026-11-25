@@ -5,7 +5,7 @@
 // Britton, crocodilian.com species accounts. Figures are rounded and vary between sources.
 import { SPECIES, CROC_TREE } from "./origins.mjs";
 import { sideAt, planAt, mouthAt } from "./hunt-model.mjs";
-import { clamp, lerp, smooth, groupThousands } from "./math.mjs";
+import { clamp, lerp, smooth, groupThousands, hash01 } from "./math.mjs";
 
 export const DATA = {
   porosus:      { typ: [4.3, 5.2], max: 6.17, snout: 1.15, region: "asia",   record: "Lolong, Mindanao, measured 2011 at 6.17 m and 1,075 kg" },
@@ -112,6 +112,68 @@ export function headPath(cx, top, H, b, n = 48) {
   return "M" + R.join("L") + "L" + L.reverse().join("L") + "Z";
 }
 export const headEyes = (cx, top, H) => { const u = .74, w = .1 * H; return [[f(cx - w), f(top + u * H)], [f(cx + w), f(top + u * H)]]; };
+
+// ---- skin: each species' adult colouring, from field guides and photographs ----
+// back = dorsal colour, flank, belly; band = markings; pattern = how the markings fall.
+export const SKIN = {
+  niloticus:    { back: "#3f4226", flank: "#6e6634", belly: "#d8c98c", band: "#1f2112", pattern: "bands", n: 11, note: "Olive-bronze above with dark crossbands on the tail; a yellow belly" },
+  porosus:      { back: "#45453a", flank: "#8a7a4a", belly: "#e6dcb8", band: "#232318", pattern: "blotch", n: 9, note: "Grey-olive and tan, with dark blotches; a pale cream belly" },
+  acutus:       { back: "#59603f", flank: "#8c8f60", belly: "#e2dcb8", band: "#2f3322", pattern: "bands", n: 9, note: "Paler, grey-green; faint bands that fade with age" },
+  intermedius:  { back: "#8a7a4c", flank: "#b9a56b", belly: "#eee3bf", band: "#3b331f", pattern: "blotch", n: 8, note: "Light tan, with scattered dark markings" },
+  palustris:    { back: "#4a4637", flank: "#6f6650", belly: "#cfc39d", band: "#2a271d", pattern: "plain", n: 0, note: "Dull grey-brown, nearly uniform in adults" },
+  siamensis:    { back: "#3d4430", flank: "#5f6844", belly: "#d2c999", band: "#20251a", pattern: "blotch", n: 7, note: "Olive-green to dark grey, with darker mottling" },
+  suchus:       { back: "#363a26", flank: "#5b5a33", belly: "#cdbd84", band: "#1b1d11", pattern: "bands", n: 10, note: "Darker than the Nile crocodile, with dark bands" },
+  novaeguineae: { back: "#4b4632", flank: "#77704c", belly: "#d9cda3", band: "#29261b", pattern: "bands", n: 10, note: "Grey-brown with dark bands across the tail" },
+  rhombifer:    { back: "#232319", flank: "#3d3a24", belly: "#d7c57f", band: "#d2b552", pattern: "speckle", n: 0, note: "Black, speckled bright yellow: the 'jewelled' crocodile" },
+  moreletii:    { back: "#3b3a2c", flank: "#5d5940", belly: "#cfc297", band: "#1e1e15", pattern: "bands", n: 9, note: "Dark grey-brown with darker bands" },
+  mindorensis:  { back: "#5b4c2c", flank: "#8c7642", belly: "#dccb94", band: "#2c2414", pattern: "bands", n: 8, note: "Golden-brown with dark markings" },
+  johnstoni:    { back: "#6b5a38", flank: "#9b8656", belly: "#e7dcb8", band: "#352b19", pattern: "bands", n: 12, note: "Light brown with dark bands on body and tail" },
+};
+const sp = (u, k, x0, y, Lpx) => { const p = sideAt(u), droop = u > .5 ? (u - .5) * (u - .5) * .05 : 0; return [x0 + (1 - u) * Lpx, y + (p.top + (p.bot - p.top) * k + droop) * Lpx]; };
+// Open path along the back, for the wet highlight.
+export function topEdge(x0, y, Lpx, from = .02, to = .96) {
+  const pts = []; for (let u = from; u <= to + 1e-9; u += .02) { const [x, yy] = sp(u, 0, x0, y, Lpx); pts.push(`${f(x)},${f(yy + .8)}`); }
+  return "M" + pts.join("L");
+}
+// Dark crossbands across back and tail (clip to the body). Bands get bolder toward the tail.
+export function crossbands(x0, y, Lpx, n, from = .3, to = .97) {
+  if (!n) return "";
+  let d = "";
+  for (let i = 0; i < n; i++) {
+    const j = hash01(i * 3.7 + n), u = lerp(from, to, (i + .5) / n) + (j - .5) * .012;
+    const w = lerp(.005, .011, i / n) * (.75 + j * .5), deep = lerp(.3, .72, i / n) * (.85 + hash01(i + 9) * .3);
+    const a = sp(u - w, -.2, x0, y, Lpx), b = sp(u + w * .9, -.2, x0, y, Lpx), m1 = sp(u + w * 1.15, deep * .5, x0, y, Lpx);
+    const c = sp(u + w * .35, deep, x0, y, Lpx), e = sp(u - w * .55, deep * .92, x0, y, Lpx), m2 = sp(u - w * 1.2, deep * .45, x0, y, Lpx);
+    d += `M${f(a[0])},${f(a[1])}L${f(b[0])},${f(b[1])}Q${f(m1[0])},${f(m1[1])} ${f(c[0])},${f(c[1])}L${f(e[0])},${f(e[1])}Q${f(m2[0])},${f(m2[1])} ${f(a[0])},${f(a[1])}Z`;
+  }
+  return d;
+}
+// Paired rows of bony plates (osteoderms) along the back and the double tail crest: [x, y, r].
+export function scutes(x0, y, Lpx) {
+  const out = [];
+  for (let u = .2; u < .9; u += .0135) for (const k of u < .5 ? [.03, .1] : [.02]) { const [x, yy] = sp(u, k, x0, y, Lpx); out.push([f(x), f(yy), f(Lpx * (u < .5 ? .0038 : .0032) * (1 - (u - .2) * .6))]); }
+  return out;
+}
+// Deterministic spots inside the body: [x, y, r]. kind "speckle" = many small, "blotch" = fewer, larger.
+export function spots(x0, y, Lpx, kind, seed = 1) {
+  const many = kind === "speckle", n = many ? 140 : kind === "blotch" ? 70 : 0, out = [];
+  for (let i = 0; i < n; i++) {
+    const u = .03 + hash01(seed * 97 + i) * .93, k = .04 + hash01(seed * 31 + i * 7) * (many ? .62 : .5);
+    const [x, yy] = sp(u, k, x0, y, Lpx), r = Lpx * (many ? .0028 + hash01(i * 13 + seed) * .003 : .0035 + hash01(i * 17 + seed) * .0055);
+    out.push([f(x), f(yy), f(r)]);
+  }
+  return out;
+}
+// Small teeth along the jaw line, pointing down from the upper jaw (u .01–.17).
+export function teeth(x0, y, Lpx) {
+  let d = "";
+  for (let u = .014; u < .165; u += .021) {
+    const [x, yy] = sp(u, mouthAt(u), x0, y, Lpx), big = Math.abs(u - .035) < .008 || Math.abs(u - .098) < .011, h = Lpx * (big ? .0068 : .0038), w = Lpx * .0022;
+    d += `M${f(x - w)},${f(yy - .4)}L${f(x)},${f(yy + h)}L${f(x + w)},${f(yy - .4)}Z`;
+  }
+  return d;
+}
+export const eyeAt = (x0, y, Lpx) => { const [x, yy] = sp(.148, .2, x0, y, Lpx); return [f(x), f(yy), Math.max(1.4, Lpx * .0065)]; };
 
 // metres → px scale for a plate of given width
 export const plateScale = (x0, x1, maxM = 6.5) => ({ px: m => x0 + m * (x1 - x0) / maxM, m: px => (px - x0) * maxM / (x1 - x0), perM: (x1 - x0) / maxM });
