@@ -468,77 +468,112 @@ section{position:relative}
 .btn.ghost:hover{background:var(--bone);color:var(--deep)}
 .btn[aria-pressed="true"]{background:var(--iris);color:var(--deep)}
 
-/* ---------- RANGE MAP ---------- */
-#range{background:var(--river)}
-.map-grid{display:grid;gap:clamp(1.5rem,3vw,2.5rem);grid-template-columns:1fr}
-@media (min-width:980px){.map-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
-.map-box{position:relative;min-width:0}
-.map-box svg{width:100%;height:auto;display:block;overflow:hidden}
-.map-box .land{fill:#18221d;stroke:rgba(232,224,204,.09);stroke-width:.6}
-.map-box .land.out{fill:#111915}
-.map-box .land[data-s="strong"]{fill:#33452b}
-.map-box .land[data-s="patchy"]{fill:#4c4128}
-.map-box .land[data-s="depleted"]{fill:#5a2e20}
-.map-box .land[data-s="gone"]{fill:url(#hatch)}
-.map-box .land[data-s="suchus"]{fill:#1f2b27}
-.map-box .land{transition:opacity .4s}
-.map-box svg.focus .land[data-s]:not(.hl){opacity:.35}
-.map-box .lake{fill:#0a1512;stroke:#2e4a44;stroke-width:.6}
-.map-box .river{fill:none;stroke:#3f6a63;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
-.map-box .river.nile{stroke:#6aa196;stroke-width:1.6}
-.hot{cursor:pointer}
-.hot .r{fill:none;stroke:var(--iris);stroke-width:1.2;opacity:0}
-.hot .d{fill:var(--iris);stroke:var(--deep);stroke-width:2;transition:r .3s}
-.hot.on .d{fill:var(--bone)}
-.hot .t{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;fill:var(--bone);paint-order:stroke;stroke:var(--deep);stroke-width:3px;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity .3s}
-.hot:hover .t,.hot.on .t,.hot:focus .t{opacity:1}
-.legend{display:flex;flex-wrap:wrap;gap:.6rem 1.25rem;margin-top:1rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed);text-transform:uppercase}
-.legend button{all:unset;cursor:pointer;display:flex;align-items:center;gap:.5rem;padding:2px 0}
-.legend button:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
-.legend button[aria-pressed="true"]{color:var(--bone)}
-.legend i{width:14px;height:10px;display:inline-block;border:1px solid var(--line-2)}
-.place{display:grid;gap:1rem;align-content:start;min-width:0}
-.place figure{margin:0;position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--silt)}
-.place figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease),opacity .5s}
-.place figure.none{display:grid;place-items:center}
-.place figure.none canvas{width:100%;height:100%}
-.place .coords{font-family:var(--f-mono);font-size:var(--s-1);color:var(--reed);letter-spacing:.06em}
-.place h3{font-size:clamp(2.2rem,4vw,3.2rem)}
-.place p{color:var(--dim)}
-.place .tag{display:inline-flex;gap:.5rem;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .55rem;border:1px solid var(--line-2);color:var(--bone);width:max-content}
-.place .tag i{width:7px;height:7px;border-radius:50%}
-.place-nav{display:flex;gap:.5rem;flex-wrap:wrap}
-.place-body{display:grid;gap:.8rem;transition:opacity .35s}
-.place-body.out{opacity:0}
-
-/* ---------- NUMBERS ---------- */
-#numbers{background:var(--deep)}
-.dots-wrap{display:grid;gap:1.5rem;grid-template-columns:1fr}
-@media (min-width:980px){.dots-wrap{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:start}}
-.dots-side{display:grid;gap:1.5rem;align-content:start}
-.figure-big{font-family:var(--f-display);font-weight:900;font-size:clamp(3.6rem,9vw,7rem);line-height:.82;color:var(--bone);transition:color .5s}
-.figure-big.amber{color:var(--iris)}
-.figure-cap{color:var(--dim);max-width:36ch}
-.toggle{display:flex;gap:.5rem;flex-wrap:wrap}
-.dots-canvas-wrap{position:relative;aspect-ratio:3/2;min-width:0}
-.dots-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
-.key{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--reed);text-transform:uppercase;display:flex;gap:1.25rem;flex-wrap:wrap}
-.key span{display:inline-flex;align-items:center;gap:.45rem}
-.key i{width:7px;height:7px;border-radius:50%;display:inline-block}
-
-.timeline{margin-top:clamp(4rem,9vw,7rem);display:grid;gap:0;border-top:1px solid var(--line)}
-.tl{display:grid;grid-template-columns:minmax(6.5rem,10rem) 1fr;gap:1rem 2rem;padding:1.15rem 0;border-bottom:1px solid var(--line);align-items:baseline}
-.tl .y{font-family:var(--f-display);font-weight:700;font-size:1.6rem;color:var(--bone);line-height:1}
-.tl .y.hot{color:var(--iris)}
-.tl p{color:var(--dim);max-width:70ch}
-.tl p strong{color:var(--bone);font-weight:500}
-.pressures{margin-top:clamp(4rem,9vw,6rem);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:2.5rem 2rem}
-.pressure{display:grid;gap:.5rem;align-content:start}
-.pressure .lvl{display:flex;gap:3px}
-.pressure .lvl i{width:22px;height:4px;background:var(--line)}
-.pressure .lvl i.f{background:var(--rust)}
-.pressure h3{font-size:1.6rem;letter-spacing:.02em}
-.pressure p{color:var(--dim);font-size:.98rem}
+/* ---------- NUMBERS: counting crocodiles ---------- */
+#numbers{background:radial-gradient(120% 60% at 80% 0%,#0f1b17,var(--deep) 60%);--c-loss:#d0683f;--c-alive:#8fb36a;--c-prot:#e2a83c;--c-sci:#6fb3ad;--c-cult:#d9b26f}
+.nb-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(4rem,8vw,6rem)}
+.nb-tile{background:#08110e;padding:1.4rem 1.3rem 1.3rem;display:grid;gap:.45rem;position:relative;overflow:hidden}
+.nb-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c)}
+.nb-tile::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(var(--c),transparent 70%);opacity:.12}
+.nb-tile.t-alive{--c:var(--c-alive)}.nb-tile.t-loss{--c:var(--c-loss)}.nb-tile.t-prot{--c:var(--c-prot)}.nb-tile.t-sci{--c:var(--c-sci)}
+.nb-tile .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.nb-tile b{font-family:var(--f-display);font-weight:900;font-size:clamp(2rem,3.4vw,2.9rem);line-height:.9;text-transform:uppercase;color:var(--bone)}
+.nb-tile .s{font-size:.92rem;color:var(--dim)}
+.nb-block{margin-bottom:clamp(5rem,10vw,7.5rem)}
+.nb-label{display:flex;gap:1rem;align-items:center;margin-bottom:1.6rem}
+.nb-letter{flex:none;width:3.2rem;height:3.2rem;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:1.7rem;color:#0a0f0c;background:var(--c);box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 18%,transparent)}
+.nb-label .eyebrow{margin-bottom:.3rem}
+.nb-label h3{font-size:clamp(2rem,4vw,3.2rem)}
+.nb-seg{display:flex;flex-wrap:wrap;border:1px solid var(--line-2);width:max-content;max-width:100%}
+.nb-seg button{appearance:none;border:0;background:transparent;color:var(--bone);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:.7rem .9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:background .2s}
+.nb-seg button + button{border-left:1px solid var(--line-2)}
+.nb-seg button i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.nb-seg button[aria-pressed="true"]{background:rgba(232,224,204,.1)}
+.nb-seg button:hover{background:rgba(232,224,204,.06)}
+.nb-btn{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--bone);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:.7rem 1rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.nb-btn:hover{border-color:var(--bone)}
+.nb-btn.hot{border-color:#ff7a2e;color:#ffb98d}
+.nb-btn.hot:hover{background:#ff7a2e;color:#140a04}
+.nb-seg button:focus-visible,.nb-btn:focus-visible{outline:2px solid var(--iris);outline-offset:2px}
+.lg-grid{display:grid;gap:2rem;grid-template-columns:1fr}
+@media (min-width:980px){.lg-grid{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:center}}
+.lg-side{display:grid;gap:1rem;align-content:start}
+.lg-big{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,7vw,5.6rem);line-height:.85;color:var(--c-loss);transition:color .5s}
+.lg-big[data-mode="alive"]{color:var(--c-alive)}
+.lg-big[data-mode="compare"]{background:linear-gradient(90deg,var(--c-loss),var(--c-alive));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg-cap{color:var(--bone);font-size:1.08rem;line-height:1.5;max-width:38ch}
+.lg-hover{font-family:var(--f-mono);font-size:12px;color:var(--iris);letter-spacing:.04em;min-height:1.4em}
+.lg-stage{position:relative;aspect-ratio:16/9;min-height:280px}
+.lg-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.nb-key{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--reed)}
+.nb-key span{display:inline-flex;align-items:center;gap:.45rem}
+.nb-key i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.nb-key .d-loss{background:var(--c-loss)}.nb-key .d-alive{background:var(--c-alive)}.nb-key .d-maybe{border:1.5px solid var(--c-alive)}
+/* timeline */
+.tl-filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.tl-filters button{appearance:none;background:transparent;border:1px solid currentColor;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:.5rem .8rem;border-radius:999px;cursor:pointer;transition:opacity .2s,background .2s}
+.tl-filters button[aria-pressed="false"]{opacity:.4}
+.tl-stage{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-inline:calc(var(--gut) * -1) calc(var(--gut-r) * -1);padding-inline:var(--gut) var(--gut-r)}
+.tl-stage svg{display:block;width:100%;min-width:820px;height:auto}
+.tl-card{margin-top:1.25rem;border-top:1px solid var(--line-2);padding-top:1.2rem;display:grid;gap:.6rem;max-width:70ch;min-height:12rem}
+.tl-card-top{display:flex;gap:1rem;align-items:center}
+.tl-cat{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .6rem;border-radius:999px;color:#0a0f0c}
+.tl-year{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.08em;color:var(--reed)}
+.tl-card h4{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(2rem,3.6vw,2.8rem);line-height:.9;margin:0}
+.tl-card p{color:var(--dim);font-size:1.08rem;line-height:1.6}
+.tl-nav{display:flex;gap:.5rem;margin-top:.3rem}
+.tl-tick-label,.tl-era-label,.tl-break-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em}
+.tl-label{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;pointer-events:none}
+.tl-event{cursor:pointer;outline:none;transition:opacity .3s}
+.tl-event:focus-visible .tl-halo{opacity:1}
+.tl-leader{transition:opacity .3s}
+.tl-chip{color:var(--tl-color);display:inline-flex;align-items:center;gap:.45rem}
+.tl-chip-dot{width:8px;height:8px;border-radius:50%;background:var(--tl-color);display:inline-block}
+.tl-nav button[disabled]{opacity:.35;cursor:default}
+/* survey */
+.sv-grid{display:grid;gap:2rem;grid-template-columns:1fr}
+@media (min-width:980px){.sv-grid{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:start}}
+.sv-copy{display:grid;gap:1rem;align-content:start}
+.sv-copy p{color:var(--dim);line-height:1.6}
+.sv-copy p.first{color:var(--bone);font-size:1.12rem;line-height:1.5}
+.sv-try{font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;color:#ffb98d !important}
+.sv-read{display:flex;gap:2rem;border-block:1px solid var(--line);padding:.9rem 0}
+.sv-read div{display:grid;gap:.2rem}
+.sv-read .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--reed)}
+.sv-read b{font-family:var(--f-display);font-weight:900;font-size:3rem;line-height:.85;color:#ff9a5a}
+.sv-read div + div b{color:var(--bone)}
+.sv-ctl{display:flex;gap:.5rem;flex-wrap:wrap}
+.sv-msg{color:var(--bone) !important;min-height:3em}
+.sv-stage{position:relative;aspect-ratio:16/7;min-height:260px;border:1px solid var(--line);background:#050d0c;overflow:hidden}
+.sv-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:none;outline:none;touch-action:none}
+.sv-stage canvas:focus-visible{box-shadow:inset 0 0 0 2px var(--iris)}
+/* ranching */
+.rc-grid{display:grid;gap:2rem;grid-template-columns:1fr}
+@media (min-width:900px){.rc-grid{grid-template-columns:minmax(0,6fr) minmax(0,5fr);align-items:center;gap:3rem}}
+.rc-stage svg{width:100%;max-width:560px;height:auto;display:block;margin-inline:auto;overflow:visible}
+.rc-track{fill:none;stroke:rgba(232,224,204,.08);stroke-width:18}
+.rc-arc{fill:none;stroke-width:3;opacity:.45;transition:opacity .3s,stroke-width .3s}
+.rc-arc.on{opacity:1;stroke-width:4}
+.rc-node{cursor:pointer;outline:none}
+.rc-dot{stroke:#060c0a;stroke-width:4;transition:transform .35s var(--ease);transform-box:fill-box;transform-origin:center}
+.rc-node.on .rc-dot{transform:scale(1.18);filter:drop-shadow(0 0 14px rgba(255,255,255,.18))}
+.rc-node:focus-visible .rc-dot{stroke:var(--bone)}
+.rc-num{font-family:var(--f-display);font-weight:900;font-size:24px;fill:#0a0f0c;pointer-events:none}
+.rc-lab{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;fill:var(--bone);pointer-events:none}
+.rc-hub-1{font-family:var(--f-display);font-weight:900;font-size:30px;text-transform:uppercase;fill:var(--bone)}
+.rc-hub-2{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;fill:var(--reed)}
+.rc-card{display:grid;gap:.8rem;align-content:start}
+.rc-n{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.12em;text-transform:uppercase}
+.rc-card h4{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(2rem,3.6vw,2.8rem);line-height:.9;margin:0}
+.rc-card p{color:var(--dim);font-size:1.08rem;line-height:1.6}
+.rc-card .nb-btn{width:max-content}
+.rc-aside{font-size:.95rem !important;border-left:2px solid var(--c-alive);padding-left:1rem}
+/* pressures */
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1rem}
+.pr{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 10%,#08110e),#08110e 60%);border:1px solid var(--line);border-top:3px solid var(--c);padding:1.3rem 1.2rem 1.4rem;display:grid;gap:.7rem;align-content:start;transition:transform .3s var(--ease),border-color .3s}
+.pr:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c) 50%,transparent)}
+.pr svg{width:38px;height:38px;fill:none;stroke:var(--c);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pr h4{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:1.5rem;line-height:.95;margin:0}
+.pr p{color:var(--dim);font-size:.96rem;line-height:1.55}
 
 /* ---------- NEST ---------- */
 #nest{background:linear-gradient(var(--deep),#120f0a 40%,#120f0a)}
@@ -649,7 +684,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </button>
 
 <nav class="index" id="index" aria-label="Sections">
-  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#range">Range</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
+  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -1172,84 +1207,91 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
   </div>
 </section>
 
-<!-- ============ RANGE ============ -->
-<section id="range" class="band">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow">04 &nbsp;·&nbsp; Where they live</p>
-      <h2 class="fade">Range</h2>
-      <p class="lede fade">The Nile crocodile lives in rivers, lakes, swamps and estuaries across sub-Saharan Africa and western Madagascar. Pick a place on the map.</p>
-    </header>
-    <div class="map-grid">
-      <div class="map-box">
-        <svg id="map" viewBox="20 40 700 735" role="img" aria-label="Map of Africa shaded by Nile crocodile status, with notable places marked">
-          <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#17201b"/><line x1="0" y1="0" x2="0" y2="6" stroke="#b8603f" stroke-width="1.6"/></pattern></defs>
-          <g id="m-land"></g><g id="m-lakes"></g><g id="m-rivers"></g><g id="m-hot"></g>
-        </svg>
-        <div class="legend" id="legend">
-          <button type="button" data-s="strong" aria-pressed="false"><i style="background:#33452b"></i>Strongholds</button>
-          <button type="button" data-s="patchy" aria-pressed="false"><i style="background:#4c4128"></i>Patchy or under-surveyed</button>
-          <button type="button" data-s="depleted" aria-pressed="false"><i style="background:#5a2e20"></i>Depleted</button>
-          <button type="button" data-s="gone" aria-pressed="false"><i style="background:repeating-linear-gradient(45deg,#17201b 0 2px,#b8603f 2px 3.5px)"></i>Gone</button>
-          <button type="button" data-s="suchus" aria-pressed="false"><i style="background:#1f2b27"></i>West African crocodile range</button>
-        </div>
-        <p class="credit" style="margin-top:.9rem">Country shading is a rough summary of IUCN Crocodile Specialist Group range-state reports. Status varies river by river. Basemap: Natural Earth.</p>
-      </div>
-      <aside class="place" id="place" aria-live="polite">
-        <figure id="pl-fig"><img id="pl-img" alt="" src="img/sandbar.jpg"></figure>
-        <div class="place-body" id="pl-body">
-          <span class="coords num" id="pl-coords"></span>
-          <h3 id="pl-name"></h3>
-          <span class="tag" id="pl-tag"></span>
-          <p id="pl-text"></p>
-          <span class="credit" id="pl-credit"></span>
-        </div>
-        <div class="place-nav"><button class="btn ghost" type="button" id="pl-prev">Previous</button><button class="btn ghost" type="button" id="pl-next">Next place</button></div>
-      </aside>
-    </div>
-  </div>
-</section>
-
 <!-- ============ NUMBERS ============ -->
-<section id="numbers" class="band">
+<section id="numbers" class="band" aria-label="Counting crocodiles: population, history and threats">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">05 &nbsp;·&nbsp; Population</p>
-      <h2 class="fade">How they're doing</h2>
-      <p class="lede fade">The species as a whole has recovered. The IUCN lists it as <strong style="color:var(--ok);font-weight:500">Least Concern</strong>. That recovery came after an era of killing that is hard to picture, so here it is in dots.</p>
+      <p class="eyebrow">04 &nbsp;·&nbsp; Population</p>
+      <h2 class="fade">Counting crocodiles</h2>
+      <p class="lede fade">Within one human lifetime the Nile crocodile was hunted out of much of its range, and then it came back. Both halves of that story are numbers, and both are harder to count than they look.</p>
     </header>
-    <div class="dots-wrap">
-      <div class="dots-side">
-        <div class="toggle" role="group" aria-label="Choose figure">
-          <button class="btn" type="button" data-v="killed" aria-pressed="true">Killed, 1950–1980</button>
-          <button class="btn" type="button" data-v="alive" aria-pressed="false">Alive today</button>
+
+    <div class="nb-tiles">
+      <div class="nb-tile t-alive fade"><span class="k">Wild today</span><b class="num">250,000–500,000</b><span class="s">IUCN estimate, 2019</span></div>
+      <div class="nb-tile t-loss fade"><span class="k">Killed for skins</span><b class="num">≈3,000,000</b><span class="s">1950 to 1980</span></div>
+      <div class="nb-tile t-prot fade"><span class="k">Trade banned</span><b class="num">1975</b><span class="s">CITES Appendix I</span></div>
+      <div class="nb-tile t-sci fade"><span class="k">Red List status</span><b>Least Concern</b><span class="s">since the 2019 assessment</span></div>
+    </div>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#d0683f">A</span><div><p class="eyebrow">The ledger</p><h3>One dot, a thousand crocodiles</h3></div></div>
+      <div class="lg-grid">
+        <div class="lg-side">
+          <div class="nb-seg" id="lg-modes" role="group" aria-label="Show">
+            <button type="button" data-mode="killed" aria-pressed="true"><i style="background:#d0683f"></i>Killed</button>
+            <button type="button" data-mode="alive" aria-pressed="false"><i style="background:#8fb36a"></i>Alive today</button>
+            <button type="button" data-mode="compare" aria-pressed="false"><i style="background:linear-gradient(90deg,#d0683f 50%,#8fb36a 50%)"></i>Side by side</button>
+          </div>
+          <b class="lg-big num" id="lg-big">≈3,000,000</b>
+          <p class="lg-cap" id="lg-cap"></p>
+          <p class="lg-hover" id="lg-hover" aria-live="polite"></p>
+          <p class="nb-key"><span><i class="d-loss"></i>Killed</span><span><i class="d-alive"></i>Alive, lower estimate</span><span><i class="d-maybe"></i>Alive, upper estimate</span></p>
         </div>
-        <div class="figure-big num" id="fig-n">≈3,000,000</div>
-        <p class="figure-cap" id="fig-cap">Nile crocodiles killed for their hides across Africa in roughly thirty years. Belly skin was sold to the leather trade by the square inch.</p>
-        <div class="key"><span><i style="background:var(--bone)"></i>1 dot = 1,000 crocodiles</span><span id="key-2"><i style="background:var(--iris)"></i>Estimated wild population</span></div>
+        <div class="lg-stage"><canvas id="lg-c" role="img" aria-label="Three thousand rust dots for three million crocodiles killed for skins, beside 250 solid and 250 hollow green dots for the 250,000 to 500,000 alive today."></canvas></div>
       </div>
-      <div class="dots-canvas-wrap"><canvas id="dots-c" role="img" aria-label="Three thousand dots, each one thousand crocodiles killed for hides, compared with 250 to 500 dots for the wild population today."></canvas></div>
-    </div>
+    </article>
 
-    <div class="timeline" id="timeline">
-      <div class="tl fade"><span class="y">c.450 BCE</span><p>Herodotus describes Nile crocodiles in Egypt, including the story of a small bird that picks its teeth. People repeated the story for two thousand years.</p></div>
-      <div class="tl fade"><span class="y">300 BCE–300 CE</span><p>Crocodiles are kept, fed and mummified by the thousand at temples of the god Sobek, at Kom Ombo and Shedet in the Faiyum, which the Greeks called <strong>Crocodilopolis</strong>.</p></div>
-      <div class="tl fade"><span class="y">1800s</span><p>Hunted out of the lower Nile in Egypt and the delta, and gone from the Seychelles. In Egypt they now survive only above the Aswan dams.</p></div>
-      <div class="tl fade"><span class="y">Early 1900s</span><p>The last crocodiles of the Levant disappear from coastal rivers in what is now Israel. One of them is still named the Crocodile River, Nahal Taninim.</p></div>
-      <div class="tl fade"><span class="y hot">1950–1980</span><p><strong>The hide trade.</strong> Commercial hunters take an estimated three million crocodiles. Numbers collapse across much of the range.</p></div>
-      <div class="tl fade"><span class="y hot">1975</span><p>Listed on <strong>CITES Appendix I</strong>, which bans international commercial trade.</p></div>
-      <div class="tl fade"><span class="y">1980s–90s</span><p>Ranching and farming programmes, led by Zimbabwe, Zambia and South Africa, move many national populations to Appendix II. Eggs are collected from the wild under quota and hides are traded legally.</p></div>
-      <div class="tl fade"><span class="y">2008</span><p>Pansteatitis, a painful inflammation of body fat linked to eating rancid fish in a polluted river, kills well over a hundred crocodiles in the Olifants River gorge near Kruger.</p></div>
-      <div class="tl fade"><span class="y">2011</span><p>DNA work shows the crocodiles of West and Central Africa are a separate species, <strong>Crocodylus suchus</strong>. The Nile crocodile's range shrinks on paper overnight.</p></div>
-      <div class="tl fade"><span class="y hot">2019</span><p>IUCN Red List: <strong>Least Concern</strong>. Estimated wild population <strong>250,000–500,000</strong>.</p></div>
-    </div>
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#d9b26f">B</span><div><p class="eyebrow">2,500 years</p><h3>Crocodiles and people</h3></div></div>
+      <div class="tl-filters" id="tl-filters" aria-label="Show categories"></div>
+      <div class="tl-stage"><svg id="tl-svg" role="img" aria-label="Timeline from 450 BCE to 2019 of crocodiles and people: culture, losses, protection and science."></svg></div>
+      <div class="tl-card" aria-live="polite">
+        <div class="tl-card-top"><span id="tl-cat" class="tl-cat"></span><span id="tl-year" class="tl-year num"></span></div>
+        <h4 id="tl-title"></h4>
+        <p id="tl-text"></p>
+        <div class="tl-nav"><button type="button" class="nb-btn" id="tl-prev">← Earlier</button><button type="button" class="nb-btn" id="tl-next">Later →</button></div>
+      </div>
+    </article>
 
-    <div class="pressures">
-      <div class="pressure fade"><div class="lvl" aria-label="Pressure 3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div><h3>Conflict</h3><p>More fatal attacks on people than any other crocodilian, with estimates in the hundreds a year. Many go unreported. Retaliatory killing follows.</p></div>
-      <div class="pressure fade"><div class="lvl" aria-label="Pressure 3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div><h3>Lost habitat</h3><p>Dams, irrigation, sand mining and farmed riverbanks take away nesting sandbars and the backwaters where young crocodiles shelter.</p></div>
-      <div class="pressure fade"><div class="lvl" aria-label="Pressure 2 of 4"><i class="f"></i><i class="f"></i><i></i><i></i></div><h3>Polluted water</h3><p>Upstream mining and sewage are linked to die-offs, as in the Olifants. As apex predators, crocodiles concentrate whatever is in the fish.</p></div>
-      <div class="pressure fade"><div class="lvl" aria-label="Pressure 2 of 4"><i class="f"></i><i class="f"></i><i></i><i></i></div><h3>Nets and hooks</h3><p>Gill nets drown crocodiles, and they take fish from nets. That puts them in direct competition with fishing communities.</p></div>
-    </div>
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#ff7a2e">C</span><div><p class="eyebrow">How a count is made</p><h3>Count the eyes</h3></div></div>
+      <div class="sv-grid">
+        <div class="sv-copy">
+          <p class="first">Most crocodile numbers start in a boat at night. A spotlight sweeps the bank, and crocodile eyes shine back red-orange, because a reflective layer behind the retina bounces the light back out.</p>
+          <p>Experienced counters judge each animal's size from the gap between its eyes and nostrils. But anything underwater, behind reeds or wary of the light is missed. A count is a minimum, and survey teams correct for what they could not see.</p>
+          <p class="sv-try">Move the light along the river. Tap each pair of eyes you find, then reveal the river.</p>
+          <div class="sv-read"><div><span class="k">Counted</span><b id="sv-count" class="num">0</b></div><div><span class="k">Actually there</span><b id="sv-total" class="num">?</b></div></div>
+          <div class="sv-ctl"><button type="button" class="nb-btn hot" id="sv-reveal">Reveal the river</button><button type="button" class="nb-btn" id="sv-reset">New river</button></div>
+          <p class="sv-msg" id="sv-msg" aria-live="polite"></p>
+        </div>
+        <div class="sv-stage"><canvas id="sv-c" tabindex="0" role="application" aria-label="Night river. Move the spotlight with the pointer or arrow keys and press Enter or tap to count a pair of eyes."></canvas></div>
+      </div>
+    </article>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#8fb36a">D</span><div><p class="eyebrow">How they came back</p><h3>The ranching loop</h3></div></div>
+      <div class="rc-grid">
+        <div class="rc-stage"><svg id="rc-svg" role="img" aria-label="A five-step loop: wild nests, eggs collected under quota, raised on farms, skins traded legally, and a reason to protect wetlands."></svg></div>
+        <div class="rc-card" aria-live="polite">
+          <p class="rc-n" id="rc-n"></p>
+          <h4 id="rc-title"></h4>
+          <p id="rc-text"></p>
+          <button type="button" class="nb-btn" id="rc-next">Next step →</button>
+          <p class="rc-aside">In some programmes a share of farm-raised young has been released back into the wild. Ranching works best where it is tied to surveys and quotas; where it is not, it can hide illegal trade.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#6fb3ad">E</span><div><p class="eyebrow">What still threatens them</p><h3>Five pressures</h3></div></div>
+      <div class="pr-grid">
+        <div class="pr fade" style="--c:#d0683f"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="14" r="6"/><path d="M4 34c2-8 18-8 20 0M24 26l12-8"/></svg><h4>Conflict with people</h4><p>Nile crocodiles kill more people than any other crocodile. Many attacks go unrecorded, so reliable totals don't exist. Revenge killings and the removal of "problem" animals follow.</p></div>
+        <div class="pr fade" style="--c:#d9b26f"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 30h32M8 30V18l6-4 6 4v12M24 30V12l6-4 6 4v18"/></svg><h4>Lost riverbanks</h4><p>Dams, irrigation, sand mining and farming on riverbanks take the sandbars where females nest and the quiet backwaters where young crocodiles hide.</p></div>
+        <div class="pr fade" style="--c:#6fb3ad"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4c6 9 10 15 10 20a10 10 0 0 1-20 0c0-5 4-11 10-20z"/><path d="M15 25h10"/></svg><h4>Polluted water</h4><p>Upstream mining, farming and sewage have been linked to die-offs, as in the Olifants River. As top predators, crocodiles concentrate whatever is in the fish they eat.</p></div>
+        <div class="pr fade" style="--c:#8fb36a"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 8l32 24M4 16l24 18M12 4l24 18M4 24l12 10M22 4l14 10"/></svg><h4>Nets and hooks</h4><p>Crocodiles drown in gill nets and take fish from them. That puts them in direct competition with the fishing communities that share their water.</p></div>
+        <div class="pr fade" style="--c:#e2a83c"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="27" r="7"/><path d="M20 20V5M15 9h10M15 13h10"/></svg><h4>Warmer nests</h4><p>Nest temperature decides whether an egg becomes male or female. Warming could shift those ratios. Females can respond by nesting in shadier or deeper spots, and how much this will matter is not yet known.</p></div>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -1257,7 +1299,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 <section id="nest" class="band">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">06 &nbsp;·&nbsp; Temperature decides</p>
+      <p class="eyebrow">05 &nbsp;·&nbsp; Temperature decides</p>
       <h2 class="fade">The nest</h2>
       <p class="lede fade">A Nile crocodile has no sex chromosomes. Whether an egg becomes male or female depends on how warm the sand around it stays in the middle weeks of incubation. Drag the thermometer.</p>
     </header>
@@ -1288,7 +1330,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 <section id="grow" class="band">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">07 &nbsp;·&nbsp; To scale</p>
+      <p class="eyebrow">06 &nbsp;·&nbsp; To scale</p>
       <h2 class="fade">Grow one</h2>
       <p class="lede fade">A Nile crocodile keeps growing for most of its life, and what it eats changes as it does. Drag to grow it beside a 1.75 m person.</p>
     </header>
@@ -1328,7 +1370,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 <section id="bank" class="band">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">08 &nbsp;·&nbsp; Field photographs</p>
+      <p class="eyebrow">07 &nbsp;·&nbsp; Field photographs</p>
       <h2 class="fade">Riverbank</h2>
     </header>
     <div class="essay">
@@ -1347,7 +1389,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 <section id="lore" class="band">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow">09 &nbsp;·&nbsp; Stories, checked</p>
+      <p class="eyebrow">08 &nbsp;·&nbsp; Stories, checked</p>
       <h2 class="fade">Lore</h2>
     </header>
     <div class="lore">
@@ -1403,10 +1445,10 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <li>Diego Delso, Masai Mara and Chobe. CC BY-SA 4.0</li>
           <li>Arturo de Frias Marques, Mara River feast. CC BY-SA 4.0</li>
           <li>Charles J. Sharp, Kenya, Serengeti, Mlilwane. CC BY-SA 4.0</li>
-          <li>Bernard Gagnon, Zambezi (CC BY-SA 4.0) and Lake Chamo (CC BY-SA 3.0)</li>
+          <li>Bernard Gagnon, Zambezi. CC BY-SA 4.0</li>
           <li>La Ferme aux Crocodiles, hatchling. CC BY-SA 3.0</li>
           <li>Mark Jordahl, juveniles. CC BY 2.0</li>
-          <li>All via Wikimedia Commons. Map data: Natural Earth, public domain.</li>
+          <li>All via Wikimedia Commons.</li>
         </ul>
         <p class="credit" style="margin-top:2rem">Figures are rounded. Where surveys disagree, ranges are given.</p>
       </div>
