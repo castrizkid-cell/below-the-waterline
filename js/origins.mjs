@@ -113,11 +113,11 @@ export const SPECIES = {
     fact: "Mostly nocturnal. Hunts fish and frogs in swamps and lakes of the interior." },
   johnstoni:   { common: "Freshwater crocodile", latin: "Crocodylus johnstoni", where: "Northern Australia", len: 3,
     fact: "Narrow-snouted and shy. Can gallop on land, with all four feet briefly off the ground." },
-  acutus:      { common: "American crocodile", latin: "Crocodylus acutus", where: "Florida to Peru, the Caribbean", len: 6,
+  acutus:      { common: "American crocodile", latin: "Crocodylus acutus", where: "Florida to Peru, the Caribbean", len: 5,
     fact: "Lives in mangroves and brackish lagoons and has reached islands across the Caribbean, as its ancestors once crossed the Atlantic." },
   intermedius: { common: "Orinoco crocodile", latin: "Crocodylus intermedius", where: "The Orinoco basin, Venezuela and Colombia", len: 5,
     fact: "Hunted almost to extinction for hides in the 20th century. Its wild population is now very small." },
-  moreletii:   { common: "Morelet's crocodile", latin: "Crocodylus moreletii", where: "Mexico, Belize, Guatemala", len: 3,
+  moreletii:   { common: "Morelet's crocodile", latin: "Crocodylus moreletii", where: "Mexico, Belize, Guatemala", len: 3.5,
     fact: "A freshwater species of the Yucatán and Gulf lowlands. It has recovered well since hunting was banned." },
   rhombifer:   { common: "Cuban crocodile", latin: "Crocodylus rhombifer", where: "Zapata Swamp, Cuba", len: 3.5,
     fact: "Long-legged and unusually at home on land. One of the smallest ranges of any crocodile." },
@@ -127,7 +127,7 @@ export const SPECIES = {
 export const RANKS = [
   ["Archosauria", "250 Ma"], ["Pseudosuchia", "249 Ma"], ["Crocodylomorpha", "232 Ma"],
   ["Crocodyliformes", "205 Ma"], ["Eusuchia", "125 Ma"], ["Crocodylia", "90 Ma"],
-  ["Crocodylidae", "≈50 Ma"], ["Crocodylus", "≈10 Ma"], ["C. niloticus", "Laurenti, 1768"],
+  ["Crocodylidae", "date debated"], ["Crocodylus", "≈10 Ma"], ["C. niloticus", "Laurenti, 1768"],
 ];
 
 // ---------- math ----------

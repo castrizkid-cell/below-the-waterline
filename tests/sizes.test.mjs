@@ -26,7 +26,7 @@ test("orderings are permutations; length puts the saltwater crocodile first", ()
 
 test("the tape counts species that reach a length", () => {
   assert.equal(reaching(1.75).length, 12);
-  assert.equal(reaching(6.0).length, 2);
+  assert.deepEqual(reaching(6.0), ["porosus"]);
   assert.equal(reaching(6.5).length, 0);
   assert.equal(tapeLine(4.6), `${reaching(4.6).length} of 12 species reach 4.60 m`);
   assert.equal(tapeLine(1), "Every species reaches 1.00 m");
@@ -67,4 +67,12 @@ test("person and details geometry", () => {
   const p = personPath(0, 50, 100);
   assert.ok(p.body.endsWith("Z")); assert.equal(p.head[0], 164);
   const d = sideDetails(0, 50, 500); assert.ok(d.jaw.startsWith("M") && d.crest.length > 0); assert.ok(d.eye[0] > 400);
+});
+
+test("size ranking matches the literature: saltwater > Nile > Orinoco > American", () => {
+  const m = id => DATA[id].max, t = id => DATA[id].typ[1];
+  assert.ok(m("porosus") > m("niloticus"));
+  assert.ok(m("niloticus") > m("intermedius") && m("niloticus") > m("acutus"), "Nile is larger than the American and Orinoco crocodiles");
+  assert.ok(t("niloticus") >= t("acutus"));
+  assert.deepEqual(order("length").slice(0, 4), ["porosus", "niloticus", "intermedius", "acutus"]);
 });

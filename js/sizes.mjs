@@ -10,14 +10,14 @@ import { clamp, lerp, smooth, groupThousands } from "./math.mjs";
 export const DATA = {
   porosus:      { typ: [4.3, 5.2], max: 6.17, snout: 1.15, region: "asia",   record: "Lolong, Mindanao, measured 2011 at 6.17 m and 1,075 kg" },
   niloticus:    { typ: [3.5, 5.0], max: 5.5,  snout: 1.05, region: "africa", record: "Males over 5 m live at Lake Chamo and on the Mara" },
-  acutus:       { typ: [3.0, 4.5], max: 6.0,  snout: 0.8,  region: "americas", record: "Old reports reach 6 m; today 4–5 m is a big animal" },
+  acutus:       { typ: [3.0, 4.2], max: 5.0,  snout: 0.8,  region: "americas", record: "About 5 m at most; older reports of 6 m were never confirmed" },
   intermedius:  { typ: [3.5, 5.0], max: 5.2,  snout: 0.7,  region: "americas", record: "Historical claims of 6 m+ were never verified" },
   palustris:    { typ: [3.0, 4.0], max: 4.5,  snout: 1.55, region: "asia",   record: "The broadest snout of any true crocodile" },
   siamensis:    { typ: [2.5, 3.5], max: 4.0,  snout: 1.25, region: "asia",   record: "Wild adults are now rare enough that few are measured" },
-  suchus:       { typ: [2.5, 3.5], max: 4.0,  snout: 1.0,  region: "africa", record: "Smaller and calmer than the Nile crocodile beside it" },
+  suchus:       { typ: [2.5, 3.5], max: 4.0,  snout: 1.0,  region: "africa", record: "Smaller and generally less aggressive than the Nile crocodile" },
   novaeguineae: { typ: [2.5, 3.2], max: 3.5,  snout: 0.9,  region: "australasia", record: "Freshwater swamps and lakes of the interior" },
   rhombifer:    { typ: [2.3, 3.2], max: 3.5,  snout: 1.35, region: "americas", record: "Short, deep head; long legs for a crocodile" },
-  moreletii:    { typ: [2.2, 3.0], max: 3.0,  snout: 1.3,  region: "americas", record: "Lowland lakes and rivers of the Yucatán and Gulf" },
+  moreletii:    { typ: [2.2, 3.0], max: 3.5,  snout: 1.3,  region: "americas", record: "Most adults stay under 3 m; a few larger have been reported" },
   mindorensis:  { typ: [1.5, 2.7], max: 3.0,  snout: 1.3,  region: "asia",   record: "One of the smallest and rarest crocodiles" },
   johnstoni:    { typ: [2.3, 3.0], max: 3.0,  snout: 0.42, region: "australasia", record: "A needle snout for fish, frogs and insects" },
 };
