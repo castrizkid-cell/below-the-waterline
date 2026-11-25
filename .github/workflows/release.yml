@@ -1,0 +1,21 @@
+# Commits on main drive versions: fix -> patch, feat -> minor, "!"/BREAKING CHANGE -> major.
+# release-please opens a release PR (CHANGELOG + version bump); merging it creates the tag and GitHub release.
+name: release
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  release-please:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          # A fine-grained token lets the release PR trigger the required checks.
+          # Falls back to GITHUB_TOKEN (then close + reopen the release PR to run checks).
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
