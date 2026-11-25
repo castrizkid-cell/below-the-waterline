@@ -244,7 +244,7 @@ section{position:relative}
 
 /* ---------- HUNT ---------- */
 #hunt{background:var(--river)}
-.hunt-track{height:640vh;position:relative}
+.hunt-track{height:760vh;position:relative}
 .hunt-stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding-block:clamp(1rem,3vh,2rem)}
 .hunt-top{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
 .hunt-top h2{font-size:clamp(2.4rem,5vw,4.2rem)}
@@ -262,6 +262,82 @@ section{position:relative}
 .hunt-text p{color:var(--dim);font-size:clamp(.98rem,1.4vw,1.1rem);line-height:1.5}
 .hunt-text .swap{transition:opacity .35s,transform .45s var(--ease)}
 .hunt-text .swap.out{opacity:0;transform:translateY(8px)}
+
+
+.hunt-text .h-kicker{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.14em;text-transform:uppercase;color:var(--iris)}
+.hunt-text .h-note{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed);text-transform:uppercase;margin-top:.2rem}
+.hunt-canvas-wrap{border-block:1px solid var(--line)}
+.hx{background:var(--deep)}
+.hx-intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:2rem;border-top:1px solid var(--line);padding-top:1.5rem;margin-bottom:clamp(4rem,8vw,6rem)}
+.hx-stat{display:grid;gap:.4rem;align-content:start}
+.hx-stat b{font-family:var(--f-display);font-weight:900;font-size:clamp(2.4rem,5vw,3.6rem);line-height:.85;text-transform:uppercase;color:var(--iris)}
+.hx-stat span{color:var(--dim);font-size:1rem}
+.hx-h{font-size:clamp(2.2rem,4.6vw,3.6rem);margin:.4rem 0 1rem}
+.hx-sub{color:var(--dim);font-style:italic;margin:-.4rem 0 1.5rem}
+.hx-p{color:var(--dim);font-size:1.08rem;line-height:1.65;max-width:62ch}
+.hx-p.first{color:var(--bone);font-size:clamp(1.2rem,1.8vw,1.38rem);line-height:1.5}
+.hx-p.wide{margin-top:1.5rem;max-width:72ch}
+.ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:2.5rem 2rem;margin-bottom:clamp(5rem,10vw,8rem)}
+.way{margin:0;display:grid;gap:.9rem;align-content:start}
+.way svg{width:100%;height:auto;display:block;background:#2a2716;border:1px solid var(--line)}
+.way h4{font-family:var(--f-display);font-weight:700;font-size:1.7rem;text-transform:uppercase;margin:0 0 .3rem;line-height:.95}
+.way p{color:var(--dim);font-size:.98rem;line-height:1.55}
+.w-bank{fill:#5a4a2e}.w-edge{fill:none;stroke:rgba(240,225,190,.4)}
+.w-land{fill:#3f3a22}.w-water{fill:#2a2716}.w-shallow{fill:#3a3420}.w-water2{fill:#22251a}
+.w-trail{fill:none;stroke:#6c5a3a;stroke-width:9;stroke-linecap:round;opacity:.7}
+.w-path{fill:none;stroke:var(--iris);stroke-width:1.6;stroke-dasharray:4 4}
+.w-strike,.w-sweep{fill:none;stroke:var(--iris);stroke-width:2}
+.w-flow{fill:none;stroke:var(--reed);stroke-width:1.4}
+.w-l{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;fill:var(--bone);text-transform:uppercase;paint-order:stroke;stroke:rgba(6,10,8,.7);stroke-width:3px}
+.drinker{fill:#a89b7a}.w-herd{fill:#9c9277}.w-fish{fill:#c9c09d;opacity:.85}
+.carcass{fill:#7b5a44;stroke:#3a2a1f}
+.pc-body{fill:#4a4a2c;stroke:#1d1f14;stroke-width:.8}
+.pc-leg{fill:none;stroke:#3c3c25;stroke-linecap:round;stroke-linejoin:round}
+.pc-scute{fill:#2c2e1d}
+.pc-eye{fill:var(--iris)}
+.pc-nos{fill:#14150d}
+.hx-row{display:grid;gap:clamp(2.5rem,5vw,4rem);grid-template-columns:1fr;margin-bottom:clamp(5rem,10vw,8rem)}
+@media (min-width:980px){.hx-row{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:start}}
+.bite,.tooth{width:100%;height:auto;display:block;margin:.5rem 0 1.5rem}
+.tooth{max-width:340px}
+.b-skull{fill:#4a4a2c;stroke:#1d1f14}.b-jaw{fill:#3c3c25;stroke:#1d1f14}
+.b-hinge{fill:var(--deep);stroke:var(--bone);stroke-width:2}
+.b-mus{fill:rgba(184,96,63,.55);stroke:var(--rust)}
+.b-up{stroke:var(--iris);stroke-width:7}.b-force{stroke:var(--iris);stroke-width:4}.b-down{stroke:var(--rust);stroke-width:2}
+.bite-nums{display:grid;gap:1.25rem;border-top:1px solid var(--line);padding-top:1.25rem}
+.bite-nums div{display:grid;grid-template-columns:minmax(9rem,12rem) 1fr;gap:1rem;align-items:baseline}
+.bite-nums b{font-family:var(--f-display);font-weight:900;font-size:1.8rem;text-transform:uppercase;color:var(--bone);line-height:.9}
+.bite-nums span{color:var(--dim);font-size:.98rem}
+@media (max-width:620px){.bite-nums div{grid-template-columns:1fr;gap:.3rem}}
+.t-gum{fill:#5a3a30}.t-tooth{fill:#e8dfc6;stroke:#a89b7a}.t-root{fill:#c9bd9e;stroke:#a89b7a}.t-rep{fill:#f4eedc;stroke:var(--iris);stroke-width:1.5}.t-bud{fill:#f4eedc;opacity:.7}
+.ld{stroke:var(--reed);stroke-width:.8;opacity:.7}
+.roll-block{margin-bottom:clamp(5rem,10vw,8rem)}
+.roll-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1.5rem}
+.roll-f{margin:0;display:grid;gap:.7rem}
+.roll-f svg{width:100%;height:auto;display:block;border:1px solid var(--line)}
+.roll-f figcaption{color:var(--dim);font-size:.98rem}
+.roll-f figcaption b{display:block;font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.1em;text-transform:uppercase;color:var(--iris);font-weight:500;margin-bottom:.25rem}
+.xs{fill:#4a4a2c;stroke:#1d1f14}.xs-belly{fill:#c8b88a}.xs-osteo circle{fill:#2c2e1d}.xs-leg{fill:#3c3c25}
+.js .spin{animation:spin 4s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.year{width:100%;max-width:420px;height:auto;display:block;margin:1rem 0}
+.y-ring{fill:none;stroke:var(--line-2)}
+.y-tick{stroke:var(--line-2)}
+.y-m{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;fill:var(--reed);text-transform:uppercase}
+.y-cross{fill:none;stroke:var(--iris);stroke-width:14}
+.y-rain{fill:none;stroke:#6f8a86;stroke-width:6;stroke-dasharray:2 3}
+.y-c1{font-family:var(--f-display);font-weight:900;font-size:26px;fill:var(--bone);text-transform:uppercase}
+.y-c2{font-family:var(--f-mono);font-size:11px;fill:var(--reed);letter-spacing:.08em;text-transform:uppercase}
+.year-key{display:flex;gap:1.5rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--reed)}
+.year-key i{display:inline-block;width:18px;height:6px;margin-right:.5rem;vertical-align:1px}
+.year-key .k-cross{background:var(--iris)}.year-key .k-rain{background:repeating-linear-gradient(90deg,#6f8a86 0 2px,transparent 2px 5px)}
+.after{margin-bottom:clamp(4rem,8vw,6rem)}
+.after-line{list-style:none;margin:1.5rem 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:0;border-top:2px solid var(--iris)}
+.after-line li{position:relative;padding:1.4rem 1.25rem 0 0;display:grid;gap:.4rem}
+.after-line li::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--deep);border:2px solid var(--iris)}
+.after-line b{font-family:var(--f-display);font-weight:700;font-size:1.5rem;text-transform:uppercase;line-height:.95}
+.after-line span{color:var(--dim);font-size:.95rem}
+@media (prefers-reduced-motion:reduce){.js .spin{animation:none}}
 
 /* full-bleed photo after hunt */
 .bleed{position:relative;margin:0}
@@ -697,19 +773,19 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ THE HUNT ============ -->
-<section id="hunt" aria-label="The hunt, in six stages">
+<section id="hunt" aria-label="The hunt, in seven stages">
   <div class="hunt-track" id="hunt-track">
     <div class="hunt-stage wrap">
       <div class="hunt-top">
-        <div><p class="eyebrow" style="margin-bottom:.6rem">02 &nbsp;·&nbsp; Scroll to advance</p><h2>The hunt</h2></div>
+        <div><p class="eyebrow" style="margin-bottom:.6rem">02 &nbsp;·&nbsp; Mara River, late afternoon · scroll to advance</p><h2>The hunt</h2></div>
         <ol class="stages" id="stages" aria-label="Stages">
-          <li><i><b></b></i>Wait</li><li><i><b></b></i>Close</li><li><i><b></b></i>Strike</li><li><i><b></b></i>Drown</li><li><i><b></b></i>Roll</li><li><i><b></b></i>Swallow</li>
+          <li><i><b></b></i>Watch</li><li><i><b></b></i>Sink</li><li><i><b></b></i>Hold</li><li><i><b></b></i>Strike</li><li><i><b></b></i>Drown</li><li><i><b></b></i>Roll</li><li><i><b></b></i>Swallow</li>
         </ol>
       </div>
-      <div class="hunt-canvas-wrap"><canvas id="hunt-c" role="img" aria-label="Animated side view of a crocodile ambushing a wildebeest at the water's edge"></canvas></div>
+      <div class="hunt-canvas-wrap"><canvas id="hunt-c" role="img" aria-label="Cross-section of a river drawn to scale. A 4.5-metre Nile crocodile, facing the bank, watches a wildebeest drink, sinks, approaches underwater, strikes, drags the animal into deep water, rolls, and swallows."></canvas></div>
       <div class="hunt-text" aria-live="polite">
         <div class="roman swap" id="h-roman">I</div>
-        <div class="body swap" id="h-body"><h3>Wait</h3><p>It holds one spot, sometimes for hours, near where animals come down to drink. Large adults can go months between big meals, so it can afford to wait.</p></div>
+        <div class="body swap" id="h-body"><p class="h-kicker">Watch</p><h3>It has been here before</h3><p>A big male can hold the same stretch of river for years, and it turns up where the herds come down to drink. For now it lies at the surface twenty metres out. All that shows are the bumps of its eyes and nostrils. It watches.</p><p class="h-note">Eyes, ears and nostrils sit in one line on top of the head</p></div>
       </div>
     </div>
   </div>
@@ -717,6 +793,206 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
     <img class="rv" src="img/feast.jpg" alt="Several Nile crocodiles tearing at a wildebeest carcass in the brown water of the Mara River." width="1600" height="1066" loading="lazy">
     <figcaption><div class="wrap"><p>Mara River crossing. Several crocodiles share one wildebeest. One holds while another rolls, so the carcass tears.</p><span class="credit">Arturo de Frias Marques · <a href="https://commons.wikimedia.org/wiki/File:Crocodile_Feast_AdF.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span></div></figcaption>
   </figure>
+
+  <div class="hx band">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">02 &nbsp;·&nbsp; Field notes</p>
+        <h2 class="fade">How it hunts</h2>
+        <p class="lede fade">The lunge at the water's edge is the famous part, and the rarest. A Nile crocodile eats mostly fish, and it has a different method for nearly everything that comes near water. What ties them together is patience, a skin that feels the water, and a bite that does not let go.</p>
+      </header>
+
+      <div class="hx-intro">
+        <div class="hx-stat fade"><b>Months</b><span>can pass between large meals for a big adult. Waiting costs a cold-blooded body almost nothing.</span></div>
+        <div class="hx-stat fade"><b>Stones</b><span>turn up in the stomachs of many adults. Whether they grind food or work as ballast is still argued.</span></div>
+        <div class="hx-stat fade"><b>Fish</b><span>were the main food in Hugh Cott's classic study of stomach contents. Large mammals mattered mainly to the biggest crocodiles.</span></div>
+      </div>
+
+      <h3 class="hx-h fade">Six ways to eat</h3>
+      <p class="hx-sub fade">Seen from above. Gold is the crocodile's move.</p>
+      <div class="ways">
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile approaches drinking antelope underwater and lunges at the edge.">
+            <path class="w-bank" d="M0,0H320V62C260,70 200,54 150,62S40,72 0,64Z"/><path class="w-edge" d="M0,64C40,72 100,56 150,62S260,70 320,62"/>
+            <g class="drinker" transform="translate(118,52) rotate(80)"><ellipse rx="15" ry="7"/><ellipse cx="-17" cy="0" rx="6" ry="3.5"/></g>
+            <g class="drinker" transform="translate(160,48) rotate(95)"><ellipse rx="15" ry="7"/><ellipse cx="-17" cy="0" rx="6" ry="3.5"/></g>
+            <g class="drinker" transform="translate(205,52) rotate(100)"><ellipse rx="15" ry="7"/><ellipse cx="-17" cy="0" rx="6" ry="3.5"/></g>
+            <path class="w-path" d="M30,200C60,170 120,170 150,140"/>
+            <g class="pc" data-x="162" data-y="96" data-h="-80" data-l="110" data-legs="0"></g>
+            <path class="w-strike" d="M164,84L162,70" marker-end="url(#arw)"/>
+            <text class="w-l" x="12" y="190">approach underwater</text><text class="w-l" x="222" y="100">lunge</text>
+          </svg>
+          <figcaption><h4>The drinking place</h4><p>The classic ambush. It approaches below the surface and waits a body length out. Most attempts fail: the animal looks up at the wrong moment, or never drinks. It tries again another day.</p></figcaption>
+        </figure>
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="Wildebeest cross a river in a narrow lane while crocodiles wait downstream of the crossing.">
+            <path class="w-bank" d="M0,0H320V48C250,56 120,44 0,52Z"/><path class="w-bank" d="M0,210H320V156C220,150 120,162 0,154Z"/>
+            <g id="herd"></g>
+            <path class="w-flow" d="M20,128H90" marker-end="url(#arwf)"/><text class="w-l" x="20" y="144">current</text>
+            <g class="pc" data-x="232" data-y="96" data-h="190" data-l="78" data-legs="0" data-k="0.6"></g>
+            <g class="pc" data-x="236" data-y="128" data-h="175" data-l="70" data-legs="0"></g>
+            <g class="pc" data-x="258" data-y="72" data-h="200" data-l="64" data-legs="0"></g>
+            <g class="pc" data-x="104" data-y="110" data-h="0" data-l="70" data-legs="0" data-k="-0.5"></g>
+            <text class="w-l" x="196" y="196">herd crosses</text>
+          </svg>
+          <figcaption><h4>The crossing</h4><p>From about July to October the great migration crosses the Mara River at the same few places, year after year. Dozens of crocodiles gather there. Many animals die in the crush, and the crocodiles take the young, the weak and the drowned.</p></figcaption>
+        </figure>
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="Crocodiles form a curved line across a channel, facing upstream, catching fish carried by the current.">
+            <path class="w-bank" d="M0,0H320V40C220,48 160,70 120,62S30,40 0,44Z"/><path class="w-bank" d="M0,210H320V172C220,164 160,140 120,148S30,170 0,166Z"/>
+            <g id="fish3"></g>
+            <path class="w-flow" d="M20,105H70" marker-end="url(#arwf)"/>
+            <g class="pc" data-x="196" data-y="66" data-h="200" data-l="60" data-legs="0"></g>
+            <g class="pc" data-x="184" data-y="88" data-h="190" data-l="60" data-legs="0"></g>
+            <g class="pc" data-x="180" data-y="112" data-h="180" data-l="60" data-legs="0"></g>
+            <g class="pc" data-x="186" data-y="136" data-h="170" data-l="60" data-legs="0"></g>
+            <g class="pc" data-x="198" data-y="156" data-h="160" data-l="60" data-legs="0"></g>
+            <text class="w-l" x="20" y="124">fish carried down</text>
+          </svg>
+          <figcaption><h4>The fish wall</h4><p>Nile crocodiles have been seen lining up across a channel or a river mouth, facing the current, and taking the fish that come through. Observers describe them holding their places in the line. It is one of very few kinds of cooperative hunting recorded in reptiles.</p></figcaption>
+        </figure>
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile lies still in shallow water and snaps its head sideways at a passing fish.">
+            <path class="w-shallow" d="M0,0H320V210H0Z"/>
+            <g class="pc" data-x="210" data-y="118" data-h="-12" data-l="150" data-legs="1" data-kh="-6"></g>
+            <path class="w-sweep" d="M232,58A70,70 0 0 1 252,138" marker-end="url(#arw)"/>
+            <g id="fish4"></g>
+            <text class="w-l" x="196" y="36">sideways snap</text>
+          </svg>
+          <figcaption><h4>The sideways snap</h4><p>A head moving sideways through water pushes much less water ahead of it than one moving forward, and gives a fish no bow wave to sense. In the shallows a crocodile lies still and whips its head sideways at whatever brushes its jaws. A large share of its fish are caught this way.</p></figcaption>
+        </figure>
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile waits in grass beside a game trail a short distance from the water.">
+            <path class="w-land" d="M0,0H320V210H0Z"/><path class="w-water" d="M0,150C80,140 160,170 320,160V210H0Z"/>
+            <path class="w-trail" d="M300,0C260,60 220,90 190,155"/>
+            <g class="pc" data-x="168" data-y="110" data-h="-30" data-l="96" data-legs="1"></g>
+            <g class="drinker" transform="translate(238,62) rotate(118)"><ellipse rx="15" ry="7"/><ellipse cx="-17" cy="0" rx="6" ry="3.5"/></g>
+            <path class="w-strike" d="M176,104L200,92" marker-end="url(#arw)"/>
+            <text class="w-l" x="250" y="30">game trail</text><text class="w-l" x="16" y="196">water</text>
+          </svg>
+          <figcaption><h4>On land, at night</h4><p>Away from water it is slower, but not harmless. Crocodiles wait beside paths that lead down to the river and occasionally take animals on land, mostly after dark and only a short dash from the edge.</p></figcaption>
+        </figure>
+        <figure class="way fade">
+          <svg viewBox="0 0 320 210" role="img" aria-label="Several crocodiles converge on a floating carcass; one rolls while another holds.">
+            <path class="w-bank" d="M0,0H320V30C220,36 100,24 0,32Z"/>
+            <ellipse class="carcass" cx="160" cy="112" rx="26" ry="14"/>
+            <g class="pc" data-x="136" data-y="108" data-h="10" data-l="100" data-legs="0"></g>
+            <g class="pc" data-x="184" data-y="118" data-h="170" data-l="94" data-legs="0" data-k="0.4"></g>
+            <g class="pc" data-x="166" data-y="132" data-h="-100" data-l="80" data-legs="0" data-k="-0.6"></g>
+            <path class="w-sweep" d="M200,150A20,20 0 1 1 224,150" marker-end="url(#arw)"/>
+            <text class="w-l" x="232" y="176">roll</text><text class="w-l" x="20" y="100">hold</text>
+          </svg>
+          <figcaption><h4>Shared and stolen</h4><p>It isn't fussy about freshness. Nile crocodiles eat carrion readily, and a big carcass draws them from far along the river. Bigger animals take precedence, but at a large carcass they tolerate each other. One anchors while another twists off a piece.</p></figcaption>
+        </figure>
+      </div>
+
+      <div class="hx-row">
+        <div class="hx-col">
+          <p class="eyebrow">The bite</p>
+          <h3 class="hx-h fade">Built to shut</h3>
+          <svg class="bite" viewBox="0 0 560 250" role="img" aria-label="Lever diagram of a crocodile jaw. Huge closing muscles pull up near the hinge; a small opening muscle behind the hinge pulls down.">
+            <path class="b-skull" d="M40,118C120,106 300,92 452,86C486,86 512,100 512,118L470,124L40,126Z"/>
+            <path class="b-jaw" d="M40,130L470,128L520,140C510,160 480,166 452,162C300,156 120,146 40,138Z"/>
+            <g class="b-teeth"></g>
+            <circle class="b-hinge" cx="488" cy="128" r="7"/>
+            <path class="b-mus" d="M360,96C380,40 470,36 488,96C470,120 380,122 360,96Z"/>
+            <path class="b-up" d="M420,170V60" marker-end="url(#arwB)"/>
+            <path class="b-down" d="M532,118V150" marker-end="url(#arwS)"/>
+            <path class="b-force" d="M110,72V112" marker-end="url(#arwB)"/>
+            <text class="w-l" x="310" y="30">closing muscles: huge</text>
+            <text class="w-l" x="548" y="186" text-anchor="end">opening muscle: small</text>
+            <text class="w-l" x="488" y="216" text-anchor="middle">hinge</text><line class="ld" x1="488" y1="136" x2="488" y2="204"/>
+            <text class="w-l" x="66" y="60">bite force at the teeth</text>
+          </svg>
+          <div class="bite-nums">
+            <div><b class="num">16,414 N</b><span>The strongest bite ever measured in a living animal: a 4.59 m saltwater crocodile. Roughly the weight of a small car pressing down through the teeth.</span></div>
+            <div><b class="num">Size, not shape</b><span>In tests across all 23 crocodilian species, bite force tracked body size. A Nile crocodile bites about as hard as a saltwater crocodile its size.</span></div>
+            <div><b class="num">Weak to open</b><span>The opening muscles are small. The power is all in closing, which is why a crocodile's jaws can be held shut with a strap.</span></div>
+          </div>
+        </div>
+        <div class="hx-col">
+          <p class="eyebrow">The teeth</p>
+          <h3 class="hx-h fade">Cones that grip</h3>
+          <svg class="tooth" viewBox="0 0 300 260" role="img" aria-label="Cross-section of a crocodile tooth socket: a working tooth, a replacement tooth growing inside it, and a new tooth starting below.">
+            <path class="t-gum" d="M20,150H280V250H20Z"/>
+            <path class="t-tooth" d="M110,160C110,90 130,40 150,20C170,40 190,90 190,160Z"/>
+            <path class="t-root" d="M110,160L114,236H186L190,160Z"/>
+            <path class="t-rep" d="M128,226C128,186 140,160 150,148C160,160 172,186 172,226Z"/>
+            <path class="t-bud" d="M206,244C206,232 211,224 216,220C221,224 226,232 226,244Z"/>
+            <text class="w-l" x="200" y="60">working tooth</text><line class="ld" x1="196" y1="64" x2="172" y2="90"/>
+            <text class="w-l" x="200" y="186">replacement</text><line class="ld" x1="196" y1="190" x2="166" y2="196"/>
+            <text class="w-l" x="232" y="240">next</text>
+          </svg>
+          <p class="hx-p">Every tooth is a hollow cone with its replacement already growing inside it, and a third starting beneath. When a tooth breaks on bone, the next is ready. A Nile crocodile has 64 to 68 teeth and can replace each of them dozens of times. They are built to grip and puncture, not to slice, which is why everything after the bite depends on drowning, twisting and swallowing whole.</p>
+        </div>
+      </div>
+
+      <div class="roll-block">
+        <p class="eyebrow">The death roll</p>
+        <h3 class="hx-h fade">How a spin cuts</h3>
+        <div class="roll-grid">
+          <figure class="roll-f fade">
+            <svg viewBox="0 0 300 200" role="img" aria-label="Seen from above: the crocodile bites and locks its jaws on a carcass."><path class="w-water2" d="M0,0H300V200H0Z"/><rect class="carcass" x="210" y="76" width="70" height="46" rx="12"/><g class="pc" data-x="222" data-y="100" data-h="0" data-l="190" data-legs="1"></g></svg>
+            <figcaption><b>1 · Bite and lock</b> Jaws clamp on a limb or the edge of the carcass.</figcaption>
+          </figure>
+          <figure class="roll-f fade">
+            <svg viewBox="0 0 300 200" role="img" aria-label="Seen from above: legs pressed to the body, head and tail bent to the same side."><path class="w-water2" d="M0,0H300V200H0Z"/><rect class="carcass" x="210" y="76" width="70" height="46" rx="12"/><g class="pc" data-x="222" data-y="100" data-h="25" data-l="190" data-legs="0" data-kh="-5" data-kt="5"></g></svg>
+            <figcaption><b>2 · Tuck and bend</b> Legs flat against the body. Head and tail swing to the same side.</figcaption>
+          </figure>
+          <figure class="roll-f fade">
+            <svg viewBox="0 0 300 200" role="img" aria-label="Seen from the front: the body rotates around its long axis.">
+              <path class="w-water2" d="M0,0H300V200H0Z"/>
+              <g transform="translate(150,104)"><g class="spin">
+                <path class="xs" d="M-52,6C-52,-24 -30,-34 0,-34C30,-34 52,-24 52,6C52,28 30,36 0,36C-30,36 -52,28 -52,6Z"/>
+                <path class="xs-belly" d="M-46,18C-30,34 30,34 46,18C40,32 24,36 0,36C-24,36 -40,32 -46,18Z"/>
+                <g class="xs-osteo"><circle cx="-22" cy="-30" r="5"/><circle cx="-8" cy="-34" r="5"/><circle cx="8" cy="-34" r="5"/><circle cx="22" cy="-30" r="5"/></g>
+                <path class="xs-leg" d="M-52,10C-60,14 -60,26 -50,26Z"/><path class="xs-leg" d="M52,10C60,14 60,26 50,26Z"/>
+              </g></g>
+              <path class="w-sweep" d="M150,30A74,74 0 1 1 82,74" marker-end="url(#arw)"/>
+            </svg>
+            <figcaption><b>3 · Spin</b> The bend turns into rotation around the long axis. The locked jaws twist the bite free.</figcaption>
+          </figure>
+        </div>
+        <p class="hx-p wide">In 2007 researchers filmed alligators rolling and found the spin isn't powered by the legs. It comes from the body bending, the head and tail swung to one side, which a tucked, streamlined animal turns into rotation. A 2019 survey found death rolls in most crocodilian species tested, including slender-snouted ones that mostly eat fish.</p>
+      </div>
+
+      <div class="hx-row">
+        <div class="hx-col">
+          <p class="eyebrow">A year at the crossing</p>
+          <h3 class="hx-h fade">The feast has a season</h3>
+          <svg class="year" id="year" viewBox="0 0 340 340" role="img" aria-label="Year calendar for the Mara River. Long rains March to May, short rains November and December, and the great migration crossing from July to October."></svg>
+          <div class="year-key"><span><i class="k-cross"></i>Herds cross the Mara</span><span><i class="k-rain"></i>Rains</span></div>
+        </div>
+        <div class="hx-col">
+          <p class="hx-p first">For most of the year, the crocodiles of the Mara live on fish and whatever comes to drink. Then, as the rains in the south end, more than a million wildebeest move north into Kenya, and the river is in their way.</p>
+          <p class="hx-p">They cross at the same places, year after year, often several times as the grazing shifts. Big crocodiles may eat a few large meals in those months and then very little until the next season. A cold-blooded body makes that possible: a Nile crocodile needs only a fraction of the food a lion of the same weight would.</p>
+          <p class="hx-p">The timing moves with the rains. Some years the herds reach the river in June, some years not until August.</p>
+        </div>
+      </div>
+
+      <div class="after">
+        <p class="eyebrow">After the meal</p>
+        <h3 class="hx-h fade">What happens next</h3>
+        <ol class="after-line">
+          <li class="fade"><b>Seconds</b><span>The strike. Jaws close, the animal is pulled off balance.</span></li>
+          <li class="fade"><b>Minutes</b><span>Drowning. Large prey is held under until it stops moving.</span></li>
+          <li class="fade"><b>An hour</b><span>Tearing and swallowing. Pieces go down whole, head held high.</span></li>
+          <li class="fade"><b>Hours to days</b><span>It hauls out to bask. A warmer body digests faster, so it chases the sun.</span></li>
+          <li class="fade"><b>Days</b><span>Very strong stomach acid dissolves bone. Hair, horn and hooves resist it.</span></li>
+          <li class="fade"><b>Weeks to months</b><span>It may not need another large meal. It goes back to waiting.</span></li>
+        </ol>
+      </div>
+
+      <p class="og-close fade">A hunter that never hurries. <span>It doesn't need to be faster than you. It only needs you to drink.</span></p>
+    </div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10Z" fill="#e2a83c"/></marker>
+    <marker id="arwf" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10Z" fill="#8f9c76"/></marker>
+    <marker id="arwB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10Z" fill="#e2a83c"/></marker>
+    <marker id="arwS" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10Z" fill="#b8603f"/></marker>
+  </defs></svg>
 </section>
 
 <!-- ============ THE EDGE ============ -->
@@ -957,6 +1233,11 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <li>Brochu, C. &amp; Storrs, G. (2012). A giant crocodile from the Plio-Pleistocene of Kenya and the antiquity of <em>Crocodylus</em> in Africa. <em>J. Vert. Paleontol.</em> 32.</li>
           <li>Delfino, M. et al. (2020). Old African fossils provide new evidence for the origin of the American crocodiles. <em>Scientific Reports</em> 10.</li>
           <li>Njau, J. &amp; Blumenschine, R. (2012). Crocodylian and mammalian carnivore feeding traces on hominid fossils from Olduvai Gorge. <em>J. Hum. Evol.</em> 63.</li>
+          <li>Cott, H.B. (1961). Scientific results of an inquiry into the ecology and economic status of the Nile crocodile in Uganda and Northern Rhodesia. <em>Trans. Zool. Soc. London</em> 29.</li>
+          <li>Fleishman, L. et al. (1988). Crocodiles don't focus underwater. <em>J. Comp. Physiol. A</em> 163.</li>
+          <li>Fish, F. et al. (2007). Death roll of the alligator: mechanics of twist feeding in water. <em>J. Exp. Biol.</em> 210.</li>
+          <li>Drumheller, S. et al. (2019). Surveying death roll behavior across Crocodylia. <em>Ethology Ecology &amp; Evolution</em> 31.</li>
+          <li>Dinets, V. (2015). Apparent coordination and collaboration in cooperatively hunting crocodilians. <em>Ethology Ecology &amp; Evolution</em> 27.</li>
           <li>Herodotus, <em>Histories</em>, Book II.</li>
         </ol>
       </div>
@@ -1256,135 +1537,6 @@ Ripples.prototype.draw = function (ctx, dt, squash = .12, color = "232,224,204")
 })();
 
 /* =========================================================
-   THE HUNT (scroll-scrubbed)
-   ========================================================= */
-(function hunt() {
-  const track = document.getElementById("hunt-track"), cv = document.getElementById("hunt-c");
-  const lis = [...document.querySelectorAll("#stages li")];
-  const romanEl = document.getElementById("h-roman"), bodyEl = document.getElementById("h-body");
-  const STAGES = [
-    ["I", "Wait", "It holds one spot, sometimes for hours, near where animals come down to drink. Large adults can go months between big meals, so it can afford to wait."],
-    ["II", "Close", "It sinks and drifts in under the surface without a ripple. The pressure sensors on its jaws pick up muzzles touching the water and hooves at the edge."],
-    ["III", "Strike", "One sweep of the tail throws the front of the body out of the water. The jaws close on a muzzle or a leg. It's over in a moment."],
-    ["IV", "Drown", "It doesn't need to win a fight. It drags the animal back into deep water and holds it under. Most large prey drown."],
-    ["V", "Roll", "It can't chew. To tear off a piece it locks its jaws and spins its whole body: the death roll. Other crocodiles often hold the carcass in place."],
-    ["VI", "Swallow", "Pieces go down whole, head tipped back. Stones in its stomach and powerful stomach acid break down bone. One large meal can last weeks."]
-  ];
-  let cur = -1, last = performance.now(), T = 0;
-  const rip = new Ripples(), splash = [];
-  function setStage(i) {
-    if (i === cur) return; cur = i;
-    lis.forEach((li, k) => li.classList.toggle("on", k === i));
-    [romanEl, bodyEl].forEach(e => e.classList.add("out"));
-    setTimeout(() => {
-      romanEl.textContent = STAGES[i][0];
-      bodyEl.innerHTML = `<h3>${STAGES[i][1]}</h3><p>${STAGES[i][2]}</p>`;
-      [romanEl, bodyEl].forEach(e => e.classList.remove("out"));
-    }, RM ? 0 : 180);
-  }
-  function frame(now) {
-    const dt = Math.min(.05, (now - last) / 1000); last = now;
-    if (!visible(track)) { requestAnimationFrame(frame); return; }
-    T += RM ? 0 : dt;
-    const p = sectionProgress(track), s = p * 6;              // 0..6
-    setStage(Math.min(5, Math.floor(s)));
-    lis.forEach((li, k) => li.querySelector("b").style.transform = `scaleX(${clamp(s - k, 0, 1)})`);
-
-    const { ctx, w, h } = fitCanvas(cv);
-    // logical scene 1000 x 520, letterboxed
-    const sc = Math.min(w / 1000, h / 520), ox = (w - 1000 * sc) / 2, oy = (h - 520 * sc) / 2;
-    ctx.clearRect(0, 0, w, h);
-    ctx.save(); ctx.translate(ox, oy); ctx.scale(sc, sc);
-    const WY = 250;
-    // sky + water
-    let g = ctx.createLinearGradient(0, 0, 0, WY); g.addColorStop(0, "#0d1512"); g.addColorStop(1, "#2b2a1c");
-    ctx.fillStyle = g; ctx.fillRect(-400, 0, 1800, WY);
-    g = ctx.createLinearGradient(0, WY, 0, 520); g.addColorStop(0, "#22301f"); g.addColorStop(1, "#070d0a");
-    ctx.fillStyle = g; ctx.fillRect(-400, WY, 1800, 270);
-    // bank (right)
-    ctx.fillStyle = "#2a2419";
-    ctx.beginPath(); ctx.moveTo(760, 520); ctx.lineTo(760, 300); ctx.bezierCurveTo(800, 262, 830, 232, 880, 222); ctx.lineTo(1400, 210); ctx.lineTo(1400, 520); ctx.fill();
-    ctx.fillStyle = "#1c1912"; ctx.beginPath(); ctx.moveTo(760, 520); ctx.lineTo(760, 300); ctx.bezierCurveTo(780, 340, 800, 420, 840, 520); ctx.fill();
-
-    // ---- choreography ----
-    const L = 470;
-    const st = k => seg(s, k, k + 1);
-    let cx = 60, cy = WY - L * .012, jaw = 0, tilt = 0, roll = 0, eye = 1, alphaAbove = 1;
-    let gx = 845, gy = 228, gDrop = 1, gRot = 0, gPull = 0, gAlpha = 1, gKick = 0;
-    const bob = Math.sin(T * .9) * 1.2;
-    // I wait
-    cy += bob;
-    // II close
-    const a2 = ease(st(1));
-    cx = lerp(60, 330, a2); cy = lerp(cy, WY + 26, Math.sin(Math.min(1, a2 * 1.4) * Math.PI / 2) * (1 - seg(s, 1.85, 2)));
-    eye = 1 - seg(s, 1.05, 1.25);
-    // III strike
-    const a3 = st(2);
-    if (s >= 2) {
-      const lunge = easeOut(seg(a3, 0, .45));
-      cx = lerp(330, 470, lunge); cy = lerp(WY + 26, WY - 34, lunge) - Math.sin(seg(a3, 0, .6) * Math.PI) * 18;
-      tilt = -lerp(0, .22, lunge) * (1 - seg(a3, .6, 1) * .5);
-      jaw = seg(a3, .05, .3) * (1 - seg(a3, .38, .5));
-      gDrop = lerp(1, .55, seg(a3, .38, .7)); gKick = seg(a3, .4, 1);
-      if (a3 > .4 && splash.length < 60 && !RM) for (let i = 0; i < 4; i++) splash.push({ x: 500 + Math.random() * 80, y: WY, vx: (Math.random() - .3) * 160, vy: -120 - Math.random() * 220, t: 0 });
-      eye = Math.max(eye, lunge);
-    }
-    // IV drown: drag back and under
-    const a4 = ease(st(3));
-    if (s >= 3) {
-      cx = lerp(470, 300, a4); cy = lerp(WY - 34 + 9, WY + 70, a4); tilt = lerp(-.11, .06, a4);
-      gx = lerp(845, 640, a4); gy = lerp(228, WY + 70, a4); gRot = lerp(0, -1.1, a4); gDrop = lerp(.55, .2, a4); gPull = lerp(0, .3, a4); gKick = 1 - a4 * .6;
-      eye = 1 - seg(a4, 0, .3);
-    }
-    // V roll
-    const a5 = st(4);
-    if (s >= 4) {
-      cx = 300 + Math.sin(a5 * Math.PI) * 20; cy = WY + 70; tilt = .06 * (1 - a5); roll = ease(a5) * Math.PI * 4;
-      gx = 640 + a5 * 10; gy = WY + 70 - a5 * 20; gRot = -1.1 - Math.sin(a5 * Math.PI * 4) * .25; gDrop = .2; gKick = 0; gPull = .3;
-    }
-    // VI swallow: surface, head tipped back
-    const a6 = ease(st(5));
-    if (s >= 5) {
-      cx = lerp(300, 340, a6); cy = lerp(WY + 70, WY - L * .02, a6); roll = 0; tilt = -lerp(0, .32, seg(a6, .4, 1)); jaw = seg(a6, .5, .7) * (1 - seg(a6, .85, 1)) * .6;
-      gx = lerp(650, 690, a6); gy = lerp(WY + 50, WY + 6, a6); gRot = lerp(-1.2, -1.5, a6); gAlpha = lerp(1, .85, a6);
-      eye = a6;
-    }
-
-    // second crocodile joins at the carcass (roll + swallow)
-    if (s > 4.2) {
-      const k = ease(seg(s, 4.2, 5.2));
-      drawCroc(ctx, { L: 380, x: lerp(1050, 600, k), y: WY - 380 * .012 + Math.sin(T) * 1.2 + 34 * (1 - k), t: T, sway: .4, fill: "#16221b", belly: "#1f2b20", alpha: .8 * k, legs: true, eyeGlow: k > .9 ? 1 : 0 });
-    }
-    // prey
-    drawGnu(ctx, gx, gy, 92, { drop: gDrop, rot: gRot, pull: gPull, kick: Math.sin(T * 14) * gKick, alpha: gAlpha, fill: "#14160f" });
-    // crocodile
-    drawCroc(ctx, { L, x: cx, y: cy, t: T, sway: s < 2 ? .5 : 1.1, paddle: s > 1 && s < 2 ? 1 : .3, jaw, tilt, roll, fill: "#1d2a21", belly: "#27321f", eyeGlow: eye, alpha: 1 });
-
-    // water surface overlay: makes the submerged part read as submerged
-    ctx.fillStyle = "rgba(20,34,26,.42)"; ctx.fillRect(-400, WY, 1800, 270);
-    ctx.fillStyle = "rgba(232,224,204,.18)"; ctx.fillRect(-400, WY, 1800, 1);
-    for (let i = 0; i < 14; i++) { ctx.fillStyle = `rgba(226,168,60,${.12 * (1 - i / 14)})`; ctx.fillRect((i * 173 + T * 6) % 1300 - 150, WY + 2 + i * 2, 40 + (i * 29) % 70, 1); }
-    // drinking ripples at stage I–II
-    if (!RM && s < 2.3 && Math.random() < dt * 1.2) rip.add(gx - 70, WY, 70, 2.4);
-    if (!RM && s >= 4 && s < 5 && Math.random() < dt * 5) rip.add(300 + Math.random() * 260, WY, 120, 1.8);
-    rip.draw(ctx, RM ? 0 : dt, .09);
-    // splash
-    ctx.fillStyle = "rgba(232,224,204,.7)";
-    for (let i = splash.length - 1; i >= 0; i--) { const d = splash[i]; d.t += dt; d.vy += 600 * dt; d.x += d.vx * dt; d.y += d.vy * dt; if (d.y > WY + 4 || d.t > 2) { splash.splice(i, 1); continue; } ctx.fillRect(d.x, d.y, 2.2, 2.2); }
-    // swirl lines during the roll
-    if (s >= 4 && s < 5) { ctx.strokeStyle = "rgba(232,224,204,.12)"; ctx.lineWidth = 1.2; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(420, WY + 80, 140 + k * 26, 30 + k * 8, 0, T * 3 + k, T * 3 + k + 1.6); ctx.stroke(); } }
-    // bubbles while drowning
-    if (s >= 3 && s < 4.6 && !RM) { ctx.strokeStyle = "rgba(232,224,204,.35)"; for (let k = 0; k < 10; k++) { const bx = gx - 40 + (k * 37) % 70, by = gy - ((T * 60 + k * 41) % 120); if (by > WY) { ctx.beginPath(); ctx.arc(bx, by, 1.5 + (k % 3), 0, Math.PI * 2); ctx.stroke(); } } }
-    // scale bar
-    ctx.fillStyle = "rgba(143,156,118,.8)"; ctx.font = "500 12px 'IBM Plex Mono', monospace";
-    ctx.fillRect(40, 495, 104, 1); ctx.fillRect(40, 490, 1, 10); ctx.fillRect(144, 490, 1, 10); ctx.fillText("1 m", 152, 499);
-    ctx.restore();
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
-/* =========================================================
    THE EDGE: reaction test
    ========================================================= */
 (function edge() {
@@ -1666,3 +1818,5 @@ Ripples.prototype.draw = function (ctx, dt, squash = .12, color = "232,224,204")
 })();
 </script>
 <script type="module" src="js/origins-ui.mjs"></script>
+<script type="module" src="js/hunt-scene.mjs"></script>
+<script type="module" src="js/hunt-diagrams.mjs"></script>
