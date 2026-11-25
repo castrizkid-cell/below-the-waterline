@@ -1,0 +1,1381 @@
+<title>Below the Waterline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A field guide to the Nile crocodile: how it hunts, where it lives, and how its populations are doing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one river, read top to bottom. The page sits at the waterline and every section
+   reveals the way water drops away from a body: from the bottom up. Single dark world, by choice. */
+:root{
+  --river:#0b1411;      /* the water at dusk */
+  --deep:#060c0a;       /* below the thermocline */
+  --silt:#141d18;       /* raised surfaces */
+  --reed:#8f9c76;       /* bank vegetation, secondary text */
+  --bone:#e8e0cc;       /* body text, egg shell */
+  --iris:#e2a83c;       /* the crocodile's eye: the one accent */
+  --mud:#7b6547;
+  --rust:#b8603f;
+  --line:rgba(232,224,204,.13);
+  --line-2:rgba(232,224,204,.28);
+  --dim:rgba(232,224,204,.62);
+  --ok:#7f9b5e; --warn:#c09a52; --bad:#b8603f; --other:#3d4c45;
+
+  --f-display:"Big Shoulders Display","Arial Narrow","Helvetica Neue Condensed",Impact,sans-serif;
+  --f-body:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --s-1:.8125rem; --s0:1.0625rem; --s1:1.3rem; --s2:1.75rem; --s3:2.6rem; --s4:clamp(3rem,7vw,5.6rem); --s5:clamp(4.2rem,13vw,11.5rem);
+  --gut:max(16px, env(safe-area-inset-left, 0px));
+  --gut-r:max(16px, env(safe-area-inset-right, 0px));
+  --ease:cubic-bezier(.2,.7,.1,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--deep);scroll-behavior:smooth}
+body{background:var(--river);color:var(--bone);font-family:var(--f-body);font-size:var(--s0);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+::selection{background:var(--iris);color:var(--deep)}
+a{color:inherit;text-decoration-color:var(--iris);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--iris);outline-offset:3px;border-radius:2px}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;text-transform:uppercase;letter-spacing:.005em;line-height:.86;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r)}
+.eyebrow{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.14em;text-transform:uppercase;color:var(--reed)}
+.eyebrow b{color:var(--iris);font-weight:500}
+.prose{max-width:62ch;display:grid;gap:1em}
+.prose p{color:var(--dim)}
+.prose p strong{color:var(--bone);font-weight:500}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono)}
+section{position:relative}
+.sec-head{display:grid;gap:1.1rem;margin-bottom:clamp(2rem,5vw,3.5rem)}
+.sec-head h2{font-size:var(--s4)}
+.sec-head .lede{font-size:var(--s1);line-height:1.45;max-width:46ch;color:var(--bone)}
+.band{padding-block:clamp(5rem,12vw,9rem)}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+
+/* ---------- reveal: water drops away, bottom to top ---------- */
+.js .rv{clip-path:inset(0 0 0 0)}
+.js .rv.pre{clip-path:inset(100% 0 0 0)}
+.js .rv{transition:clip-path 1.25s var(--ease)}
+.js .fade.pre{opacity:0;transform:translateY(18px)}
+.js .fade{transition:opacity .9s var(--ease),transform .9s var(--ease)}
+
+/* ---------- HUD: breath clock ---------- */
+.hud{position:fixed;z-index:40;left:calc(env(safe-area-inset-left,0px) + 14px);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--reed);
+  background:rgba(6,12,10,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);padding:10px 12px 9px;
+  width:min(240px,calc(100vw - 28px));cursor:pointer;text-align:left;border-radius:2px;transition:border-color .3s}
+.hud:hover{border-color:var(--line-2)}
+.hud .row{display:flex;justify-content:space-between;gap:12px}
+.hud .row b{color:var(--bone);font-weight:500}
+.hud .air{height:2px;background:var(--line);margin:8px 0 0;position:relative;overflow:hidden}
+.hud .air i{position:absolute;inset:0 auto 0 0;background:var(--iris);width:100%;transform-origin:left;transition:transform 1s linear}
+.hud .why{display:none;text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:13px;line-height:1.45;color:var(--dim);margin-top:8px}
+.hud[aria-expanded="true"] .why{display:block}
+
+/* ---------- section index (desktop) ---------- */
+.index{position:fixed;z-index:30;right:calc(env(safe-area-inset-right,0px) + 18px);top:50%;transform:translateY(-50%);display:none;gap:2px;flex-direction:column;align-items:flex-end}
+.index a{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:transparent;text-decoration:none;padding:5px 0;transition:color .3s}
+.index a::after{content:"";width:14px;height:1px;background:var(--line-2);transition:width .4s var(--ease),background .3s}
+.index:hover a{color:var(--reed)}
+.index a.on::after{width:34px;background:var(--iris)}
+.index a.on{color:var(--bone)}
+@media (min-width:1100px){.index{display:flex}}
+
+/* ---------- HERO ---------- */
+#surface{height:230vh;background:var(--deep)}
+.hero-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.hero-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-copy{position:absolute;left:0;right:0;top:0;padding-top:clamp(5.5rem,13vh,9rem);pointer-events:none}
+.hero-copy .wrap{display:grid;gap:1.25rem}
+.hero-copy h1{font-size:var(--s5);color:var(--bone);max-width:9ch;transition:opacity .4s,transform .6s var(--ease)}
+.hero-copy h1 span{display:block}
+.hero-copy h1 .lo{color:transparent;-webkit-text-stroke:1.5px rgba(232,224,204,.55)}
+.hero-copy .lede{max-width:34ch;font-size:var(--s1);line-height:1.4;color:var(--dim)}
+.hero-copy .lede em{color:var(--bone)}
+.hero-under{position:absolute;left:0;right:0;bottom:clamp(3rem,10vh,6rem);pointer-events:none;opacity:0;transition:opacity .6s}
+.hero-under .wrap{display:flex;justify-content:flex-end}
+.hero-under p{max-width:30ch;font-size:var(--s1);line-height:1.4;color:var(--bone)}
+.hero-under p span{display:block;font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.12em;text-transform:uppercase;color:var(--iris);margin-bottom:.6rem}
+.cue{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--reed);display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .4s}
+.cue::after{content:"";width:1px;height:38px;background:linear-gradient(var(--reed),transparent);animation:drip 2.4s var(--ease) infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- ANATOMY ---------- */
+#built{background:linear-gradient(var(--deep),var(--river) 30%)}
+.anat{display:grid;gap:clamp(2rem,4vw,3rem)}
+.anat-fig{position:relative;margin:0}
+.anat-fig img{width:100%;aspect-ratio:1600/1066;object-fit:cover;filter:saturate(.85) contrast(1.04)}
+.pin{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;border:0;background:transparent;cursor:pointer;padding:0}
+.pin::before,.pin::after{content:"";position:absolute;inset:0;border-radius:50%}
+.pin::before{inset:9px;background:var(--iris);box-shadow:0 0 0 3px rgba(6,12,10,.55)}
+.pin::after{border:1px solid var(--iris);animation:ring 2.8s var(--ease) infinite;opacity:0}
+.pin[aria-pressed="true"]::before{background:var(--bone)}
+@keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+.pin .lab{position:absolute;left:50%;top:-6px;transform:translate(-50%,-100%);white-space:nowrap;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone);background:rgba(6,12,10,.72);padding:3px 6px;pointer-events:none}
+.anat-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:0;border-top:1px solid var(--line)}
+.note{padding:1.25rem 1.25rem 1.5rem 0;border-bottom:1px solid var(--line);display:grid;gap:.45rem;align-content:start;transition:background .4s}
+.note:not(:last-child){padding-right:1.5rem}
+.note .k{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.12em;text-transform:uppercase;color:var(--reed);display:flex;justify-content:space-between;gap:1rem}
+.note .v{font-family:var(--f-display);font-weight:700;font-size:var(--s3);line-height:.95;color:var(--bone);text-transform:uppercase}
+.note .v small{font-size:.5em;letter-spacing:.04em;color:var(--reed);font-weight:500}
+.note p{font-size:.97rem;color:var(--dim);line-height:1.5}
+.note.lit .k{color:var(--iris)}
+.note.lit .v{color:var(--iris)}
+
+/* ---------- HUNT ---------- */
+#hunt{background:var(--river)}
+.hunt-track{height:640vh;position:relative}
+.hunt-stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding-block:clamp(1rem,3vh,2rem)}
+.hunt-top{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.hunt-top h2{font-size:clamp(2.4rem,5vw,4.2rem)}
+.stages{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex:1 1 360px;max-width:560px}
+.stages li{flex:1;display:grid;gap:6px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--reed)}
+.stages li i{display:block;height:2px;background:var(--line);position:relative;overflow:hidden}
+.stages li i b{position:absolute;inset:0;background:var(--iris);transform:scaleX(0);transform-origin:left}
+.stages li.on{color:var(--bone)}
+.hunt-canvas-wrap{position:relative;min-height:0;margin-block:clamp(.75rem,2vh,1.5rem)}
+.hunt-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hunt-text{display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,3vw,2.5rem);align-items:start;min-height:7.5em}
+.hunt-text .roman{font-family:var(--f-display);font-weight:900;font-size:clamp(3rem,7vw,5.5rem);line-height:.8;color:var(--iris);min-width:1.6ch}
+.hunt-text .body{display:grid;gap:.4rem;max-width:58ch}
+.hunt-text h3{font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:.02em}
+.hunt-text p{color:var(--dim);font-size:clamp(.98rem,1.4vw,1.1rem);line-height:1.5}
+.hunt-text .swap{transition:opacity .35s,transform .45s var(--ease)}
+.hunt-text .swap.out{opacity:0;transform:translateY(8px)}
+
+/* full-bleed photo after hunt */
+.bleed{position:relative;margin:0}
+.bleed img{width:100%;height:min(88vh,62vw);min-height:340px;object-fit:cover;filter:saturate(.9)}
+.bleed figcaption{position:absolute;left:0;right:0;bottom:0;padding-block:5rem 1.5rem;background:linear-gradient(transparent,rgba(6,12,10,.85))}
+.bleed figcaption .wrap{display:flex;justify-content:space-between;gap:1rem 2rem;flex-wrap:wrap;align-items:end}
+.bleed figcaption p{font-size:var(--s1);max-width:38ch;line-height:1.35}
+.credit{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed)}
+.credit a{text-decoration:none;border-bottom:1px solid var(--line-2)}
+
+/* ---------- EDGE (reaction) ---------- */
+#edge{background:var(--deep)}
+.edge-grid{display:grid;gap:clamp(2rem,4vw,3.5rem);grid-template-columns:1fr}
+@media (min-width:900px){.edge-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center}}
+.edge-box{position:relative;aspect-ratio:16/10;max-width:100%;background:#000;border:1px solid var(--line);overflow:hidden;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.edge-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.edge-msg{position:absolute;left:0;right:0;top:0;padding:clamp(1rem,3vw,1.75rem);display:grid;gap:.4rem;pointer-events:none}
+.edge-msg .big{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,6vw,4.4rem);line-height:.9;text-transform:uppercase}
+.edge-msg .small{font-size:.98rem;color:var(--dim);max-width:40ch}
+.btn{appearance:none;border:1px solid var(--iris);background:transparent;color:var(--iris);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:.85rem 1.2rem;cursor:pointer;transition:background .25s,color .25s}
+.btn:hover{background:var(--iris);color:var(--deep)}
+.btn.ghost{border-color:var(--line-2);color:var(--bone)}
+.btn.ghost:hover{background:var(--bone);color:var(--deep)}
+.btn[aria-pressed="true"]{background:var(--iris);color:var(--deep)}
+.tries{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:var(--s-1);color:var(--reed);letter-spacing:.06em}
+.tries b{color:var(--bone);font-weight:500}
+
+/* ---------- RANGE MAP ---------- */
+#range{background:var(--river)}
+.map-grid{display:grid;gap:clamp(1.5rem,3vw,2.5rem);grid-template-columns:1fr}
+@media (min-width:980px){.map-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.map-box{position:relative;min-width:0}
+.map-box svg{width:100%;height:auto;display:block;overflow:visible}
+.map-box .land{fill:#18221d;stroke:rgba(232,224,204,.09);stroke-width:.6}
+.map-box .land.out{fill:#111915}
+.map-box .land[data-s="strong"]{fill:#33452b}
+.map-box .land[data-s="patchy"]{fill:#4c4128}
+.map-box .land[data-s="depleted"]{fill:#5a2e20}
+.map-box .land[data-s="gone"]{fill:url(#hatch)}
+.map-box .land[data-s="suchus"]{fill:#1f2b27}
+.map-box .land{transition:opacity .4s}
+.map-box svg.focus .land[data-s]:not(.hl){opacity:.35}
+.map-box .lake{fill:#0a1512;stroke:#2e4a44;stroke-width:.6}
+.map-box .river{fill:none;stroke:#3f6a63;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.map-box .river.nile{stroke:#6aa196;stroke-width:1.6}
+.hot{cursor:pointer}
+.hot .r{fill:none;stroke:var(--iris);stroke-width:1.2;opacity:0}
+.hot .d{fill:var(--iris);stroke:var(--deep);stroke-width:2;transition:r .3s}
+.hot.on .d{fill:var(--bone)}
+.hot .t{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;fill:var(--bone);paint-order:stroke;stroke:var(--deep);stroke-width:3px;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity .3s}
+.hot:hover .t,.hot.on .t,.hot:focus .t{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:.6rem 1.25rem;margin-top:1rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed);text-transform:uppercase}
+.legend button{all:unset;cursor:pointer;display:flex;align-items:center;gap:.5rem;padding:2px 0}
+.legend button:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
+.legend button[aria-pressed="true"]{color:var(--bone)}
+.legend i{width:14px;height:10px;display:inline-block;border:1px solid var(--line-2)}
+.place{display:grid;gap:1rem;align-content:start;min-width:0}
+.place figure{margin:0;position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--silt)}
+.place figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease),opacity .5s}
+.place figure.none{display:grid;place-items:center}
+.place figure.none canvas{width:100%;height:100%}
+.place .coords{font-family:var(--f-mono);font-size:var(--s-1);color:var(--reed);letter-spacing:.06em}
+.place h3{font-size:clamp(2.2rem,4vw,3.2rem)}
+.place p{color:var(--dim)}
+.place .tag{display:inline-flex;gap:.5rem;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .55rem;border:1px solid var(--line-2);color:var(--bone);width:max-content}
+.place .tag i{width:7px;height:7px;border-radius:50%}
+.place-nav{display:flex;gap:.5rem;flex-wrap:wrap}
+.place-body{display:grid;gap:.8rem;transition:opacity .35s}
+.place-body.out{opacity:0}
+
+/* ---------- NUMBERS ---------- */
+#numbers{background:var(--deep)}
+.dots-wrap{display:grid;gap:1.5rem;grid-template-columns:1fr}
+@media (min-width:980px){.dots-wrap{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:start}}
+.dots-side{display:grid;gap:1.5rem;align-content:start}
+.figure-big{font-family:var(--f-display);font-weight:900;font-size:clamp(3.6rem,9vw,7rem);line-height:.82;color:var(--bone);transition:color .5s}
+.figure-big.amber{color:var(--iris)}
+.figure-cap{color:var(--dim);max-width:36ch}
+.toggle{display:flex;gap:.5rem;flex-wrap:wrap}
+.dots-canvas-wrap{position:relative;aspect-ratio:3/2;min-width:0}
+.dots-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.key{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--reed);text-transform:uppercase;display:flex;gap:1.25rem;flex-wrap:wrap}
+.key span{display:inline-flex;align-items:center;gap:.45rem}
+.key i{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+.timeline{margin-top:clamp(4rem,9vw,7rem);display:grid;gap:0;border-top:1px solid var(--line)}
+.tl{display:grid;grid-template-columns:minmax(6.5rem,10rem) 1fr;gap:1rem 2rem;padding:1.15rem 0;border-bottom:1px solid var(--line);align-items:baseline}
+.tl .y{font-family:var(--f-display);font-weight:700;font-size:1.6rem;color:var(--bone);line-height:1}
+.tl .y.hot{color:var(--iris)}
+.tl p{color:var(--dim);max-width:70ch}
+.tl p strong{color:var(--bone);font-weight:500}
+.pressures{margin-top:clamp(4rem,9vw,6rem);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:2.5rem 2rem}
+.pressure{display:grid;gap:.5rem;align-content:start}
+.pressure .lvl{display:flex;gap:3px}
+.pressure .lvl i{width:22px;height:4px;background:var(--line)}
+.pressure .lvl i.f{background:var(--rust)}
+.pressure h3{font-size:1.6rem;letter-spacing:.02em}
+.pressure p{color:var(--dim);font-size:.98rem}
+
+/* ---------- NEST ---------- */
+#nest{background:linear-gradient(var(--deep),#120f0a 40%,#120f0a)}
+.nest-grid{display:grid;gap:clamp(2rem,4vw,3.5rem);grid-template-columns:1fr}
+@media (min-width:980px){.nest-grid{grid-template-columns:minmax(0,6fr) minmax(0,6fr);align-items:center}}
+.thermo{display:grid;gap:1.25rem}
+.thermo-read{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.thermo-read .t{font-family:var(--f-display);font-weight:900;font-size:clamp(4rem,10vw,7.5rem);line-height:.8;color:var(--iris)}
+.thermo-read .out{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.1em;text-transform:uppercase;color:var(--bone)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;cursor:pointer;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--track,linear-gradient(90deg,var(--line),var(--line)))}
+input[type=range]::-moz-range-track{height:6px;background:var(--track,var(--line))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;border-radius:50%;background:var(--bone);border:4px solid var(--deep);box-shadow:0 0 0 1px var(--iris)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--bone);border:4px solid var(--deep);box-shadow:0 0 0 1px var(--iris)}
+#temp{--track:linear-gradient(90deg,#b98a5a 0%,#b98a5a 46.25%,#7f9b5e 46.25%,#7f9b5e 81.25%,#b98a5a 81.25%)}
+.scale{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--reed);letter-spacing:.04em}
+.clutch{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(4px,1vw,8px);max-width:520px}
+.egg{aspect-ratio:.78;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;background:var(--bone);position:relative;transition:background .5s var(--ease),transform .5s var(--ease)}
+.egg.m{background:#8fae6a}
+.egg.f{background:#d6a46b}
+.egg-key{display:flex;gap:1.25rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--reed);flex-wrap:wrap}
+.egg-key i{width:9px;height:11px;border-radius:50%;display:inline-block;vertical-align:-1px;margin-right:.4rem}
+.nest-photo{margin:0;position:relative}
+.nest-photo img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.nest-photo figcaption{margin-top:.6rem}
+.facts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:1.5rem;margin-top:clamp(3rem,6vw,4.5rem);border-top:1px solid var(--line);padding-top:1.5rem}
+.facts-row div{display:grid;gap:.25rem}
+.facts-row b{font-family:var(--f-display);font-size:2.4rem;line-height:.9;font-weight:700}
+.facts-row span{font-size:.95rem;color:var(--dim)}
+
+/* ---------- GROW ---------- */
+#grow{background:var(--river)}
+.grow-stage{position:relative;aspect-ratio:21/8;max-width:100%;min-height:240px;border-bottom:1px solid var(--line-2)}
+.grow-stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.grow-ctl{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.5rem}
+.grow-read{display:flex;gap:clamp(1.5rem,5vw,4rem);flex-wrap:wrap;align-items:end}
+.grow-read div{display:grid;gap:.2rem}
+.grow-read .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--reed)}
+.grow-read .v{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,6vw,4.4rem);line-height:.85}
+.grow-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2rem;margin-top:2.5rem}
+.grow-cols h3{font-size:1.35rem;letter-spacing:.06em;color:var(--reed);margin-bottom:.6rem}
+.grow-cols ul{list-style:none;margin:0;padding:0;display:grid;gap:.1rem}
+.grow-cols li{padding:.5rem 0;border-bottom:1px solid var(--line);color:var(--bone);transition:opacity .4s}
+.grow-cols li.gray{opacity:.28}
+#len{--track:linear-gradient(90deg,var(--iris) var(--pct,50%),var(--line) var(--pct,50%))}
+
+/* ---------- RIVERBANK (photo essay) ---------- */
+#bank{background:var(--deep)}
+.essay{display:grid;gap:clamp(1rem,2vw,1.5rem);grid-template-columns:repeat(12,minmax(0,1fr))}
+.shot{margin:0;grid-column:span 12;display:grid;gap:.6rem;align-content:start}
+.shot .img{overflow:hidden;background:var(--silt)}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s var(--ease),filter .6s}
+.shot:hover img{transform:scale(1.035)}
+.shot figcaption{display:grid;gap:.15rem}
+.shot figcaption p{font-size:.98rem;color:var(--bone);line-height:1.4}
+@media (min-width:820px){
+  .shot.a{grid-column:1/span 7}.shot.a .img{aspect-ratio:4/3}
+  .shot.b{grid-column:9/span 4;margin-top:8rem}.shot.b .img{aspect-ratio:3/4}
+  .shot.c{grid-column:2/span 5}.shot.c .img{aspect-ratio:1/1}
+  .shot.d{grid-column:7/span 6;margin-top:5rem}.shot.d .img{aspect-ratio:3/2}
+  .shot.e{grid-column:1/span 12}.shot.e .img{aspect-ratio:2.4/1}
+  .shot.f{grid-column:1/span 5;margin-top:3rem}.shot.f .img{aspect-ratio:4/5}
+  .shot.g{grid-column:7/span 6}.shot.g .img{aspect-ratio:4/3}
+}
+@media (max-width:819px){.shot .img{aspect-ratio:4/3}}
+
+/* ---------- LORE ---------- */
+#lore{background:var(--river)}
+.lore{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:0;border-top:1px solid var(--line)}
+.lore article{padding:1.75rem 1.75rem 2rem 0;border-bottom:1px solid var(--line);display:grid;gap:.7rem;align-content:start}
+.lore .verdict{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;width:max-content;padding:.25rem .5rem;border:1px solid}
+.lore .verdict.myth{color:var(--rust);border-color:var(--rust)}
+.lore .verdict.true{color:var(--ok);border-color:var(--ok)}
+.lore .verdict.legend{color:var(--warn);border-color:var(--warn)}
+.lore h3{font-size:2rem;letter-spacing:.01em}
+.lore p{color:var(--dim)}
+
+/* ---------- FOOT ---------- */
+footer{background:var(--deep);padding-block:5rem 7rem;border-top:1px solid var(--line)}
+.foot-grid{display:grid;gap:3rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+footer h2{font-size:2.2rem;margin-bottom:1rem}
+footer ol,footer ul{margin:0;padding-left:1.1rem;display:grid;gap:.55rem;color:var(--dim);font-size:.92rem;line-height:1.45}
+footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
+.closing{font-family:var(--f-display);font-weight:900;font-size:var(--s4);text-transform:uppercase;line-height:.88;margin-bottom:3rem;max-width:14ch}
+.closing span{color:var(--iris)}
+
+@media (max-width:620px){
+  .hunt-text{grid-template-columns:1fr;gap:.3rem;min-height:10.5em}
+  .hunt-text .roman{font-size:2.4rem}
+  .stages li{font-size:0;gap:0}
+  .note{padding-right:0!important}
+  .lore article{padding-right:0}
+  .tl{grid-template-columns:1fr;gap:.3rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .rv,.js .rv.pre{clip-path:none!important;transition:none}
+  .js .fade.pre{opacity:1;transform:none}
+  .pin::after,.cue::after{animation:none}
+  *{transition-duration:.01ms!important}
+}
+</style>
+
+<button class="hud" id="hud" type="button" aria-expanded="false" aria-controls="hud-why">
+  <div class="row"><span>Time below</span><b class="num" id="hud-t">00:00</b></div>
+  <div class="row"><span>Air left</span><b class="num" id="hud-a">2:00:00</b></div>
+  <div class="air"><i id="hud-bar"></i></div>
+  <div class="why" id="hud-why">At rest, a submerged Nile crocodile can stay down for up to about two hours. This clock started when you opened the page.</div>
+</button>
+
+<nav class="index" id="index" aria-label="Sections">
+  <a href="#surface">Surface</a><a href="#built">Built to wait</a><a href="#hunt">The hunt</a><a href="#edge">The edge</a><a href="#range">Range</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="surface" aria-label="Introduction">
+  <div class="hero-stage">
+    <canvas id="hero-c" aria-hidden="true"></canvas>
+    <div class="hero-copy">
+      <div class="wrap">
+        <p class="eyebrow"><b>Crocodylus niloticus</b> &nbsp;·&nbsp; a field guide</p>
+        <h1 id="hero-h"><span>Below</span><span class="lo">the</span><span>Waterline</span></h1>
+        <p class="lede">At a river crossing you will see two eyes and a nostril. <em>The rest of the animal, up to five metres of it, is underneath you.</em></p>
+      </div>
+    </div>
+    <div class="hero-under" id="hero-under">
+      <div class="wrap"><p><span>Eyes · ears · nostrils</span>All three sit in one line on top of the skull. That is how it can breathe, see and hear while the rest of it stays hidden.</p></div>
+    </div>
+    <div class="cue" id="cue">Go under</div>
+  </div>
+</section>
+
+<!-- ============ BUILT TO WAIT ============ -->
+<section id="built" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">01 &nbsp;·&nbsp; Anatomy</p>
+      <h2 class="fade">Built to wait</h2>
+      <p class="lede fade">An adult on a Mara River sandbar. Most of what makes it dangerous is about patience, not speed. Tap a point to read it.</p>
+    </header>
+    <div class="anat">
+      <figure class="anat-fig rv" id="anat-fig">
+        <img src="img/sandbar.jpg" alt="A large Nile crocodile lying half in the shallows of the Mara River, head to the left, tail trailing into brown water." width="1600" height="1066" loading="lazy">
+        <button class="pin" style="left:4.5%;top:52%" data-n="0" aria-pressed="false" aria-label="Snout"><span class="lab">Snout</span></button>
+        <button class="pin" style="left:15%;top:44.5%" data-n="1" aria-pressed="false" aria-label="Eye"><span class="lab">Eye</span></button>
+        <button class="pin" style="left:9.5%;top:55%" data-n="2" aria-pressed="false" aria-label="Jaw"><span class="lab">Jaw</span></button>
+        <button class="pin" style="left:36%;top:46%" data-n="3" aria-pressed="false" aria-label="Back armour"><span class="lab">Armour</span></button>
+        <button class="pin" style="left:50%;top:68%" data-n="4" aria-pressed="false" aria-label="Hind foot"><span class="lab">Foot</span></button>
+        <button class="pin" style="left:72%;top:55%" data-n="5" aria-pressed="false" aria-label="Tail"><span class="lab">Tail</span></button>
+        <figcaption class="credit" style="margin-top:.6rem">Masai Mara, Kenya, 20 May 2024 · Diego Delso, <a href="https://commons.wikimedia.org/wiki/File:Cocodrilo_del_Nilo_(Crocodylus_niloticus),_reserva_natural_Mas%C3%A1i_Mara,_Kenia,_2024-05-20,_DD_71.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></figcaption>
+      </figure>
+      <div class="anat-notes" id="notes">
+        <div class="note" data-n="0"><div class="k"><span>Nostrils</span><span>valve</span></div><div class="v">Sealed</div><p>Flaps close the nostrils under water. A fold at the back of the throat (the palatal valve) lets it open its mouth submerged without flooding its lungs.</p></div>
+        <div class="note" data-n="1"><div class="k"><span>Eye</span><span>3rd lid</span></div><div class="v">Goggles</div><p>A clear third eyelid, the nictitating membrane, slides across to protect the eye under water. Vertical pupils open wide for hunting at dusk and at night.</p></div>
+        <div class="note" data-n="2"><div class="k"><span>Jaw</span><span>sensors</span></div><div class="v">Feels ripples</div><p>Tiny dome pressure receptors cover the jaws. In lab tests they responded to single drops falling on the water, which is more sensitive than human fingertips.</p></div>
+        <div class="note" data-n="3"><div class="k"><span>Back</span><span>osteoderms</span></div><div class="v">Bone plates</div><p>Bony plates set in the skin act as armour and as solar panels. Blood vessels running into them help soak up heat while it basks.</p></div>
+        <div class="note" data-n="4"><div class="k"><span>Feet</span><span>webbed</span></div><div class="v">High walk</div><p>Webbed hind feet steady it in the water. On land it can lift its body clear of the ground and walk upright. Younger crocodiles can even gallop.</p></div>
+        <div class="note" data-n="5"><div class="k"><span>Tail</span><span>&asymp;half its length</span></div><div class="v">The engine</div><p>Nearly all of its power in water comes from the tail. A single sweep can drive the front half of the body out of the river.</p></div>
+      </div>
+      <div class="anat-notes" style="border-top:0">
+        <div class="note"><div class="k"><span>Adult male</span></div><div class="v num">3.5–5 <small>m</small></div><p>Exceptional males pass 5.5 m. Females are smaller and rarely exceed about 3.8 m.</p></div>
+        <div class="note"><div class="k"><span>Mass</span></div><div class="v num">≤750 <small>kg</small></div><p>The largest males weigh more than a racehorse. Most adults weigh 225–410 kg.</p></div>
+        <div class="note"><div class="k"><span>Teeth</span></div><div class="v num">64–68</div><p>Each tooth sits over a waiting replacement. A crocodile can replace any one of them dozens of times in its life.</p></div>
+        <div class="note"><div class="k"><span>Lifespan</span></div><div class="v num">70+ <small>yrs</small></div><p>Wild ages are hard to confirm. Estimates for large adults usually run from 70 to 100 years.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE HUNT ============ -->
+<section id="hunt" aria-label="The hunt, in six stages">
+  <div class="hunt-track" id="hunt-track">
+    <div class="hunt-stage wrap">
+      <div class="hunt-top">
+        <div><p class="eyebrow" style="margin-bottom:.6rem">02 &nbsp;·&nbsp; Scroll to advance</p><h2>The hunt</h2></div>
+        <ol class="stages" id="stages" aria-label="Stages">
+          <li><i><b></b></i>Wait</li><li><i><b></b></i>Close</li><li><i><b></b></i>Strike</li><li><i><b></b></i>Drown</li><li><i><b></b></i>Roll</li><li><i><b></b></i>Swallow</li>
+        </ol>
+      </div>
+      <div class="hunt-canvas-wrap"><canvas id="hunt-c" role="img" aria-label="Animated side view of a crocodile ambushing a wildebeest at the water's edge"></canvas></div>
+      <div class="hunt-text" aria-live="polite">
+        <div class="roman swap" id="h-roman">I</div>
+        <div class="body swap" id="h-body"><h3>Wait</h3><p>It holds one spot, sometimes for hours, near where animals come down to drink. Large adults can go months between big meals, so it can afford to wait.</p></div>
+      </div>
+    </div>
+  </div>
+  <figure class="bleed">
+    <img class="rv" src="img/feast.jpg" alt="Several Nile crocodiles tearing at a wildebeest carcass in the brown water of the Mara River." width="1600" height="1066" loading="lazy">
+    <figcaption><div class="wrap"><p>Mara River crossing. Several crocodiles share one wildebeest. One holds while another rolls, so the carcass tears.</p><span class="credit">Arturo de Frias Marques · <a href="https://commons.wikimedia.org/wiki/File:Crocodile_Feast_AdF.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span></div></figcaption>
+  </figure>
+</section>
+
+<!-- ============ THE EDGE ============ -->
+<section id="edge" class="band">
+  <div class="wrap edge-grid">
+    <div>
+      <header class="sec-head" style="margin-bottom:1.75rem">
+        <p class="eyebrow">03 &nbsp;·&nbsp; Try it</p>
+        <h2 class="fade">Step back</h2>
+        <p class="lede fade">You're a zebra drinking at the edge. Watch the water. When it comes, tap or press space as fast as you can.</p>
+      </header>
+      <div class="prose fade">
+        <p>A typical visual reaction time for people is about a quarter of a second. Gazelles and zebras do better, and crocodiles still catch them. Waiting nearly motionless until the target is in range is what makes the ambush work.</p>
+      </div>
+      <div class="tries" style="margin-top:1.75rem" id="tries"><span>Best <b class="num" id="best">—</b></span><span>Last <b class="num" id="last">—</b></span><span>Caught <b class="num" id="caught">0</b></span></div>
+    </div>
+    <div>
+      <div class="edge-box" id="edge-box" tabindex="0" role="button" aria-label="Reaction test. Press to start, then press again when the crocodile strikes.">
+        <canvas id="edge-c" aria-hidden="true"></canvas>
+        <div class="edge-msg"><div class="big" id="edge-big">Tap to start</div><div class="small" id="edge-small">Watch the eyes. Don't press early.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RANGE ============ -->
+<section id="range" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">04 &nbsp;·&nbsp; Where they live</p>
+      <h2 class="fade">Range</h2>
+      <p class="lede fade">The Nile crocodile lives in rivers, lakes, swamps and estuaries across sub-Saharan Africa and western Madagascar. Pick a place on the map.</p>
+    </header>
+    <div class="map-grid">
+      <div class="map-box">
+        <svg id="map" viewBox="20 40 700 735" role="img" aria-label="Map of Africa shaded by Nile crocodile status, with notable places marked">
+          <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#17201b"/><line x1="0" y1="0" x2="0" y2="6" stroke="#b8603f" stroke-width="1.6"/></pattern></defs>
+          <g id="m-land"></g><g id="m-lakes"></g><g id="m-rivers"></g><g id="m-hot"></g>
+        </svg>
+        <div class="legend" id="legend">
+          <button type="button" data-s="strong" aria-pressed="false"><i style="background:#33452b"></i>Strongholds</button>
+          <button type="button" data-s="patchy" aria-pressed="false"><i style="background:#4c4128"></i>Patchy or under-surveyed</button>
+          <button type="button" data-s="depleted" aria-pressed="false"><i style="background:#5a2e20"></i>Depleted</button>
+          <button type="button" data-s="gone" aria-pressed="false"><i style="background:repeating-linear-gradient(45deg,#17201b 0 2px,#b8603f 2px 3.5px)"></i>Gone</button>
+          <button type="button" data-s="suchus" aria-pressed="false"><i style="background:#1f2b27"></i>West African crocodile range</button>
+        </div>
+        <p class="credit" style="margin-top:.9rem">Country shading is a rough summary of IUCN Crocodile Specialist Group range-state reports. Status varies river by river. Basemap: Natural Earth.</p>
+      </div>
+      <aside class="place" id="place" aria-live="polite">
+        <figure id="pl-fig"><img id="pl-img" alt="" src="img/sandbar.jpg"></figure>
+        <div class="place-body" id="pl-body">
+          <span class="coords num" id="pl-coords"></span>
+          <h3 id="pl-name"></h3>
+          <span class="tag" id="pl-tag"></span>
+          <p id="pl-text"></p>
+          <span class="credit" id="pl-credit"></span>
+        </div>
+        <div class="place-nav"><button class="btn ghost" type="button" id="pl-prev">Previous</button><button class="btn ghost" type="button" id="pl-next">Next place</button></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUMBERS ============ -->
+<section id="numbers" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">05 &nbsp;·&nbsp; Population</p>
+      <h2 class="fade">How they're doing</h2>
+      <p class="lede fade">The species as a whole has recovered. The IUCN lists it as <strong style="color:var(--ok);font-weight:500">Least Concern</strong>. That recovery came after an era of killing that is hard to picture, so here it is in dots.</p>
+    </header>
+    <div class="dots-wrap">
+      <div class="dots-side">
+        <div class="toggle" role="group" aria-label="Choose figure">
+          <button class="btn" type="button" data-v="killed" aria-pressed="true">Killed, 1950–1980</button>
+          <button class="btn" type="button" data-v="alive" aria-pressed="false">Alive today</button>
+        </div>
+        <div class="figure-big num" id="fig-n">≈3,000,000</div>
+        <p class="figure-cap" id="fig-cap">Nile crocodiles killed for their hides across Africa in roughly thirty years. Belly skin was sold to the leather trade by the square inch.</p>
+        <div class="key"><span><i style="background:var(--bone)"></i>1 dot = 1,000 crocodiles</span><span id="key-2"><i style="background:var(--iris)"></i>Estimated wild population</span></div>
+      </div>
+      <div class="dots-canvas-wrap"><canvas id="dots-c" role="img" aria-label="Three thousand dots, each one thousand crocodiles killed for hides, compared with 250 to 500 dots for the wild population today."></canvas></div>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <div class="tl fade"><span class="y">c.450 BCE</span><p>Herodotus describes Nile crocodiles in Egypt, including the story of a small bird that picks its teeth. People repeated the story for two thousand years.</p></div>
+      <div class="tl fade"><span class="y">300 BCE–300 CE</span><p>Crocodiles are kept, fed and mummified by the thousand at temples of the god Sobek, at Kom Ombo and Shedet in the Faiyum, which the Greeks called <strong>Crocodilopolis</strong>.</p></div>
+      <div class="tl fade"><span class="y">1800s</span><p>Hunted out of the lower Nile in Egypt and the delta, and gone from the Seychelles. In Egypt they now survive only above the Aswan dams.</p></div>
+      <div class="tl fade"><span class="y">Early 1900s</span><p>The last crocodiles of the Levant disappear from coastal rivers in what is now Israel. One of them is still named the Crocodile River, Nahal Taninim.</p></div>
+      <div class="tl fade"><span class="y hot">1950–1980</span><p><strong>The hide trade.</strong> Commercial hunters take an estimated three million crocodiles. Numbers collapse across much of the range.</p></div>
+      <div class="tl fade"><span class="y hot">1975</span><p>Listed on <strong>CITES Appendix I</strong>, which bans international commercial trade.</p></div>
+      <div class="tl fade"><span class="y">1980s–90s</span><p>Ranching and farming programmes, led by Zimbabwe, Zambia and South Africa, move many national populations to Appendix II. Eggs are collected from the wild under quota and hides are traded legally.</p></div>
+      <div class="tl fade"><span class="y">2008</span><p>Pansteatitis, a painful inflammation of body fat linked to eating rancid fish in a polluted river, kills well over a hundred crocodiles in the Olifants River gorge near Kruger.</p></div>
+      <div class="tl fade"><span class="y">2011</span><p>DNA work shows the crocodiles of West and Central Africa are a separate species, <strong>Crocodylus suchus</strong>. The Nile crocodile's range shrinks on paper overnight.</p></div>
+      <div class="tl fade"><span class="y hot">2019</span><p>IUCN Red List: <strong>Least Concern</strong>. Estimated wild population <strong>250,000–500,000</strong>.</p></div>
+    </div>
+
+    <div class="pressures">
+      <div class="pressure fade"><div class="lvl" aria-label="Pressure 3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div><h3>Conflict</h3><p>More fatal attacks on people than any other crocodilian, with estimates in the hundreds a year. Many go unreported. Retaliatory killing follows.</p></div>
+      <div class="pressure fade"><div class="lvl" aria-label="Pressure 3 of 4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div><h3>Lost habitat</h3><p>Dams, irrigation, sand mining and farmed riverbanks take away nesting sandbars and the backwaters where young crocodiles shelter.</p></div>
+      <div class="pressure fade"><div class="lvl" aria-label="Pressure 2 of 4"><i class="f"></i><i class="f"></i><i></i><i></i></div><h3>Polluted water</h3><p>Upstream mining and sewage are linked to die-offs, as in the Olifants. As apex predators, crocodiles concentrate whatever is in the fish.</p></div>
+      <div class="pressure fade"><div class="lvl" aria-label="Pressure 2 of 4"><i class="f"></i><i class="f"></i><i></i><i></i></div><h3>Nets and hooks</h3><p>Gill nets drown crocodiles, and they take fish from nets. That puts them in direct competition with fishing communities.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEST ============ -->
+<section id="nest" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">06 &nbsp;·&nbsp; Temperature decides</p>
+      <h2 class="fade">The nest</h2>
+      <p class="lede fade">A Nile crocodile has no sex chromosomes. Whether an egg becomes male or female depends on how warm the sand around it stays in the middle weeks of incubation. Drag the thermometer.</p>
+    </header>
+    <div class="nest-grid">
+      <div class="thermo">
+        <div class="thermo-read"><span class="t num" id="t-read">33.0°</span><span class="out" id="t-out">Mostly males</span></div>
+        <label for="temp" class="eyebrow">Nest temperature, °C</label>
+        <input type="range" id="temp" min="28" max="36" step="0.1" value="33">
+        <div class="scale num"><span>28°</span><span>31.7°</span><span>34.5°</span><span>36°</span></div>
+        <div class="clutch" id="clutch" aria-hidden="true"></div>
+        <div class="egg-key"><span><i style="background:#8fae6a"></i>Male</span><span><i style="background:#d6a46b"></i>Female</span><span>50 eggs · simplified model</span></div>
+      </div>
+      <figure class="nest-photo rv">
+        <img src="img/hatch.jpg" alt="A hatchling Nile crocodile climbing out of its white egg in sand, with a fragment of shell on its head." width="1600" height="1066" loading="lazy">
+        <figcaption class="credit">Hatchling at La Ferme aux Crocodiles, France · <a href="https://commons.wikimedia.org/wiki/File:%C3%89closion_b%C3%A9b%C3%A9_Nil.JPG" target="_blank" rel="noopener">CC BY-SA 3.0</a></figcaption>
+      </figure>
+    </div>
+    <div class="facts-row">
+      <div><b class="num">25–80</b><span>eggs, buried in a sandbank burrow</span></div>
+      <div><b class="num">≈90</b><span>days of incubation, with the mother guarding nearby</span></div>
+      <div><b class="num">≈30 cm</b><span>at hatching. She carries the young to water in her jaws.</span></div>
+      <div><b class="num">≈1%</b><span>of hatchlings reach adulthood, by most estimates</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GROW ============ -->
+<section id="grow" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">07 &nbsp;·&nbsp; To scale</p>
+      <h2 class="fade">Grow one</h2>
+      <p class="lede fade">A Nile crocodile keeps growing for most of its life, and what it eats changes as it does. Drag to grow it beside a 1.75 m person.</p>
+    </header>
+    <div class="grow-stage"><canvas id="grow-c" role="img" aria-label="To-scale silhouette of a crocodile next to a person"></canvas></div>
+    <div class="grow-ctl">
+      <label for="len" class="eyebrow">Total length</label>
+      <input type="range" id="len" min="0.3" max="6" step="0.05" value="4.5">
+      <div class="grow-read">
+        <div><span class="k">Length</span><span class="v num" id="g-len">4.50 m</span></div>
+        <div><span class="k">Rough mass</span><span class="v num" id="g-kg">400 kg</span></div>
+        <div><span class="k">Life stage</span><span class="v" id="g-stage" style="color:var(--iris)">Adult</span></div>
+      </div>
+    </div>
+    <div class="grow-cols">
+      <div><h3>Eats</h3><ul id="g-eat">
+        <li data-min="0" data-max="1">Insects, spiders, water beetles</li>
+        <li data-min="0" data-max="1.5">Frogs, tadpoles, freshwater crabs</li>
+        <li data-min="0.8" data-max="6">Fish: catfish, tilapia. A staple at every size above this.</li>
+        <li data-min="1" data-max="4">Water birds, monitor lizards, cane rats</li>
+        <li data-min="2.8" data-max="6">Antelope, warthog, wildebeest, zebra</li>
+        <li data-min="4.2" data-max="6">Buffalo, giraffe at the water, young hippos, other crocodiles</li>
+      </ul></div>
+      <div><h3>Eaten by</h3><ul id="g-pred">
+        <li data-min="0" data-max="1">Monitor lizards, herons, marabou storks, fish eagles</li>
+        <li data-min="0" data-max="1.2">Large catfish, mongooses, honey badgers</li>
+        <li data-min="0" data-max="2.5">Bigger crocodiles</li>
+        <li data-min="1.5" data-max="3.5">Lions and leopards, when caught on land</li>
+        <li data-min="2.5" data-max="6">Hippos kill them in fights but don't eat them</li>
+        <li data-min="0" data-max="6">People</li>
+      </ul></div>
+    </div>
+    <p class="credit" style="margin-top:1.5rem">Mass is estimated from length with a simple cube law (about 4.4 × L³ kg). Real animals vary widely with condition and season.</p>
+  </div>
+</section>
+
+<!-- ============ RIVERBANK ============ -->
+<section id="bank" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">08 &nbsp;·&nbsp; Field photographs</p>
+      <h2 class="fade">Riverbank</h2>
+    </header>
+    <div class="essay">
+      <figure class="shot a"><div class="img rv"><img src="img/head.jpg" alt="Close-up of a Nile crocodile's head resting on wet sand, its eye half-closed." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Masai Mara, Kenya · 2024 · Diego Delso · <a href="https://commons.wikimedia.org/wiki/File:Cocodrilo_del_Nilo_(Crocodylus_niloticus),_reserva_natural_Mas%C3%A1i_Mara,_Kenia,_2024-05-20,_DD_70.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Look at the dark pits along the lips. Those are the pressure sensors.</p></figcaption></figure>
+      <figure class="shot b"><div class="img rv"><img src="img/jaws.jpg" alt="A Kenyan Nile crocodile basking with jaws wide open, rows of teeth visible." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Kenya · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Kenyan_crocodile_(Crocodylus_niloticus_pauciscutatus).jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Gaping. An open mouth lets heat escape. It isn't a threat.</p></figcaption></figure>
+      <figure class="shot c"><div class="img rv"><img src="img/zambezi.jpg" alt="A Nile crocodile lying low among rocks in the Zambezi river, with water around it." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Zambezi River · Bernard Gagnon · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_in_the_Zambezi.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Among the rocks, the outline disappears.</p></figcaption></figure>
+      <figure class="shot d"><div class="img rv"><img src="img/geese.jpg" alt="A Nile crocodile on a sandy bank with a group of Egyptian geese standing a few metres away." loading="lazy" width="1600" height="1066"></div><figcaption><span class="credit">Serengeti, Tanzania · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_(Crocodylus_niloticus)_and_Egyptian_geese_Serengeti.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Egyptian geese keep a careful distance on land. The crocodile hunts in water.</p></figcaption></figure>
+      <figure class="shot e"><div class="img rv"><img src="img/chobe.jpg" alt="A Nile crocodile resting in golden grass on the bank of the Chobe River, blue water behind." loading="lazy" width="1600" height="767"></div><figcaption><span class="credit">Chobe National Park, Botswana · 2018 · Diego Delso · <a href="https://commons.wikimedia.org/wiki/File:Cocodrilo_del_Nilo_(Crocodylus_niloticus),_parque_nacional_de_Chobe,_Botsuana,_2018-07-28,_DD_72.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>A July morning in the dry season. It basks to warm up after a cold night in the water.</p></figcaption></figure>
+      <figure class="shot f"><div class="img rv"><img src="img/juveniles.jpg" alt="Seven young Nile crocodiles spread across wet sand and shallow water at a river's edge." loading="lazy" width="1600" height="1200"></div><figcaption><span class="credit">Juveniles · Mark Jordahl · <a href="https://commons.wikimedia.org/wiki/File:Juvenile_Nile_Crocodiles_(14345392644).jpg" target="_blank" rel="noopener">CC BY 2.0</a></span><p>A crèche. Young from one nest stay together near the mother for weeks to months.</p></figcaption></figure>
+      <figure class="shot g"><div class="img rv"><img src="img/basking.jpg" alt="A Nile crocodile basking on green grass at the water's edge, its reflection in the water below." loading="lazy" width="1600" height="800"></div><figcaption><span class="credit">Mlilwane, Eswatini · Charles J. Sharp · <a href="https://commons.wikimedia.org/wiki/File:Nile_crocodile_(Crocodylus_niloticus)_Mlilwane_2.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></span><p>Near the cold southern edge of the range, crocodiles spend more of the day basking.</p></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LORE ============ -->
+<section id="lore" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">09 &nbsp;·&nbsp; Stories, checked</p>
+      <h2 class="fade">Lore</h2>
+    </header>
+    <div class="lore">
+      <article class="fade"><span class="verdict myth">Myth, probably</span><h3>The toothpick bird</h3><p>Herodotus wrote that a bird walks into the crocodile's open mouth to eat leeches. The Egyptian plover is often named. Nobody has reliably photographed or filmed it happening.</p></article>
+      <article class="fade"><span class="verdict true">True</span><h3>They fish as a team</h3><p>Crocodiles have been seen lining up across a channel or forming a semicircle to herd fish, each taking what swims past. At a large carcass, one anchors it while others roll.</p></article>
+      <article class="fade"><span class="verdict true">True</span><h3>Cave crocodiles</h3><p>In Ankarana, in northern Madagascar, crocodiles retreat into flooded caves during the dry season, sometimes far from daylight.</p></article>
+      <article class="fade"><span class="verdict true">True</span><h3>Saved by bad skin</h3><p>Lake Turkana's crocodiles have skin so full of bone plates that it was nearly worthless to hide hunters. In the 1960s a survey counted roughly 12,000 there, one of the densest populations ever recorded.</p></article>
+      <article class="fade"><span class="verdict legend">Legend</span><h3>Gustave</h3><p>A huge male in Burundi's Rusizi River and on the shores of Lake Tanganyika, often estimated at around 6 m. The many killings blamed on him have never been verified, and he hasn't been reliably seen in years.</p></article>
+      <article class="fade"><span class="verdict true">True</span><h3>Salt tolerance</h3><p>Salt glands on the tongue let Nile crocodiles live in estuaries like St Lucia in South Africa, and sometimes along the coast.</p></article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="closing">Next time you see two bumps on still water, <span>remember what's underneath.</span></p>
+    <div class="foot-grid">
+      <div>
+        <h2>Sources</h2>
+        <ol>
+          <li>Isberg, S. et al. (2019). <em>Crocodylus niloticus</em>. IUCN Red List of Threatened Species.</li>
+          <li>Hekkala, E. et al. (2011). An ancient icon reveals new mysteries: mummy DNA resurrects a cryptic species within the Nile crocodile. <em>Molecular Ecology</em> 20.</li>
+          <li>Leitch, D. &amp; Catania, K. (2012). Structure, innervation and response properties of integumentary sensory organs in crocodilians. <em>J. Exp. Biol.</em> 215.</li>
+          <li>Hutton, J. (1987). Incubation temperatures, sex ratios and sex determination in a population of Nile crocodiles. <em>J. Zool.</em> 211.</li>
+          <li>Erickson, G. et al. (2012). Insights into the ecology and evolutionary success of crocodilians revealed through bite-force and tooth-pressure experimentation. <em>PLoS ONE</em> 7.</li>
+          <li>Graham, A. &amp; Beard, P. (1973). <em>Eyelids of Morning: The Mingled Destinies of Crocodiles and Men.</em></li>
+          <li>Ross, J.P. (ed.) (1998). <em>Crocodiles: Status Survey and Conservation Action Plan.</em> IUCN/SSC Crocodile Specialist Group.</li>
+          <li>Herodotus, <em>Histories</em>, Book II.</li>
+        </ol>
+      </div>
+      <div>
+        <h2>Photographs</h2>
+        <ul>
+          <li>Diego Delso, Masai Mara and Chobe. CC BY-SA 4.0</li>
+          <li>Arturo de Frias Marques, Mara River feast. CC BY-SA 4.0</li>
+          <li>Charles J. Sharp, Kenya, Serengeti, Mlilwane. CC BY-SA 4.0</li>
+          <li>Bernard Gagnon, Zambezi (CC BY-SA 4.0) and Lake Chamo (CC BY-SA 3.0)</li>
+          <li>La Ferme aux Crocodiles, hatchling. CC BY-SA 3.0</li>
+          <li>Mark Jordahl, juveniles. CC BY 2.0</li>
+          <li>All via Wikimedia Commons. Map data: Natural Earth, public domain.</li>
+        </ul>
+        <p class="credit" style="margin-top:2rem">Figures are rounded. Where surveys disagree, ranges are given.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const doc = document.documentElement; doc.classList.add("js");
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DPR = () => Math.min(window.devicePixelRatio || 1, 2);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+const C = { river:"#0b1411", deep:"#060c0a", bone:"#e8e0cc", iris:"#e2a83c", reed:"#8f9c76" };
+
+function fitCanvas(cv) {
+  const r = cv.getBoundingClientRect(), d = DPR();
+  const w = Math.max(1, Math.round(r.width * d)), h = Math.max(1, Math.round(r.height * d));
+  if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  const ctx = cv.getContext("2d"); ctx.setTransform(d, 0, 0, d, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+function sectionProgress(el) {
+  const r = el.getBoundingClientRect(), span = r.height - innerHeight;
+  return span <= 0 ? 0 : clamp(-r.top / span, 0, 1);
+}
+function visible(el, margin = 0) { const r = el.getBoundingClientRect(); return r.bottom > -margin && r.top < innerHeight + margin; }
+
+/* =========================================================
+   Procedural crocodile, side view, facing left.
+   u: 0 = snout tip, 1 = tail tip.  All sizes in units of L.
+   ========================================================= */
+const PROF = [[0,.008],[.03,.014],[.08,.02],[.12,.026],[.155,.036],[.19,.033],[.23,.046],[.30,.060],[.38,.064],[.46,.054],[.53,.036],[.64,.024],[.78,.013],[.9,.007],[1,.0015]];
+function halfH(u) {
+  for (let i = 1; i < PROF.length; i++) if (u <= PROF[i][0]) {
+    const [a, ha] = PROF[i-1], [b, hb] = PROF[i], t = (u - a) / (b - a);
+    return lerp(ha, hb, t*t*(3-2*t));
+  }
+  return 0;
+}
+/* opts: L, x (snout x), y (top-of-head y), t (time), sway, jaw (0..1), tilt (rad, head up), roll (0..2PI), fill, belly, alpha, eyeGlow, legs */
+function drawCroc(ctx, o) {
+  const L = o.L, N = 90, roll = o.roll || 0, sy = Math.cos(roll), show = Math.abs(sy) > .02;
+  const top = [], bot = [];
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const hh = halfH(u) * L;
+    let cy = o.y + .04 * L + (u > .45 ? (u - .45) * (u - .45) * .09 * L : 0);
+    cy += Math.sin(u * 7 - (o.t || 0) * 1.6) * (o.sway || 0) * Math.pow(u, 1.6) * L * .035;
+    const x = o.x + u * L;
+    top.push([x, cy - hh * .92 * sy]); bot.push([x, cy + hh * 1.0 * sy]);
+  }
+  ctx.save(); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha;
+  if (o.tilt) { ctx.translate(o.x + .3 * L, o.y + .04 * L); ctx.rotate(o.tilt); ctx.translate(-(o.x + .3 * L), -(o.y + .04 * L)); }
+  // legs (behind body)
+  if (o.legs !== false && show) {
+    ctx.fillStyle = o.leg || "#0d1612";
+    [[.27, 1], [.47, 1.25]].forEach(([u, s], k) => {
+      const i = Math.round(u * N), [x, y] = bot[i], l = .07 * L * s, sw = Math.sin((o.t || 0) * 2 + k * 2) * (o.paddle || 0);
+      ctx.beginPath();
+      ctx.moveTo(x - .02 * L, y - .01 * L);
+      ctx.quadraticCurveTo(x + .015 * L + sw * .02 * L, y + l * .55 * sy, x + .03 * L + sw * .04 * L, y + l * sy);
+      ctx.lineTo(x + .055 * L + sw * .04 * L, y + l * sy + .006 * L);
+      ctx.lineTo(x + .02 * L, y + .002 * L);
+      ctx.closePath(); ctx.fill();
+    });
+  }
+  // body
+  if (show) {
+    const g = ctx.createLinearGradient(0, o.y - .07 * L, 0, o.y + .12 * L);
+    const back = o.fill || "#1c2a22", belly = o.belly || "#2c3a2c";
+    if (sy > 0) { g.addColorStop(0, back); g.addColorStop(1, belly); } else { g.addColorStop(0, "#8e8a6c"); g.addColorStop(1, "#c9c2a2"); }
+    ctx.fillStyle = g;
+    const jaw = o.jaw || 0, hingeI = Math.round(.17 * N);
+    ctx.beginPath();
+    ctx.moveTo(top[hingeI][0], top[hingeI][1]);
+    for (let i = hingeI; i <= N; i++) ctx.lineTo(top[i][0], top[i][1]);
+    for (let i = N; i >= hingeI; i--) ctx.lineTo(bot[i][0], bot[i][1]);
+    ctx.closePath(); ctx.fill();
+    // head: upper and lower jaws, hinged at u=.17
+    const hx = top[hingeI][0], hy = (top[hingeI][1] + bot[hingeI][1]) / 2;
+    const up = a => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(a); ctx.translate(-hx, -hy); };
+    up(jaw * .28);
+    ctx.beginPath(); ctx.moveTo(hx, top[hingeI][1]);
+    for (let i = hingeI; i >= 0; i--) ctx.lineTo(top[i][0], top[i][1]);
+    for (let i = 0; i <= hingeI; i++) { const m = (top[i][1] + bot[i][1]) / 2; ctx.lineTo(bot[i][0], m + (bot[i][1] - m) * .15); }
+    ctx.closePath(); ctx.fill();
+    if (jaw > .05) { ctx.fillStyle = "#e8e0cc"; for (let i = 2; i < hingeI; i += 2) { const m = (top[i][1] + bot[i][1]) / 2 + (bot[i][1]-top[i][1])*.07; ctx.beginPath(); ctx.moveTo(top[i][0] - .004 * L, m); ctx.lineTo(top[i][0], m + .011 * L * sy); ctx.lineTo(top[i][0] + .004 * L, m); ctx.fill(); } ctx.fillStyle = g; }
+    ctx.restore();
+    up(-jaw * .34);
+    ctx.beginPath(); ctx.moveTo(hx, bot[hingeI][1]);
+    for (let i = hingeI; i >= 0; i--) ctx.lineTo(bot[i][0], bot[i][1]);
+    for (let i = 0; i <= hingeI; i++) { const m = (top[i][1] + bot[i][1]) / 2; ctx.lineTo(top[i][0], m + (bot[i][1] - m) * .15); }
+    ctx.closePath(); ctx.fill();
+    if (jaw > .05) { ctx.fillStyle = "#e8e0cc"; for (let i = 3; i < hingeI; i += 2) { const m = (top[i][1] + bot[i][1]) / 2 + (bot[i][1]-top[i][1])*.12; ctx.beginPath(); ctx.moveTo(top[i][0] - .004 * L, m); ctx.lineTo(top[i][0], m - .011 * L * sy); ctx.lineTo(top[i][0] + .004 * L, m); ctx.fill(); } }
+    if (jaw > .05) { ctx.restore(); up(0); }
+    ctx.restore();
+    // dorsal scutes: double crest on the tail, bumps on the back
+    if (sy > 0) {
+      ctx.fillStyle = o.crest || back;
+      for (let u = .2; u < .97; u += .022) {
+        const i = Math.round(u * N), [x, y] = top[i], s = (u > .5 ? .011 : .006) * L * (1 - u * .55);
+        ctx.beginPath(); ctx.moveTo(x - s * .9, y + 1); ctx.lineTo(x, y - s); ctx.lineTo(x + s * .9, y + 1); ctx.fill();
+      }
+      // scale bands
+      ctx.strokeStyle = "rgba(0,0,0,.22)"; ctx.lineWidth = Math.max(.6, L * .0012);
+      for (let u = .2; u < .96; u += .018) { const i = Math.round(u * N); ctx.beginPath(); ctx.moveTo(top[i][0], top[i][1] + 1); ctx.lineTo(bot[i][0], bot[i][1] - 1); ctx.stroke(); }
+      // eye bump + nostril bump
+      const ei = Math.round(.145 * N), [ex, ey] = top[ei];
+      ctx.fillStyle = back;
+      ctx.beginPath(); ctx.ellipse(ex, ey + .002 * L, .018 * L, .013 * L, 0, Math.PI, 0); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(o.x + .018 * L, top[2][1] + .001 * L, .007 * L, .006 * L, 0, Math.PI, 0); ctx.fill();
+      if (o.eyeGlow) {
+        const er = .0055 * L;
+        ctx.fillStyle = C.iris; ctx.globalAlpha *= o.eyeGlow;
+        ctx.beginPath(); ctx.ellipse(ex - .004 * L, ey - .004 * L, er * 1.25, er * (o.blink != null ? (1 - o.blink) : 1), 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#120c04"; ctx.beginPath(); ctx.ellipse(ex - .004 * L, ey - .004 * L, er * .22, er * .9 * (o.blink != null ? (1 - o.blink) : 1), 0, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  ctx.restore();
+  return { eye: (() => { const ei = Math.round(.145 * N); return top[ei]; })(), top, bot };
+}
+
+/* wildebeest silhouette, facing left, standing; s = shoulder height in px */
+function drawGnu(ctx, x, y, s, o = {}) {
+  ctx.save(); ctx.translate(x, y); if (o.rot) ctx.rotate(o.rot); ctx.globalAlpha = o.alpha == null ? 1 : o.alpha;
+  ctx.fillStyle = o.fill || "#171a14";
+  const leg = (lx, ph) => { const k = Math.sin(ph) * (o.kick || 0); ctx.beginPath(); ctx.moveTo(lx - s*.05, -s*.5); ctx.lineTo(lx + k*s*.15 - s*.025, 0); ctx.lineTo(lx + k*s*.15 + s*.025, 0); ctx.lineTo(lx + s*.05, -s*.5); ctx.fill(); };
+  leg(s*.05, 0); leg(s*.17, 1.6); leg(s*.78, 2.5); leg(s*.9, .8);
+  // body: high shoulders, sloping back
+  ctx.beginPath();
+  ctx.moveTo(-s*.02, -s*.55);
+  ctx.bezierCurveTo(-s*.06, -s*.95, s*.25, -s*1.08, s*.35, -s*.98);
+  ctx.bezierCurveTo(s*.6, -s*.88, s*.9, -s*.86, s*1.0, -s*.8);
+  ctx.bezierCurveTo(s*1.08, -s*.7, s*1.02, -s*.5, s*.9, -s*.45);
+  ctx.bezierCurveTo(s*.6, -s*.42, s*.2, -s*.42, -s*.02, -s*.55); ctx.fill();
+  // tail
+  ctx.beginPath(); ctx.moveTo(s*1.0, -s*.8); ctx.quadraticCurveTo(s*1.12, -s*.6, s*1.08, -s*.38); ctx.lineWidth = s*.03; ctx.strokeStyle = ctx.fillStyle; ctx.stroke();
+  // neck + head; drop: 0 = head up, 1 = drinking
+  const d = o.drop == null ? 1 : o.drop;
+  ctx.save(); ctx.translate(s*.02, -s*.82); ctx.rotate(lerp(-.15, 1.05, d) + (o.pull || 0));
+  ctx.beginPath(); ctx.moveTo(0, -s*.16); ctx.lineTo(-s*.42, -s*.1); ctx.lineTo(-s*.56, s*.0); ctx.lineTo(-s*.58, s*.08); ctx.lineTo(-s*.42, s*.1); ctx.lineTo(0, s*.16); ctx.fill();
+  // beard + horns
+  ctx.beginPath(); ctx.moveTo(-s*.1, s*.13); ctx.lineTo(-s*.2, s*.24); ctx.lineTo(-s*.3, s*.1); ctx.fill();
+  ctx.lineWidth = s*.035; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(-s*.36, -s*.1); ctx.quadraticCurveTo(-s*.3, -s*.3, -s*.18, -s*.24); ctx.stroke();
+  ctx.restore();
+  ctx.restore();
+  // muzzle point in world coords (approx) for the strike
+  const a = lerp(-.15, 1.05, d) + (o.pull || 0) + (o.rot || 0);
+  const mx = x + Math.cos(o.rot||0)*s*.02 - Math.sin(o.rot||0)*(-s*.82);
+  const my = y + Math.sin(o.rot||0)*s*.02 + Math.cos(o.rot||0)*(-s*.82);
+  return { mx: mx + Math.cos(a + Math.PI) * s*.57, my: my + Math.sin(a + Math.PI) * s*.57 };
+}
+
+/* ripple ring set */
+function Ripples() { this.list = []; }
+Ripples.prototype.add = function (x, y, max = 120, life = 2.6) { this.list.push({ x, y, t: 0, max, life }); if (this.list.length > 40) this.list.shift(); };
+Ripples.prototype.draw = function (ctx, dt, squash = .12, color = "232,224,204") {
+  this.list = this.list.filter(r => (r.t += dt) < r.life);
+  for (const r of this.list) {
+    const k = r.t / r.life, rad = easeOut(k) * r.max;
+    for (let j = 0; j < 3; j++) {
+      const rr = rad - j * r.max * .12; if (rr <= 1) continue;
+      ctx.strokeStyle = `rgba(${color},${(1 - k) * .45 * (1 - j * .28)})`; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(r.x, r.y, rr, rr * squash, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+};
+
+/* =========================================================
+   HERO
+   ========================================================= */
+(function hero() {
+  const sec = document.getElementById("surface"), cv = document.getElementById("hero-c");
+  const under = document.getElementById("hero-under"), cue = document.getElementById("cue"), h1 = document.getElementById("hero-h");
+  const rip = new Ripples();
+  const motes = Array.from({ length: 90 }, () => ({ x: Math.random(), y: Math.random(), z: .3 + Math.random() * .7, s: Math.random() * 1000 }));
+  const reeds = Array.from({ length: 160 }, (_, i) => ({ x: i / 160 + Math.random() * .006, h: .3 + Math.random() * .7, b: (Math.random() - .5) * .5 }));
+  let last = performance.now(), T = 0, nextRip = 0, blinkAt = 3, pointer = null;
+  cv.parentElement.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); pointer = { x: e.clientX - r.left, y: e.clientY - r.top, t: T }; }, { passive: true });
+
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!visible(sec)) { requestAnimationFrame(frame); return; }
+    T += RM ? 0 : dt;
+    const { ctx, w, h } = fitCanvas(cv);
+    const p = sectionProgress(sec), pe = ease(seg(p, .05, .85));
+    const wy = h * lerp(.66, .2, pe);                 // the waterline climbs as we sink
+    const mobile = w < 700;
+    const L = mobile ? w * 2.1 : Math.min(w * 1.15, 1700);
+    const sx = mobile ? w * .36 : w * .5;              // snout x
+    const bob = Math.sin(T * .9) * 1.5;
+
+    // sky
+    let g = ctx.createLinearGradient(0, 0, 0, wy);
+    g.addColorStop(0, "#070d0b"); g.addColorStop(.7, "#121a14"); g.addColorStop(1, "#2a2a1b");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, wy);
+    // low sun glow on horizon
+    const sg = ctx.createRadialGradient(w * .78, wy, 0, w * .78, wy, w * .55);
+    sg.addColorStop(0, "rgba(226,168,60,.22)"); sg.addColorStop(1, "rgba(226,168,60,0)");
+    ctx.fillStyle = sg; ctx.fillRect(0, 0, w, wy);
+    // far bank reeds
+    ctx.fillStyle = "#0a100d";
+    ctx.beginPath(); ctx.moveTo(0, wy);
+    for (const r of reeds) { const x = r.x * w, hh = r.h * Math.min(70, h * .08); ctx.lineTo(x - 1.2, wy - 3); ctx.lineTo(x + r.b * 10 + Math.sin(T * .7 + r.x * 20) * 1.5, wy - hh); ctx.lineTo(x + 1.2, wy - 3); }
+    ctx.lineTo(w, wy); ctx.closePath(); ctx.fill();
+    ctx.fillRect(0, wy - 4, w, 4);
+
+    // underwater
+    g = ctx.createLinearGradient(0, wy, 0, h);
+    g.addColorStop(0, "#1c2a20"); g.addColorStop(.25, "#0f1a15"); g.addColorStop(1, "#050a08");
+    ctx.fillStyle = g; ctx.fillRect(0, wy, w, h - wy);
+    // light shafts
+    if (h - wy > 20) {
+      ctx.save(); ctx.globalCompositeOperation = "lighter";
+      for (let i = 0; i < 7; i++) {
+        const x0 = ((i * .17 + Math.sin(T * .15 + i) * .03) % 1) * w * 1.2 - w * .1, ww = w * (.03 + (i % 3) * .015);
+        const lg = ctx.createLinearGradient(0, wy, 0, wy + (h - wy) * .9);
+        lg.addColorStop(0, `rgba(170,190,140,${.05 + .03 * Math.sin(T * .6 + i * 1.7)})`); lg.addColorStop(1, "rgba(170,190,140,0)");
+        ctx.fillStyle = lg; ctx.beginPath(); ctx.moveTo(x0, wy); ctx.lineTo(x0 + ww, wy); ctx.lineTo(x0 + ww + w * .12, h); ctx.lineTo(x0 + w * .1, h); ctx.fill();
+      }
+      ctx.restore();
+    }
+    // crocodile, under water (dimmed by turbidity, clearer as we descend)
+    const crocTop = wy - L * .012 + bob;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, wy, w, h - wy); ctx.clip();
+    drawCroc(ctx, { L, x: sx, y: crocTop, t: T, sway: .6, paddle: .4, alpha: lerp(.32, .95, pe), fill: "#1a271f", belly: "#24301f", crest: "#1a271f", leg: "#111c16" });
+    // turbidity veil
+    const vg = ctx.createLinearGradient(0, wy, 0, h);
+    vg.addColorStop(0, `rgba(14,22,17,${lerp(.35, .05, pe)})`); vg.addColorStop(1, `rgba(5,10,8,${lerp(.85, .35, pe)})`);
+    ctx.fillStyle = vg; ctx.fillRect(0, wy, w, h - wy);
+    ctx.restore();
+    // silt motes
+    ctx.fillStyle = "rgba(200,205,170,.35)";
+    for (const m of motes) { const y = wy + ((m.y + T * .006 * m.z) % 1) * (h - wy), x = (m.x + Math.sin(T * .2 + m.s) * .01) * w; if (y > wy + 4) { ctx.globalAlpha = m.z * .6; ctx.fillRect(x, y, m.z * 1.6, m.z * 1.6); } }
+    ctx.globalAlpha = 1;
+
+    // above water: only what breaks the surface
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, wy); ctx.clip();
+    let blink = 0; const bt = T - blinkAt; if (bt > 0 && bt < .28) blink = Math.sin(bt / .28 * Math.PI); if (bt > .28) blinkAt = T + 3 + Math.random() * 5;
+    const r = drawCroc(ctx, { L, x: sx, y: crocTop, t: T, sway: 0, alpha: 1, fill: "#202a1f", crest: "#202a1f", legs: false, eyeGlow: 1, blink: RM ? 0 : blink });
+    ctx.restore();
+    // surface line, meniscus and reflections
+    ctx.fillStyle = "rgba(232,224,204,.08)"; ctx.fillRect(0, wy, w, 1);
+    ctx.save(); ctx.globalAlpha = .55;
+    for (let i = 0; i < 26; i++) {
+      const y = wy + 2 + i * 2.2, a = (1 - i / 26) * .32;
+      const x = (Math.sin(i * 12.3 + T * .4) * .5 + .5) * w, len = 20 + (i * 37 % 90);
+      ctx.fillStyle = `rgba(226,168,60,${a * .5})`; ctx.fillRect(x, y, len, 1);
+      ctx.fillStyle = `rgba(232,224,204,${a * .25})`; ctx.fillRect((x * 1.7) % w, y, len * .6, 1);
+    }
+    // eye reflection
+    if (r.eye) { ctx.fillStyle = "rgba(226,168,60,.35)"; const ex = r.eye[0], ey = wy + (wy - r.eye[1]) * .9; ctx.fillRect(ex - L * .008 + Math.sin(T * 3) * 1.5, ey, L * .01, 1.5); ctx.fillRect(ex - L * .006 + Math.sin(T * 3.3) * 2, ey + 4, L * .008, 1); }
+    ctx.restore();
+    // ripples on the surface
+    if (!RM && T > nextRip) { rip.add(r.eye ? r.eye[0] : sx, wy, L * .09, 4); nextRip = T + 2.8; }
+    if (pointer && T - pointer.t < .05 && Math.abs(pointer.y - wy) < 60 && Math.random() < .25) rip.add(pointer.x, wy, 90, 2.4);
+    rip.draw(ctx, RM ? 0 : dt, .08);
+
+    // overlay copy states
+    h1.style.opacity = String(1 - seg(p, .18, .42));
+    h1.parentElement.querySelector(".lede").style.opacity = String(1 - seg(p, .12, .36));
+    under.style.opacity = String(seg(p, .48, .7) * (1 - seg(p, .92, 1)));
+    cue.style.opacity = String(1 - seg(p, 0, .08));
+
+    // measuring tape under the body, once below
+    const mt = seg(p, .55, .85);
+    if (mt > 0) {
+      const y = crocTop + L * .14, x0 = sx, x1 = sx + L * Math.min(1, (w - sx - 10) / L) * easeOut(mt);
+      ctx.strokeStyle = `rgba(226,168,60,${mt})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillStyle = `rgba(226,168,60,${mt})`; ctx.font = "500 11px 'IBM Plex Mono', monospace";
+      for (let m = 0; m <= 4.5; m += .5) { const x = sx + (m / 4.5) * L; if (x > x1) break; const big = m % 1 === 0; ctx.fillRect(x, y - (big ? 6 : 3), 1, big ? 12 : 6); if (big) ctx.fillText(m + " m", x + 4, y + 16); }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   ANATOMY pins
+   ========================================================= */
+(function anatomy() {
+  const pins = [...document.querySelectorAll("#anat-fig .pin")], notes = [...document.querySelectorAll("#notes .note")];
+  const set = n => { pins.forEach(p => p.setAttribute("aria-pressed", String(+p.dataset.n === n))); notes.forEach(x => x.classList.toggle("lit", +x.dataset.n === n)); };
+  pins.forEach(p => { p.addEventListener("click", () => set(+p.dataset.n)); p.addEventListener("mouseenter", () => set(+p.dataset.n)); });
+  notes.forEach(x => x.addEventListener("mouseenter", () => set(+x.dataset.n)));
+})();
+
+/* =========================================================
+   THE HUNT (scroll-scrubbed)
+   ========================================================= */
+(function hunt() {
+  const track = document.getElementById("hunt-track"), cv = document.getElementById("hunt-c");
+  const lis = [...document.querySelectorAll("#stages li")];
+  const romanEl = document.getElementById("h-roman"), bodyEl = document.getElementById("h-body");
+  const STAGES = [
+    ["I", "Wait", "It holds one spot, sometimes for hours, near where animals come down to drink. Large adults can go months between big meals, so it can afford to wait."],
+    ["II", "Close", "It sinks and drifts in under the surface without a ripple. The pressure sensors on its jaws pick up muzzles touching the water and hooves at the edge."],
+    ["III", "Strike", "One sweep of the tail throws the front of the body out of the water. The jaws close on a muzzle or a leg. It's over in a moment."],
+    ["IV", "Drown", "It doesn't need to win a fight. It drags the animal back into deep water and holds it under. Most large prey drown."],
+    ["V", "Roll", "It can't chew. To tear off a piece it locks its jaws and spins its whole body: the death roll. Other crocodiles often hold the carcass in place."],
+    ["VI", "Swallow", "Pieces go down whole, head tipped back. Stones in its stomach and powerful stomach acid break down bone. One large meal can last weeks."]
+  ];
+  let cur = -1, last = performance.now(), T = 0;
+  const rip = new Ripples(), splash = [];
+  function setStage(i) {
+    if (i === cur) return; cur = i;
+    lis.forEach((li, k) => li.classList.toggle("on", k === i));
+    [romanEl, bodyEl].forEach(e => e.classList.add("out"));
+    setTimeout(() => {
+      romanEl.textContent = STAGES[i][0];
+      bodyEl.innerHTML = `<h3>${STAGES[i][1]}</h3><p>${STAGES[i][2]}</p>`;
+      [romanEl, bodyEl].forEach(e => e.classList.remove("out"));
+    }, RM ? 0 : 180);
+  }
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!visible(track)) { requestAnimationFrame(frame); return; }
+    T += RM ? 0 : dt;
+    const p = sectionProgress(track), s = p * 6;              // 0..6
+    setStage(Math.min(5, Math.floor(s)));
+    lis.forEach((li, k) => li.querySelector("b").style.transform = `scaleX(${clamp(s - k, 0, 1)})`);
+
+    const { ctx, w, h } = fitCanvas(cv);
+    // logical scene 1000 x 520, letterboxed
+    const sc = Math.min(w / 1000, h / 520), ox = (w - 1000 * sc) / 2, oy = (h - 520 * sc) / 2;
+    ctx.clearRect(0, 0, w, h);
+    ctx.save(); ctx.translate(ox, oy); ctx.scale(sc, sc);
+    const WY = 250;
+    // sky + water
+    let g = ctx.createLinearGradient(0, 0, 0, WY); g.addColorStop(0, "#0d1512"); g.addColorStop(1, "#2b2a1c");
+    ctx.fillStyle = g; ctx.fillRect(-400, 0, 1800, WY);
+    g = ctx.createLinearGradient(0, WY, 0, 520); g.addColorStop(0, "#22301f"); g.addColorStop(1, "#070d0a");
+    ctx.fillStyle = g; ctx.fillRect(-400, WY, 1800, 270);
+    // bank (right)
+    ctx.fillStyle = "#2a2419";
+    ctx.beginPath(); ctx.moveTo(760, 520); ctx.lineTo(760, 300); ctx.bezierCurveTo(800, 262, 830, 232, 880, 222); ctx.lineTo(1400, 210); ctx.lineTo(1400, 520); ctx.fill();
+    ctx.fillStyle = "#1c1912"; ctx.beginPath(); ctx.moveTo(760, 520); ctx.lineTo(760, 300); ctx.bezierCurveTo(780, 340, 800, 420, 840, 520); ctx.fill();
+
+    // ---- choreography ----
+    const L = 470;
+    const st = k => seg(s, k, k + 1);
+    let cx = 60, cy = WY - L * .012, jaw = 0, tilt = 0, roll = 0, eye = 1, alphaAbove = 1;
+    let gx = 845, gy = 228, gDrop = 1, gRot = 0, gPull = 0, gAlpha = 1, gKick = 0;
+    const bob = Math.sin(T * .9) * 1.2;
+    // I wait
+    cy += bob;
+    // II close
+    const a2 = ease(st(1));
+    cx = lerp(60, 330, a2); cy = lerp(cy, WY + 26, Math.sin(Math.min(1, a2 * 1.4) * Math.PI / 2) * (1 - seg(s, 1.85, 2)));
+    eye = 1 - seg(s, 1.05, 1.25);
+    // III strike
+    const a3 = st(2);
+    if (s >= 2) {
+      const lunge = easeOut(seg(a3, 0, .45));
+      cx = lerp(330, 470, lunge); cy = lerp(WY + 26, WY - 34, lunge) - Math.sin(seg(a3, 0, .6) * Math.PI) * 18;
+      tilt = -lerp(0, .22, lunge) * (1 - seg(a3, .6, 1) * .5);
+      jaw = seg(a3, .05, .3) * (1 - seg(a3, .38, .5));
+      gDrop = lerp(1, .55, seg(a3, .38, .7)); gKick = seg(a3, .4, 1);
+      if (a3 > .4 && splash.length < 60 && !RM) for (let i = 0; i < 4; i++) splash.push({ x: 500 + Math.random() * 80, y: WY, vx: (Math.random() - .3) * 160, vy: -120 - Math.random() * 220, t: 0 });
+      eye = Math.max(eye, lunge);
+    }
+    // IV drown: drag back and under
+    const a4 = ease(st(3));
+    if (s >= 3) {
+      cx = lerp(470, 300, a4); cy = lerp(WY - 34 + 9, WY + 70, a4); tilt = lerp(-.11, .06, a4);
+      gx = lerp(845, 640, a4); gy = lerp(228, WY + 70, a4); gRot = lerp(0, -1.1, a4); gDrop = lerp(.55, .2, a4); gPull = lerp(0, .3, a4); gKick = 1 - a4 * .6;
+      eye = 1 - seg(a4, 0, .3);
+    }
+    // V roll
+    const a5 = st(4);
+    if (s >= 4) {
+      cx = 300 + Math.sin(a5 * Math.PI) * 20; cy = WY + 70; tilt = .06 * (1 - a5); roll = ease(a5) * Math.PI * 4;
+      gx = 640 + a5 * 10; gy = WY + 70 - a5 * 20; gRot = -1.1 - Math.sin(a5 * Math.PI * 4) * .25; gDrop = .2; gKick = 0; gPull = .3;
+    }
+    // VI swallow: surface, head tipped back
+    const a6 = ease(st(5));
+    if (s >= 5) {
+      cx = lerp(300, 340, a6); cy = lerp(WY + 70, WY - L * .02, a6); roll = 0; tilt = -lerp(0, .32, seg(a6, .4, 1)); jaw = seg(a6, .5, .7) * (1 - seg(a6, .85, 1)) * .6;
+      gx = lerp(650, 690, a6); gy = lerp(WY + 50, WY + 6, a6); gRot = lerp(-1.2, -1.5, a6); gAlpha = lerp(1, .85, a6);
+      eye = a6;
+    }
+
+    // second crocodile joins at the carcass (roll + swallow)
+    if (s > 4.2) {
+      const k = ease(seg(s, 4.2, 5.2));
+      drawCroc(ctx, { L: 380, x: lerp(1050, 600, k), y: WY - 380 * .012 + Math.sin(T) * 1.2 + 34 * (1 - k), t: T, sway: .4, fill: "#16221b", belly: "#1f2b20", alpha: .8 * k, legs: true, eyeGlow: k > .9 ? 1 : 0 });
+    }
+    // prey
+    drawGnu(ctx, gx, gy, 92, { drop: gDrop, rot: gRot, pull: gPull, kick: Math.sin(T * 14) * gKick, alpha: gAlpha, fill: "#14160f" });
+    // crocodile
+    drawCroc(ctx, { L, x: cx, y: cy, t: T, sway: s < 2 ? .5 : 1.1, paddle: s > 1 && s < 2 ? 1 : .3, jaw, tilt, roll, fill: "#1d2a21", belly: "#27321f", eyeGlow: eye, alpha: 1 });
+
+    // water surface overlay: makes the submerged part read as submerged
+    ctx.fillStyle = "rgba(20,34,26,.42)"; ctx.fillRect(-400, WY, 1800, 270);
+    ctx.fillStyle = "rgba(232,224,204,.18)"; ctx.fillRect(-400, WY, 1800, 1);
+    for (let i = 0; i < 14; i++) { ctx.fillStyle = `rgba(226,168,60,${.12 * (1 - i / 14)})`; ctx.fillRect((i * 173 + T * 6) % 1300 - 150, WY + 2 + i * 2, 40 + (i * 29) % 70, 1); }
+    // drinking ripples at stage I–II
+    if (!RM && s < 2.3 && Math.random() < dt * 1.2) rip.add(gx - 70, WY, 70, 2.4);
+    if (!RM && s >= 4 && s < 5 && Math.random() < dt * 5) rip.add(300 + Math.random() * 260, WY, 120, 1.8);
+    rip.draw(ctx, RM ? 0 : dt, .09);
+    // splash
+    ctx.fillStyle = "rgba(232,224,204,.7)";
+    for (let i = splash.length - 1; i >= 0; i--) { const d = splash[i]; d.t += dt; d.vy += 600 * dt; d.x += d.vx * dt; d.y += d.vy * dt; if (d.y > WY + 4 || d.t > 2) { splash.splice(i, 1); continue; } ctx.fillRect(d.x, d.y, 2.2, 2.2); }
+    // swirl lines during the roll
+    if (s >= 4 && s < 5) { ctx.strokeStyle = "rgba(232,224,204,.12)"; ctx.lineWidth = 1.2; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(420, WY + 80, 140 + k * 26, 30 + k * 8, 0, T * 3 + k, T * 3 + k + 1.6); ctx.stroke(); } }
+    // bubbles while drowning
+    if (s >= 3 && s < 4.6 && !RM) { ctx.strokeStyle = "rgba(232,224,204,.35)"; for (let k = 0; k < 10; k++) { const bx = gx - 40 + (k * 37) % 70, by = gy - ((T * 60 + k * 41) % 120); if (by > WY) { ctx.beginPath(); ctx.arc(bx, by, 1.5 + (k % 3), 0, Math.PI * 2); ctx.stroke(); } } }
+    // scale bar
+    ctx.fillStyle = "rgba(143,156,118,.8)"; ctx.font = "500 12px 'IBM Plex Mono', monospace";
+    ctx.fillRect(40, 495, 104, 1); ctx.fillRect(40, 490, 1, 10); ctx.fillRect(144, 490, 1, 10); ctx.fillText("1 m", 152, 499);
+    ctx.restore();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   THE EDGE: reaction test
+   ========================================================= */
+(function edge() {
+  const box = document.getElementById("edge-box"), cv = document.getElementById("edge-c");
+  const big = document.getElementById("edge-big"), small = document.getElementById("edge-small");
+  const bestEl = document.getElementById("best"), lastEl = document.getElementById("last"), caughtEl = document.getElementById("caught");
+  let state = "idle", strikeAt = 0, timer = 0, sinkAt = 0, best = Infinity, caught = 0, T = 0, last = performance.now(), result = 0;
+  const rip = new Ripples();
+  function msg(b, s) { big.textContent = b; small.textContent = s; }
+  function start() {
+    state = "watch"; msg("Watch", "Don't press until it moves.");
+    const wait = 2200 + Math.random() * 6500; sinkAt = performance.now() + wait - 700; strikeAt = performance.now() + wait;
+  }
+  function press() {
+    const now = performance.now();
+    if (state === "idle" || state === "done" || state === "early") { start(); return; }
+    if (state === "watch") { state = "early"; msg("Too soon", "It hadn't moved yet. Its patience is the advantage. Tap to try again."); return; }
+    if (state === "strike") {
+      result = Math.round(now - strikeAt); state = "done";
+      best = Math.min(best, result); bestEl.textContent = best + " ms"; lastEl.textContent = result + " ms";
+      const ok = result < 200;
+      if (!ok) { caught++; caughtEl.textContent = caught; }
+      msg(result + " ms", ok ? "Faster than most people. In the wild, the crocodile was already moving before it struck. Tap to go again." : "By then the jaws were already shut. Tap to go again.");
+    }
+  }
+  box.addEventListener("pointerdown", e => { e.preventDefault(); press(); });
+  box.addEventListener("keydown", e => { if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); press(); } });
+  addEventListener("keydown", e => { if (e.code === "Space" && (state === "strike" || state === "watch") && document.activeElement !== box && visible(box)) { e.preventDefault(); press(); } });
+
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!visible(box)) { requestAnimationFrame(frame); return; }
+    T += dt;
+    if (state === "watch" && now >= strikeAt) { state = "strike"; msg("", ""); }
+    if (state === "strike" && now - strikeAt > 1800) { state = "done"; caught++; caughtEl.textContent = caught; lastEl.textContent = "—"; msg("Caught", "You didn't react at all. Tap to try again."); }
+    const { ctx, w, h } = fitCanvas(cv);
+    const WY = h * .6;
+    let g = ctx.createLinearGradient(0, 0, 0, WY); g.addColorStop(0, "#060c0a"); g.addColorStop(1, "#262719"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, WY);
+    g = ctx.createLinearGradient(0, WY, 0, h); g.addColorStop(0, "#1a261c"); g.addColorStop(1, "#050a08"); ctx.fillStyle = g; ctx.fillRect(0, WY, w, h - WY);
+    // your muzzle, at the right edge
+    ctx.fillStyle = "#12140e"; ctx.beginPath(); ctx.moveTo(w, WY - h * .32); ctx.quadraticCurveTo(w * .86, WY - h * .2, w * .78, WY - 2); ctx.lineTo(w * .8, WY + 2); ctx.quadraticCurveTo(w * .9, WY - h * .08, w, WY - h * .1); ctx.fill();
+    const L = Math.max(w * 1.3, 520);
+    let x = w * .18, y = WY - L * .012 + Math.sin(T) * 1.2, jaw = 0, tilt = 0, eye = 1;
+    if (state === "watch" && now > sinkAt) { const k = seg(now, sinkAt, strikeAt); y += k * L * .02; eye = 1 - k * .7; }
+    if (state === "strike" || (state === "done" && result)) {
+      const k = state === "strike" ? seg(now, strikeAt, strikeAt + 160) : 1;
+      x = lerp(w * .18, w * .5, easeOut(k)); y = lerp(WY, WY - h * .2, easeOut(k)); tilt = -.28 * easeOut(k); jaw = state === "strike" ? Math.sin(Math.min(1, k * 1.3) * Math.PI) : 0; eye = 1;
+      if (state === "strike" && Math.random() < .5) rip.add(x + L * .1, WY, 120, 1.4);
+    }
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, WY); ctx.clip();
+    drawCroc(ctx, { L, x, y, t: T, sway: 0, legs: false, jaw, tilt, eyeGlow: eye, fill: "#1f2a1f" });
+    ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(0, WY, w, h - WY); ctx.clip();
+    drawCroc(ctx, { L, x, y, t: T, sway: .4, jaw, tilt, alpha: .35, fill: "#16211a" });
+    ctx.restore();
+    ctx.fillStyle = "rgba(232,224,204,.15)"; ctx.fillRect(0, WY, w, 1);
+    if (state === "watch" && Math.random() < dt * .6) rip.add(x + L * .145, WY, 50, 2.5);
+    rip.draw(ctx, dt, .1);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   RANGE MAP
+   ========================================================= */
+(function rangeMap() {
+  const STATUS = {
+    strong: ["ZAF","BWA","ZWE","ZMB","TZA","KEN","MOZ","UGA","ETH"],
+    patchy: ["EGY","SDN","SSD","SOM","MWI","AGO","COD","NAM","RWA","BDI","SWZ","ERI"],
+    depleted: ["MDG"],
+    gone: ["ISR","PSX","PSE"],
+    suchus: ["MRT","SEN","GMB","GNB","GIN","SLE","LBR","CIV","GHA","TGO","BEN","NGA","NER","MLI","BFA","CMR","TCD","CAF","GAB","COG","GNQ"]
+  };
+  const LABEL = { strong: "Stronghold", patchy: "Patchy", depleted: "Depleted", gone: "Gone", suchus: "C. suchus" };
+  const COLOR = { strong: "#7f9b5e", patchy: "#c09a52", depleted: "#b8603f", gone: "#b8603f", suchus: "#5f6f66" };
+  const sOf = {}; Object.entries(STATUS).forEach(([k, a]) => a.forEach(i => sOf[i] = k));
+  const PLACES = [
+    { n: "Mara River", c: "Kenya · Tanzania", lat: -1.45, lon: 35.05, s: "strong", img: "img/sandbar.jpg", cr: "Diego Delso · CC BY-SA 4.0",
+      t: "Between July and October, the Great Migration brings over a million wildebeest across the Mara. Its crocodiles may get most of a year's food in a few weeks at the crossings." },
+    { n: "Lake Turkana", c: "Kenya", lat: 3.55, lon: 36.1, s: "strong", t: "A desert lake with one of the densest crocodile populations ever counted, about 12,000 in the 1960s. Their bony skins were worthless to hide hunters, so the trade passed them by. Central Island's crater lakes are a major nesting site." },
+    { n: "Lake Chamo", c: "Ethiopia", lat: 5.85, lon: 37.56, s: "strong", img: "img/chamo.jpg", cr: "Bernard Gagnon · CC BY-SA 3.0",
+      t: "In Nechisar National Park. A sandbank here, known locally as the Crocodile Market, gathers some of the largest Nile crocodiles alive. Many males are well over 5 m." },
+    { n: "Murchison Falls", c: "Uganda", lat: 2.28, lon: 31.7, s: "strong", t: "Below the falls, where the Victoria Nile forces through a 7 m gap, stunned fish feed a dense population. Boats count dozens on a single stretch." },
+    { n: "Lake Nasser", c: "Egypt · Sudan", lat: 22.6, lon: 31.9, s: "patchy", t: "The last crocodiles in Egypt. Gone from the lower Nile since the 1800s, they live on in the reservoir behind the Aswan High Dam, where fishers say their numbers have grown." },
+    { n: "Rusizi River", c: "Burundi", lat: -3.3, lon: 29.28, s: "patchy", t: "Where the Rusizi flows into Lake Tanganyika. This is the home of the crocodile called Gustave, and a reminder that human–crocodile conflict is sharpest where people rely on the water every day." },
+    { n: "Luangwa River", c: "Zambia", lat: -13.1, lon: 31.8, s: "strong", t: "In the dry season the Luangwa shrinks to a chain of pools. Crocodiles and hippos crowd into the same water, at some of the highest densities in Africa." },
+    { n: "Zambezi & Kariba", c: "Zambia · Zimbabwe", lat: -16.9, lon: 28.2, s: "strong", img: "img/zambezi.jpg", cr: "Bernard Gagnon · CC BY-SA 4.0",
+      t: "The middle Zambezi and Lake Kariba are the heart of Zimbabwe's ranching programme. Eggs taken from the wild under quota supply farms. Some hatchlings return to the river, and landowners have a reason to keep crocodiles." },
+    { n: "Chobe & Okavango", c: "Botswana", lat: -18.2, lon: 24.4, s: "strong", img: "img/chobe.jpg", cr: "Diego Delso · CC BY-SA 4.0",
+      t: "The Okavango's yearly flood spreads crocodiles across the delta. In the dry months they gather in permanent channels and along the Chobe River, where they nest on the sandbanks of the panhandle." },
+    { n: "Olifants River", c: "South Africa", lat: -24.0, lon: 31.7, s: "patchy", t: "Pollution from mines, farms and sewage upstream, and rancid fish trapped behind dams, have been linked to pansteatitis outbreaks here since 2008. The gorge population lost well over a hundred adults." },
+    { n: "St Lucia Estuary", c: "South Africa", lat: -28.3, lon: 32.45, s: "strong", t: "Near the southern limit of the species. Crocodiles here live in water that turns brackish and salty, using glands on the tongue to get rid of excess salt." },
+    { n: "Ankarana", c: "Madagascar", lat: -12.95, lon: 49.1, s: "depleted", t: "Madagascar's crocodiles have been hunted and pushed out of much of their old range. In Ankarana's limestone massif some escape the dry season in flooded caves." }
+  ];
+  const svg = document.getElementById("map"), gl = svg.querySelector("#m-land"), gk = svg.querySelector("#m-lakes"), gr = svg.querySelector("#m-rivers"), gh = svg.querySelector("#m-hot");
+  const NS = "http://www.w3.org/2000/svg";
+  const P = (lon, lat) => [(lon + 18) * 10, (38.5 - lat) * 10];
+  const el = (t, a, parent) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); parent && parent.appendChild(e); return e; };
+  let idx = 0, filter = null;
+  const imgEl = document.getElementById("pl-img"), fig = document.getElementById("pl-fig"), body = document.getElementById("pl-body");
+  function show(i) {
+    idx = (i + PLACES.length) % PLACES.length; const p = PLACES[idx];
+    gh.querySelectorAll(".hot").forEach((g, k) => g.classList.toggle("on", k === idx));
+    body.classList.add("out");
+    setTimeout(() => {
+      document.getElementById("pl-coords").textContent = `${Math.abs(p.lat).toFixed(2)}° ${p.lat >= 0 ? "N" : "S"}  ·  ${p.lon.toFixed(2)}° E  ·  ${p.c}`;
+      document.getElementById("pl-name").textContent = p.n;
+      const tag = document.getElementById("pl-tag"); tag.innerHTML = `<i style="background:${COLOR[p.s]}"></i>${LABEL[p.s]}`;
+      document.getElementById("pl-text").textContent = p.t;
+      document.getElementById("pl-credit").textContent = p.img ? "Photo: " + p.cr : "";
+      if (p.img) { fig.hidden = false; imgEl.src = p.img; imgEl.alt = "Nile crocodile at " + p.n; } else fig.hidden = true;
+      body.classList.remove("out");
+    }, RM ? 0 : 200);
+  }
+  document.getElementById("pl-prev").addEventListener("click", () => show(idx - 1));
+  document.getElementById("pl-next").addEventListener("click", () => show(idx + 1));
+  PLACES.forEach((p, i) => {
+    const [x, y] = P(p.lon, p.lat);
+    const g = el("g", { class: "hot", tabindex: "0", role: "button", "aria-label": p.n, transform: `translate(${x} ${y})` }, gh);
+    el("circle", { r: 18, fill: "transparent" }, g);
+    const r1 = el("circle", { class: "r", r: 6 }, g), r2 = el("circle", { class: "r", r: 6 }, g);
+    el("circle", { class: "d", r: 4.5 }, g);
+    const t = el("text", { class: "t", x: p.lon > 40 ? -10 : 10, y: 4, "text-anchor": p.lon > 40 ? "end" : "start" }, g); t.textContent = p.n;
+    if (!RM) { [r1, r2].forEach((r, k) => r.animate([{ r: 4, opacity: .9 }, { r: 20, opacity: 0 }], { duration: 3200, iterations: Infinity, delay: k * 1600 + i * 240, easing: "cubic-bezier(.2,.7,.1,1)" })); }
+    g.addEventListener("click", () => show(i));
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(i); } });
+  });
+  document.querySelectorAll("#legend button").forEach(b => b.addEventListener("click", () => {
+    filter = filter === b.dataset.s ? null : b.dataset.s;
+    document.querySelectorAll("#legend button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.s === filter)));
+    svg.classList.toggle("focus", !!filter);
+    gl.querySelectorAll(".land").forEach(p => p.classList.toggle("hl", p.dataset.s === filter));
+  }));
+  show(0);
+  fetch("geo.json").then(r => r.json()).then(G => {
+    const frag = document.createDocumentFragment();
+    G.countries.forEach(c => { const s = sOf[c.iso]; const a = { d: c.d, class: "land" + (c.africa || s ? "" : " out") }; if (s) a["data-s"] = s; const e = el("path", a, frag); const tt = el("title", {}, e); tt.textContent = c.name + (s ? " · " + LABEL[s] : ""); });
+    gl.appendChild(frag);
+    G.lakes.forEach(l => el("path", { d: l.d, class: "lake" }, gk));
+    G.rivers.forEach(r => el("path", { d: r.d, class: "river" + (/Nile/.test(r.name) ? " nile" : "") }, gr));
+  }).catch(() => { const t = el("text", { x: 370, y: 400, "text-anchor": "middle", fill: "#8f9c76", "font-family": "IBM Plex Mono, monospace", "font-size": 14 }, gl); t.textContent = "Map data didn't load. Open this page through a web server."; });
+})();
+
+/* =========================================================
+   NUMBERS: dot field
+   ========================================================= */
+(function dots() {
+  const cv = document.getElementById("dots-c"), wrap = cv.parentElement;
+  const btns = [...document.querySelectorAll("#numbers .toggle .btn")];
+  const fig = document.getElementById("fig-n"), cap = document.getElementById("fig-cap");
+  const N = 3000, COLS = 75; // 75 x 40
+  let mode = "killed", t0 = performance.now(), born = false;
+  const order = Array.from({ length: N }, (_, i) => i).sort(() => Math.random() - .5);
+  const rank = new Array(N); order.forEach((v, k) => rank[v] = k);
+  const TEXT = {
+    killed: ["≈3,000,000", "Nile crocodiles killed for their hides across Africa in roughly thirty years. Belly skin was sold to the leather trade by the square inch."],
+    alive: ["250–500k", "Estimated Nile crocodiles in the wild today. Solid amber dots are the low estimate and outlined dots reach the high one. A large majority of the dots that were killed would be needed to fill the gap."]
+  };
+  btns.forEach(b => b.addEventListener("click", () => {
+    if (mode === b.dataset.v) return; mode = b.dataset.v; t0 = performance.now();
+    btns.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    fig.textContent = TEXT[mode][0]; cap.textContent = TEXT[mode][1]; fig.classList.toggle("amber", mode === "alive");
+  }));
+  cap.textContent = TEXT.killed[1];
+  TEXT.alive[1] = "Estimated Nile crocodiles in the wild today. Solid amber is the low estimate and outlined dots reach the high one. Each dot is still 1,000 animals.";
+  function frame(now) {
+    if (!visible(wrap)) { requestAnimationFrame(frame); return; }
+    if (!born) { born = true; t0 = now; }
+    const { ctx, w, h } = fitCanvas(cv);
+    ctx.clearRect(0, 0, w, h);
+    const rows = Math.ceil(N / COLS), cell = Math.min(w / COLS, h / rows), r = Math.max(1, cell * .32);
+    const ox = (w - cell * COLS) / 2 + cell / 2, oy = (h - cell * rows) / 2 + cell / 2;
+    const k = RM ? 9 : (now - t0) / 1000;
+    for (let i = 0; i < N; i++) {
+      const x = ox + (i % COLS) * cell, y = oy + Math.floor(i / COLS) * cell;
+      if (mode === "killed") {
+        const a = clamp(k * 1.6 - rank[i] / N * 1.2, 0, 1);
+        if (a <= 0) continue;
+        ctx.globalAlpha = a; ctx.fillStyle = C.bone;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      } else {
+        const fadeOut = clamp(1 - k * 1.5, .1, 1);
+        if (i < 250) { const a = clamp(k * 2 - i / 250 * .6, 0, 1); ctx.globalAlpha = 1; ctx.fillStyle = C.bone; ctx.globalAlpha = fadeOut * (1 - a); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = a; ctx.fillStyle = C.iris; ctx.beginPath(); ctx.arc(x, y, r * (1 + .25 * (1 - a)), 0, Math.PI * 2); ctx.fill(); }
+        else if (i < 500) { const a = clamp(k * 2 - .4 - (i - 250) / 250 * .6, 0, 1); ctx.globalAlpha = fadeOut * (1 - a); ctx.fillStyle = C.bone; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = a; ctx.strokeStyle = C.iris; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, r * .9, 0, Math.PI * 2); ctx.stroke(); }
+        else { ctx.globalAlpha = fadeOut * .9; ctx.fillStyle = "#3a3f36"; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); }
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   NEST: temperature-dependent sex
+   ========================================================= */
+(function nest() {
+  const input = document.getElementById("temp"), read = document.getElementById("t-read"), out = document.getElementById("t-out"), clutch = document.getElementById("clutch");
+  const eggs = Array.from({ length: 50 }, (_, i) => { const e = document.createElement("div"); e.className = "egg"; clutch.appendChild(e); return { e, r: ((i * 7919) % 50) / 50 + .01 }; });
+  const sig = x => 1 / (1 + Math.exp(-x));
+  // simplified: males mostly between 31.7 and 34.5 °C, females below and above
+  const maleFrac = T => sig((T - 31.7) / .3) * sig((34.5 - T) / .3) * .97;
+  function update() {
+    const T = +input.value, m = maleFrac(T);
+    read.textContent = T.toFixed(1) + "°";
+    out.textContent = m > .8 ? "Mostly males" : m > .2 ? "Mixed clutch" : (T < 32 ? "All females, cool nest" : "All females, hot nest");
+    eggs.forEach(({ e, r }) => { const male = r < m; e.classList.toggle("m", male); e.classList.toggle("f", !male); });
+  }
+  input.addEventListener("input", update); update();
+})();
+
+/* =========================================================
+   GROW: to-scale silhouette
+   ========================================================= */
+(function grow() {
+  const input = document.getElementById("len"), cv = document.getElementById("grow-c");
+  const lenEl = document.getElementById("g-len"), kgEl = document.getElementById("g-kg"), stEl = document.getElementById("g-stage");
+  const lis = [...document.querySelectorAll("#g-eat li, #g-pred li")];
+  let shown = 4.5, target = 4.5, T = 0, last = performance.now();
+  function update() {
+    target = +input.value;
+    const kg = 4.4 * Math.pow(target, 3);
+    lenEl.textContent = target.toFixed(2) + " m";
+    kgEl.textContent = kg < 1 ? Math.round(kg * 1000) + " g" : kg < 10 ? kg.toFixed(1) + " kg" : Math.round(kg / 5) * 5 + " kg";
+    stEl.textContent = target < .5 ? "Hatchling" : target < 1.2 ? "Juvenile" : target < 2.5 ? "Sub-adult" : target < 4.2 ? "Adult" : "Large male";
+    input.style.setProperty("--pct", ((target - .3) / 5.7 * 100) + "%");
+    lis.forEach(li => li.classList.toggle("gray", !(target >= +li.dataset.min && target <= +li.dataset.max)));
+  }
+  input.addEventListener("input", update); update();
+  function person(ctx, x, base, ppm) {
+    const H = 1.75 * ppm; ctx.fillStyle = "#8f9c76";
+    ctx.beginPath(); ctx.arc(x, base - H + H * .065, H * .065, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - H * .1, base - H * .84); ctx.lineTo(x + H * .1, base - H * .84); ctx.lineTo(x + H * .085, base - H * .47); ctx.lineTo(x + H * .07, base); ctx.lineTo(x + H * .02, base); ctx.lineTo(x, base - H * .42); ctx.lineTo(x - H * .02, base); ctx.lineTo(x - H * .07, base); ctx.lineTo(x - H * .085, base - H * .47); ctx.closePath(); ctx.fill();
+    ctx.fillRect(x - H * .14, base - H * .83, H * .04, H * .36); ctx.fillRect(x + H * .1, base - H * .83, H * .04, H * .36);
+  }
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!visible(cv)) { requestAnimationFrame(frame); return; }
+    T += RM ? 0 : dt;
+    shown = RM ? target : lerp(shown, target, 1 - Math.pow(.0015, dt));
+    const { ctx, w, h } = fitCanvas(cv);
+    ctx.clearRect(0, 0, w, h);
+    const ppm = Math.min((w - 40) / 6.9, (h - 30) / 2.0), base = h - 1, x0 = 20;
+    // metre grid
+    ctx.font = "500 11px 'IBM Plex Mono', monospace"; ctx.fillStyle = "rgba(143,156,118,.75)";
+    for (let m = 0; m <= 6; m++) { const x = x0 + m * ppm; ctx.fillStyle = "rgba(232,224,204,.07)"; ctx.fillRect(x, 0, 1, h); ctx.fillStyle = "rgba(143,156,118,.75)"; ctx.fillText(m + " m", x + 4, 14); }
+    person(ctx, x0 + 6.3 * ppm, base, ppm);
+    const L = shown * ppm;
+    drawCroc(ctx, { L, x: x0, y: base - L * .115, t: T, sway: .25, fill: "#c9a24a", belly: "#8c7a3f", crest: "#c9a24a", leg: "#7d6a33", eyeGlow: 0, alpha: 1 });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   Breath clock, section index, reveals
+   ========================================================= */
+(function hud() {
+  const hud = document.getElementById("hud"), t = document.getElementById("hud-t"), a = document.getElementById("hud-a"), bar = document.getElementById("hud-bar");
+  const start = Date.now(), MAX = 7200;
+  hud.addEventListener("click", () => hud.setAttribute("aria-expanded", String(hud.getAttribute("aria-expanded") !== "true")));
+  const fmt = s => { const hh = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60; return (hh ? hh + ":" + String(mm).padStart(2, "0") : String(mm).padStart(2, "0")) + ":" + String(ss).padStart(2, "0"); };
+  const tick = () => { const s = Math.floor((Date.now() - start) / 1000), left = Math.max(0, MAX - s); t.textContent = fmt(s); a.textContent = left ? (Math.floor(left / 3600) + ":" + String(Math.floor(left % 3600 / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0")) : "Surface"; bar.style.transform = `scaleX(${left / MAX})`; };
+  tick(); setInterval(tick, 1000);
+})();
+(function idx() {
+  const links = [...document.querySelectorAll("#index a")], secs = links.map(l => document.querySelector(l.getAttribute("href")));
+  const on = () => { let k = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * .45) k = i; }); links.forEach((l, i) => l.classList.toggle("on", i === k)); };
+  addEventListener("scroll", on, { passive: true }); on();
+})();
+(function reveals() {
+  if (RM || !("IntersectionObserver" in window)) return;
+  const els = [...document.querySelectorAll(".rv, .fade")];
+  els.forEach(e => { const r = e.getBoundingClientRect(); if (r.top > innerHeight * .92) e.classList.add("pre"); });
+  const io = new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) { const e = en.target; const sib = [...e.parentElement.children].filter(x => x.classList.contains("fade")); const d = Math.max(0, sib.indexOf(e)) * 70; setTimeout(() => e.classList.remove("pre"), d); io.unobserve(e); } }), { rootMargin: "0px 0px -8% 0px" });
+  els.forEach(e => io.observe(e));
+})();
+})();
+</script>
