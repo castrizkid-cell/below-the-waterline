@@ -7,7 +7,7 @@ const RUNS = +(process.argv[2] || 3), BUDGET = +(process.argv[3] || 2000);
 const results = new Map(); const times = []; let failed = false;
 for (let r = 0; r < RUNS; r++) {
   const t0 = process.hrtime.bigint();
-  const p = spawnSync(process.execPath, ["--test", "--test-reporter=tap", "tests/"], { encoding: "utf8" });
+  const p = spawnSync(process.execPath, ["--test", "--test-reporter=tap", "tests/*.test.mjs"], { encoding: "utf8" });
   const ms = Number(process.hrtime.bigint() - t0) / 1e6; times.push(ms);
   for (const m of p.stdout.matchAll(/^\s*(not ok|ok) \d+ - (.+)$/gm)) {
     const prev = results.get(m[2]); results.set(m[2], prev ? (prev === m[1] ? prev : "FLAKY") : m[1]);
