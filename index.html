@@ -265,7 +265,7 @@ section{position:relative}
 .zoom{border-top:0 !important;padding-top:0 !important}
 
 /* ---------- HUNT ---------- */
-#hunt{background:var(--river)}
+#hunt{background:linear-gradient(180deg,#0c0a11 0,var(--river) 30vh)}
 .hunt-track{height:760vh;position:relative}
 .hunt-stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding-block:clamp(1rem,3vh,2rem)}
 .hunt-top{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
@@ -668,7 +668,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .lr-tiles{margin-bottom:clamp(4rem,8vw,6rem)}
 .lr-deck{display:grid;gap:2rem;grid-template-columns:1fr}
 @media (min-width:980px){.lr-deck{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:start}}
-.lr-card{--v:#e8e0cc;position:relative;border:1px solid var(--line-2);border-top:4px solid var(--v);background:linear-gradient(180deg,color-mix(in srgb,var(--v) 9%,#0a120f),#08100d 70%);padding:clamp(1.3rem,3vw,2.2rem);display:grid;gap:1.1rem;min-height:30rem;transition:border-color .4s,background .4s}
+.lr-card{--v:#e8e0cc;position:relative;border:1px solid var(--line-2);border-top:4px solid var(--v);background:linear-gradient(180deg,color-mix(in srgb,var(--v) 9%,#0a120f),#08100d 70%);padding:clamp(1.3rem,3vw,2.2rem);display:grid;gap:1.1rem;transition:border-color .4s,background .4s}
 .lr-top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--reed)}
 .lr-claim{font-family:var(--f-body);font-style:italic;font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1.2;color:var(--bone);max-width:30ch}
 .lr-you{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--v)}
@@ -680,7 +680,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .lr-g.answer{opacity:1;background:var(--c);color:#0a0f0c}
 .lr-g.picked:not(.answer){opacity:1;text-decoration:line-through}
 .lr-g:focus-visible{outline:2px solid var(--bone);outline-offset:2px}
-.lr-reveal{display:grid;gap:.6rem;min-height:9rem}
+.lr-reveal{display:grid;gap:.6rem;min-height:3rem}
 .lr-verdict{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,5vw,4rem);line-height:.85;text-transform:uppercase;color:var(--v)}
 .lr-text{color:var(--bone);font-size:1.08rem;line-height:1.6;max-width:62ch}
 .lr-card.revealed .lr-verdict,.lr-card.revealed .lr-text{animation:lr-in .5s var(--ease)}
@@ -736,6 +736,59 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 .closing{font-family:var(--f-display);font-weight:900;font-size:var(--s4);text-transform:uppercase;line-height:.88;margin-bottom:3rem;max-width:14ch}
 .closing span{color:var(--iris)}
 
+
+/* ================= SITE-WIDE: section identities, transitions, rhythm ================= */
+.sect{--acc:var(--iris);background:linear-gradient(180deg,var(--from,var(--deep)) 0,var(--bg,var(--deep)) 260px,var(--bg,var(--deep))) !important;isolation:isolate}
+.sect::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--acc) 30%,var(--acc) 70%,transparent);opacity:.35;z-index:0}
+.sect::after{content:attr(data-n);position:absolute;top:clamp(2.5rem,7vw,6rem);right:var(--gut-r);font-family:var(--f-display);font-weight:900;font-size:clamp(7rem,17vw,16rem);line-height:.78;letter-spacing:-.02em;color:var(--acc);opacity:.06;pointer-events:none;z-index:-1}
+.sect > .wrap{position:relative;z-index:1}
+#hunt .hx{background-color:transparent}
+.sect .sec-head .eyebrow{color:var(--acc)}
+.sect .sec-head .eyebrow::before{content:"";display:inline-block;width:2.2rem;height:1px;background:var(--acc);vertical-align:.3em;margin-right:.8rem}
+.sec-head h2{position:relative;padding-bottom:.32em}
+.sec-head h2::after{content:"";position:absolute;left:0;bottom:0;width:clamp(48px,6vw,88px);height:4px;background:var(--acc,var(--iris));transform-origin:left;transition:transform 1.1s var(--ease) .25s}
+.js .sec-head h2.pre::after{transform:scaleX(0)}
+.sec-head .lede{color:color-mix(in srgb,var(--bone) 88%,var(--acc,var(--bone)))}
+@media (min-width:1100px){
+  .sect .sec-head{grid-template-columns:minmax(0,6fr) minmax(0,5fr);column-gap:clamp(2.5rem,5vw,5rem);align-items:end;margin-bottom:clamp(3rem,6vw,4.5rem)}
+  .sect .sec-head .eyebrow{grid-column:1/-1}
+  .sect .sec-head h2{grid-column:1}
+  .sect .sec-head .lede{grid-column:2;max-width:44ch;padding-bottom:.4rem}
+}
+.band{padding-block:clamp(6rem,13vw,10rem)}
+.nb-block{scroll-margin-top:2rem}
+.nb-label h3{letter-spacing:.005em}
+.nb-label .eyebrow{color:color-mix(in srgb,var(--acc,var(--reed)) 55%,var(--reed))}
+/* smoother reveals: rise, fade and un-blur, staggered by the existing reveal script */
+.js .fade.pre{opacity:0;transform:translateY(22px);filter:blur(6px)}
+.js .fade{transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease)}
+.js .rv.pre{clip-path:inset(100% 0 0 0)}
+/* section index: each section's own colour */
+.index a::after{background:color-mix(in srgb,var(--acc) 45%,transparent)}
+.index a.on::after{background:var(--acc)}
+.index a.on{color:var(--acc)}
+/* readable measure everywhere */
+.prose p,.ch-body p,.hx-p,.sv-copy p,.lr-egypt-copy p,.tl-card p,.rc-card p,.og-card .txt{max-width:66ch}
+/* Nest */
+#nest .facts-row{border-top:0;gap:1px;background:var(--line);border:1px solid var(--line);padding-top:0}
+#nest .facts-row div{background:#0f0b07;padding:1.3rem 1.2rem;border-top:3px solid var(--acc)}
+#nest .facts-row b{color:color-mix(in srgb,var(--acc) 80%,#fff)}
+#nest .thermo-read .out{color:var(--acc)}
+#nest .nest-photo img{border:1px solid color-mix(in srgb,var(--acc) 30%,transparent)}
+/* Grow */
+#grow .grow-stage{border-bottom-color:color-mix(in srgb,var(--acc) 50%,transparent)}
+#grow .grow-read .k{color:color-mix(in srgb,var(--acc) 70%,var(--reed))}
+#grow .grow-cols h3{color:var(--acc)}
+#grow .grow-cols li{padding-left:1.2rem;position:relative}
+#grow .grow-cols li::before{content:"";position:absolute;left:0;top:1.05em;width:6px;height:6px;border-radius:50%;background:var(--acc)}
+#grow .grow-cols li.gray::before{background:var(--line-2)}
+/* Footer */
+footer{background:linear-gradient(180deg,#13100a,var(--deep) 220px);border-top:0;position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--iris),transparent);opacity:.4}
+@media (min-width:900px){.foot-grid{grid-template-columns:minmax(0,3fr) minmax(0,1fr)}footer ol{display:block;column-count:2;column-gap:3rem}footer ol li{break-inside:avoid;margin-bottom:.6rem}}
+footer h2{color:var(--iris)}
+@media (prefers-reduced-motion:reduce){.js .fade.pre{filter:none}.sec-head h2::after{transition:none}}
+
 @media (max-width:620px){
   .hunt-text{grid-template-columns:1fr;gap:.3rem;min-height:10.5em}
   .hunt-text .roman{font-size:2.4rem}
@@ -759,7 +812,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </button>
 
 <nav class="index" id="index" aria-label="Sections">
-  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#lore">Lore</a>
+  <a href="#surface" style="--acc:#e8e0cc">Surface</a><a href="#origins" style="--acc:#b98ad0">Origins</a><a href="#hunt" style="--acc:#e2a83c">The hunt</a><a href="#sizes" style="--acc:#d98a5a">Sizes</a><a href="#numbers" style="--acc:#8fb36a">Numbers</a><a href="#nest" style="--acc:#d6a46b">The nest</a><a href="#grow" style="--acc:#c9a24a">Growth</a><a href="#lore" style="--acc:#c9a46a">Lore</a>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -781,7 +834,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ ORIGINS ============ -->
-<section id="origins" class="band">
+<section id="origins" class="band sect" data-n="01" style="--acc:#b98ad0;--bg:#0c0a11;--from:#060c0a">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">01 &nbsp;·&nbsp; Deep time</p>
@@ -1000,7 +1053,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ THE HUNT ============ -->
-<section id="hunt" aria-label="The hunt, in seven stages">
+<section id="hunt" class="sect-hunt" aria-label="The hunt, in seven stages" style="--acc:#e2a83c">
   <div class="hunt-track" id="hunt-track">
     <div class="hunt-stage wrap">
       <div class="hunt-top">
@@ -1017,7 +1070,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
     </div>
   </div>
 
-  <div class="hx band">
+  <div class="hx band sect" data-n="02" style="--acc:#e2a83c;--bg:#060c0a;--from:#0b1411">
     <div class="wrap">
       <header class="sec-head">
         <p class="eyebrow">02 &nbsp;·&nbsp; Field notes</p>
@@ -1214,7 +1267,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ TWELVE LENGTHS ============ -->
-<section id="sizes" class="band" aria-label="Twelve lengths: the true crocodiles to scale">
+<section id="sizes" class="band sect" data-n="03" style="--acc:#d98a5a;--bg:#0a0b08;--from:#060c0a" aria-label="Twelve lengths: the true crocodiles to scale">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">03 &nbsp;·&nbsp; To scale, all twelve</p>
@@ -1288,7 +1341,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ NUMBERS ============ -->
-<section id="numbers" class="band" aria-label="Counting crocodiles: population, history and threats">
+<section id="numbers" class="band sect" data-n="04" style="--acc:#8fb36a;--bg:#070d0b;--from:#0a0b08" aria-label="Counting crocodiles: population, history and threats">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">04 &nbsp;·&nbsp; Population</p>
@@ -1376,7 +1429,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ NEST ============ -->
-<section id="nest" class="band">
+<section id="nest" class="band sect" data-n="05" style="--acc:#d6a46b;--bg:#120e09;--from:#070d0b">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">05 &nbsp;·&nbsp; Temperature decides</p>
@@ -1407,7 +1460,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ GROW ============ -->
-<section id="grow" class="band">
+<section id="grow" class="band sect" data-n="06" style="--acc:#c9a24a;--bg:#0b100a;--from:#120e09">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">06 &nbsp;·&nbsp; To scale</p>
@@ -1447,7 +1500,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </section>
 
 <!-- ============ LORE ============ -->
-<section id="lore" class="band" aria-label="Lore: stories about crocodiles, checked">
+<section id="lore" class="band sect" data-n="07" style="--acc:#c9a46a;--bg:#13100a;--from:#0b100a" aria-label="Lore: stories about crocodiles, checked">
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow">07 &nbsp;·&nbsp; Stories, checked</p>
