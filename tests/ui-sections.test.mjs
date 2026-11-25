@@ -3,7 +3,6 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { el, fakeDocument, fakeCanvas, FakePath2D } from "./helpers/fake-dom.mjs";
 import { mount as mountHero } from "../js/hero-ui.mjs";
-import { mount as mountEdge } from "../js/edge-ui.mjs";
 import { mount as mountGrow } from "../js/grow-ui.mjs";
 import { mulberry32 } from "../js/rng.mjs";
 import { COLORS as palette } from "../js/palette.mjs";
@@ -22,20 +21,6 @@ test("hero mounts and renders frames", () => {
   assert.equal(c.q.length, 1, "one frame scheduled");
 });
 
-test("reaction test: press starts a round, the injected clock drives it", () => {
-  const box = el("div", { getBoundingClientRect: () => ({ top: 0, bottom: 400, height: 400 }) });
-  const ids = { "edge-box": box, "edge-c": fakeCanvas(800, 500), "edge-big": el("div"), "edge-small": el("div"), best: el("b"), last: el("b"), caught: el("b") };
-  const c = clock();
-  mountEdge({ doc: fakeDocument(ids), env: env(), now: c.now, raf: c.raf, rng: mulberry32(2) });
-  c.run(1);
-  const before = ids["edge-big"].textContent;
-  box.dispatch("pointerdown");
-  c.run(1);
-  assert.notEqual(ids["edge-big"].textContent, before, "pressing changes the message");
-  c.run(60, 250); // 15 s of fake time in 60 frames, no real waiting
-  assert.ok(ids.caught.textContent !== "" || ids.last.textContent !== "", "round resolved");
-});
-
 test("grow: slider input updates readouts and greys out diet items", () => {
   const input = el("input", { value: "4.5" });
   const lis = [["0", "1"], ["2.8", "6"]].map(([min, max]) => el("li", { dataset: { min, max } }));
@@ -48,4 +33,29 @@ test("grow: slider input updates readouts and greys out diet items", () => {
   assert.match(ids["g-len"].textContent, /0\.50 m/);
   assert.ok(!lis[0].classList.contains("gray") && lis[1].classList.contains("gray"));
   assert.ok(palette.iris);
+});
+
+test("sizes: drawer, tape, sort, balance and heads all respond", async () => {
+  const { mount: mountSizes } = await import("../js/sizes-ui.mjs");
+  const { peopleFor, species, reaching } = await import("../js/sizes.mjs");
+  const ids = {};
+  for (const id of ["sz-drawer", "sz-balance", "sz-over"]) ids[id] = el("svg", { getBoundingClientRect: () => ({ left: 0, top: 0, width: 1100, height: 900 }) });
+  for (const id of ["sz-read", "sz-sentence", "sz-presets", "sz-name", "sz-latin", "sz-where", "sz-typ", "sz-max", "sz-kg", "sz-note", "sz-fact", "sz-bal-text", "sz-bal-n", "sz-bal-for", "sz-minus", "sz-plus", "sz-heads", "sz-over-text"]) ids[id] = el("div");
+  const sortBtns = ["length", "family", "region", "snout"].map(s => el("button", { dataset: { sort: s } }));
+  const ui = mountSizes({ doc: fakeDocument(ids, { "#sz-sort button": sortBtns }) });
+  assert.equal(ids["sz-name"].textContent, "Nile crocodile");
+  assert.equal(ids["sz-presets"].children.length, 4);
+  ids["sz-presets"].children[0].dispatch("click"); // "You · 1.75 m"
+  assert.equal(ui.tape, 1.75);
+  assert.equal(ids["sz-sentence"].textContent, "Every species reaches 1.75 m");
+  ids["sz-drawer"].dispatch("pointerdown", { clientX: 1076, pointerId: 1 }); // far right of the ruler = 6.5 m
+  assert.equal(ui.tape, 6.5);
+  ui.setTape(6.0); assert.match(ids["sz-sentence"].textContent, new RegExp(`^${reaching(6).length} of 12`));
+  sortBtns[1].dispatch("click"); assert.equal(sortBtns[1].attrs["aria-pressed"], "true");
+  ids["sz-heads"].children[0].dispatch("click"); // narrowest snout first
+  assert.equal(ids["sz-name"].textContent, "Freshwater crocodile");
+  const need = peopleFor(species("johnstoni").typ[1]);
+  for (let i = 1; i < need; i++) ids["sz-plus"].dispatch("click");
+  assert.match(ids["sz-bal-text"].textContent, /^Level\./);
+  assert.ok(ids["sz-balance"].classList.contains("level"));
 });

@@ -1,6 +1,6 @@
 // Page entry point: the only module that runs code at import. Mount order matters only for reveals (last).
 import { mount as mountHero } from "./hero-ui.mjs";
-import { mount as mountEdge } from "./edge-ui.mjs";
+import { mount as mountSizes } from "./sizes-ui.mjs";
 import { mount as mountGrow } from "./grow-ui.mjs";
 import { mount as mountOrigins } from "./origins-ui.mjs";
 import { mount as mountHunt } from "./hunt-scene-ui.mjs";
@@ -17,7 +17,7 @@ mountHunt();
 mountHuntDiagrams();
 mountRange();
 mountDots();
-mountEdge();
+mountSizes();
 mountNest();
 mountGrow();
 mountHud();

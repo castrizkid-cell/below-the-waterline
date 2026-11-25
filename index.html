@@ -349,22 +349,116 @@ section{position:relative}
 .credit{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--reed)}
 .credit a{text-decoration:none;border-bottom:1px solid var(--line-2)}
 
-/* ---------- EDGE (reaction) ---------- */
-#edge{background:var(--deep)}
-.edge-grid{display:grid;gap:clamp(2rem,4vw,3.5rem);grid-template-columns:1fr}
-@media (min-width:900px){.edge-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center}}
-.edge-box{position:relative;aspect-ratio:16/10;max-width:100%;background:#000;border:1px solid var(--line);overflow:hidden;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
-.edge-box canvas{position:absolute;inset:0;width:100%;height:100%}
-.edge-msg{position:absolute;left:0;right:0;top:0;padding:clamp(1rem,3vw,1.75rem);display:grid;gap:.4rem;pointer-events:none}
-.edge-msg .big{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,6vw,4.4rem);line-height:.9;text-transform:uppercase}
-.edge-msg .small{font-size:.98rem;color:var(--dim);max-width:40ch}
+/* ---------- TWELVE LENGTHS: the one paper section ---------- */
+#sizes{background:var(--deep);--paper:#e9e1ca;--paper-2:#ded4b9;--ink:#1d1f16;--pencil:#6c6553;--rust-ink:#9a4123;--grid:rgba(29,31,22,.07)}
+.plate{background:
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/24px 24px,
+  radial-gradient(120% 90% at 30% 0%,#efe8d4,var(--paper) 60%,var(--paper-2));
+  color:var(--ink);padding:clamp(1rem,2.4vw,2rem);border-radius:2px;box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 30px 80px -40px rgba(0,0,0,.8);position:relative}
+.plate::before{content:"";position:absolute;inset:8px;border:1px solid rgba(29,31,22,.22);pointer-events:none}
+.plate + .plate{margin-top:clamp(1.5rem,3vw,2.5rem)}
+.plate-head{display:flex;justify-content:space-between;align-items:end;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1rem;position:relative}
+.plate-id{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:1.5rem;line-height:1;letter-spacing:.02em;color:var(--ink);display:grid;gap:.35rem;margin:0}
+.plate-id span{font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.1em;color:var(--pencil)}
+.plate-id em{font-style:normal;color:var(--rust-ink)}
+.sz-sort{display:flex;gap:0;border:1px solid var(--ink)}
+.sz-sort button,.sz-chip,.sz-bal-ctl button{appearance:none;background:transparent;border:0;color:var(--ink);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:.6rem .85rem;cursor:pointer;transition:background .2s,color .2s}
+.sz-sort button + button{border-left:1px solid var(--ink)}
+.sz-sort button[aria-pressed="true"],.sz-chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.sz-sort button:hover,.sz-chip:hover{background:rgba(29,31,22,.08)}
+.sz-sort button:focus-visible,.sz-chip:focus-visible,.sz-bal-ctl button:focus-visible,.sz-head:focus-visible{outline:2px solid var(--rust-ink);outline-offset:2px}
+.plate-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.plate-scroll svg{display:block;width:100%;min-width:760px;height:auto;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#sz-drawer .r-base,#sz-drawer .r-big{stroke:var(--ink);stroke-width:1.2}
+#sz-drawer .r-small{stroke:var(--ink);stroke-width:.6;opacity:.6}
+#sz-drawer .r-lab{font-family:var(--f-mono);font-size:12px;fill:var(--ink)}
+#sz-drawer .r-grid{stroke:var(--ink);stroke-width:.6;stroke-dasharray:2 5;opacity:.28}
+.sz-row{transition:transform .7s var(--ease),opacity .3s;cursor:pointer;outline:none}
+.sz-row .hit{fill:transparent}
+.sz-row:hover .hit,.sz-row:focus-visible .hit{fill:rgba(29,31,22,.05)}
+.sz-row .typ{fill:rgba(154,65,35,.13);stroke:rgba(154,65,35,.35);stroke-width:.8;stroke-dasharray:3 3}
+.sz-row .ink,#sz-balance .ink,.sz-head .ink,#sz-over .ink{fill:var(--ink)}
+.sz-row .detail{fill:none;stroke:var(--paper);stroke-width:1.1;opacity:.55;stroke-linecap:round}
+.sz-row .eye{fill:var(--paper)}
+.sz-row .body{transition:opacity .35s}
+.sz-row.short .body{opacity:.22}
+.sz-row .rec{stroke:var(--rust-ink);stroke-width:1.2}
+.sz-row .rec-lab{font-family:var(--f-mono);font-size:11px;fill:var(--rust-ink)}
+.sz-row .n-common{font-family:var(--f-body);font-size:17px;fill:var(--ink)}
+.sz-row .n-latin{font-family:var(--f-body);font-style:italic;font-size:13px;fill:var(--pencil)}
+.sz-row.sel .n-common{fill:var(--rust-ink);font-weight:500}
+.sz-row.sel .hit{fill:rgba(154,65,35,.07)}
+.sz-row.ref .ink{fill:var(--rust-ink);opacity:.85}
+.sz-tape{cursor:ew-resize;outline:none}
+.sz-tape .t-line{stroke:var(--rust-ink);stroke-width:2}
+.sz-tape .t-tab{fill:var(--rust-ink)}
+.sz-tape .t-txt{font-family:var(--f-mono);font-size:12.5px;font-weight:500;fill:var(--paper)}
+.sz-tape:focus-visible .t-tab{stroke:var(--ink);stroke-width:2}
+.plate-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem 2rem;flex-wrap:wrap;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(29,31,22,.25)}
+.sz-read{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.sz-read b{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,5vw,3.8rem);line-height:.85;color:var(--rust-ink)}
+.sz-read span{font-family:var(--f-body);font-size:1.15rem;color:var(--ink)}
+.sz-presets{display:flex;flex-wrap:wrap;gap:.4rem}
+.sz-chip{border:1px solid var(--ink)}
+.plate-key{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin:.9rem 0 0;font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;color:var(--pencil)}
+.plate-key span{display:inline-flex;align-items:center;gap:.45rem}
+.plate-key i{display:inline-block;width:18px;height:10px}
+.plate-key .k-ink{background:var(--ink)}
+.plate-key .k-typ{background:rgba(154,65,35,.13);border:1px dashed rgba(154,65,35,.5)}
+.plate-key .k-rec{width:2px;height:14px;background:var(--rust-ink)}
+
+.plate-2,.plate-3{display:grid;gap:clamp(1.5rem,3vw,3rem);grid-template-columns:1fr}
+@media (min-width:900px){.plate-2{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}.plate-3{grid-template-columns:minmax(0,7fr) minmax(0,4fr);align-items:center}}
+.sz-card{display:grid;gap:.5rem;align-content:start;position:relative}
+.sz-card h3{font-size:clamp(2.2rem,4.4vw,3.4rem);color:var(--ink);margin-top:.6rem}
+.sz-latin{font-style:italic;color:var(--pencil);font-size:1.1rem}
+.sz-dl{margin:.8rem 0 .4rem;display:grid;gap:0;border-top:1px solid rgba(29,31,22,.3)}
+.sz-dl div{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(29,31,22,.18)}
+.sz-dl dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--pencil)}
+.sz-dl dd{margin:0;font-family:var(--f-display);font-weight:700;font-size:1.6rem;color:var(--ink)}
+.sz-note{font-family:var(--f-mono);font-size:12px;color:var(--rust-ink);letter-spacing:.02em}
+.sz-fact{color:var(--ink);font-size:1.02rem;line-height:1.55}
+.sz-bal{display:grid;gap:.6rem;align-content:start;position:relative}
+#sz-balance{width:100%;height:auto;display:block}
+#sz-balance .b-post{fill:var(--ink)}
+#sz-balance .b-floor{stroke:var(--ink);stroke-width:2}
+#sz-balance .b-bar{fill:var(--ink)}
+#sz-balance .b-pin{fill:var(--paper);stroke:var(--ink);stroke-width:2}
+#sz-balance .b-string{stroke:var(--ink);stroke-width:1;fill:none}
+#sz-balance .b-tray{fill:var(--ink)}
+#sz-balance .b-beam,#sz-balance .b-pan{transform-box:view-box;transition:transform .9s cubic-bezier(.3,1.5,.5,1)}
+#sz-balance.level .b-bar{fill:var(--rust-ink)}
+.sz-bal-ctl{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.sz-bal-ctl button{border:1px solid var(--ink);font-size:1.3rem;line-height:1;padding:.35rem .9rem}
+.sz-bal-ctl button:hover{background:var(--ink);color:var(--paper)}
+.sz-bal-ctl b{font-family:var(--f-display);font-weight:900;font-size:2.4rem;min-width:2ch;text-align:center;color:var(--ink)}
+.sz-bal-ctl span{font-family:var(--f-body);font-size:1.02rem;color:var(--ink);flex:1 1 220px}
+.sz-small{font-family:var(--f-mono);font-size:11px;color:var(--pencil);line-height:1.5}
+.sz-heads-col{display:grid;gap:1rem;position:relative}
+.sz-heads{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.3rem}
+@media (max-width:620px){.sz-heads{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.sz-head{appearance:none;background:transparent;border:1px solid transparent;padding:.4rem .2rem;display:grid;gap:.3rem;justify-items:center;cursor:pointer;color:var(--ink);transition:border-color .2s,background .2s}
+.sz-head:hover{background:rgba(29,31,22,.05)}
+.sz-head[aria-pressed="true"]{border-color:var(--rust-ink);background:rgba(154,65,35,.07)}
+.sz-head svg{width:100%;max-width:64px;height:auto}
+.sz-head .eye,#sz-over .eye{fill:var(--paper)}
+.sz-head span{font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:1.25}
+.sz-over-fig{margin:0;display:grid;gap:.6rem;justify-items:center;position:relative}
+#sz-over{width:100%;max-width:240px;height:auto}
+#sz-over .ghost{fill:none;stroke:var(--rust-ink);stroke-width:2;stroke-dasharray:5 4}
+.sz-over-fig figcaption{font-family:var(--f-body);font-size:.98rem;color:var(--ink);text-align:center;max-width:30ch}
+.sz-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:2rem;margin-top:clamp(3.5rem,7vw,5rem);border-top:1px solid var(--line);padding-top:2rem}
+.sz-notes article{display:grid;gap:.5rem;align-content:start}
+.sz-notes .n-k{font-family:var(--f-display);font-weight:900;font-size:2.4rem;line-height:.8;color:var(--iris)}
+.sz-notes h3{font-size:1.7rem;letter-spacing:.01em}
+.sz-notes p{color:var(--dim);font-size:1rem;line-height:1.6}
+
 .btn{appearance:none;border:1px solid var(--iris);background:transparent;color:var(--iris);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:.85rem 1.2rem;cursor:pointer;transition:background .25s,color .25s}
 .btn:hover{background:var(--iris);color:var(--deep)}
 .btn.ghost{border-color:var(--line-2);color:var(--bone)}
 .btn.ghost:hover{background:var(--bone);color:var(--deep)}
 .btn[aria-pressed="true"]{background:var(--iris);color:var(--deep)}
-.tries{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--f-mono);font-size:var(--s-1);color:var(--reed);letter-spacing:.06em}
-.tries b{color:var(--bone);font-weight:500}
 
 /* ---------- RANGE MAP ---------- */
 #range{background:var(--river)}
@@ -547,7 +641,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 </button>
 
 <nav class="index" id="index" aria-label="Sections">
-  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#edge">The edge</a><a href="#range">Range</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
+  <a href="#surface">Surface</a><a href="#origins">Origins</a><a href="#hunt">The hunt</a><a href="#sizes">Sizes</a><a href="#range">Range</a><a href="#numbers">Numbers</a><a href="#nest">The nest</a><a href="#grow">Growth</a><a href="#bank">Riverbank</a><a href="#lore">Lore</a>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -996,25 +1090,75 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
   </defs></svg>
 </section>
 
-<!-- ============ THE EDGE ============ -->
-<section id="edge" class="band">
-  <div class="wrap edge-grid">
-    <div>
-      <header class="sec-head" style="margin-bottom:1.75rem">
-        <p class="eyebrow">03 &nbsp;·&nbsp; Try it</p>
-        <h2 class="fade">Step back</h2>
-        <p class="lede fade">You're a zebra drinking at the edge. Watch the water. When it comes, tap or press space as fast as you can.</p>
-      </header>
-      <div class="prose fade">
-        <p>A typical visual reaction time for people is about a quarter of a second. Gazelles and zebras do better, and crocodiles still catch them. Waiting nearly motionless until the target is in range is what makes the ambush work.</p>
+<!-- ============ TWELVE LENGTHS ============ -->
+<section id="sizes" class="band" aria-label="Twelve lengths: the true crocodiles to scale">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">03 &nbsp;·&nbsp; To scale, all twelve</p>
+      <h2 class="fade">Twelve lengths</h2>
+      <p class="lede fade">Twelve species of true crocodile share one body plan but not one size. A large Philippine crocodile is shorter than a family car. A large saltwater crocodile is longer than a giraffe is tall. Here they are on one sheet, at one scale. Drag the tape across them.</p>
+    </header>
+
+    <div class="plate">
+      <div class="plate-head">
+        <p class="plate-id">Plate III<span>Crocodylus · adult males · one scale</span></p>
+        <div class="sz-sort" id="sz-sort" role="group" aria-label="Order the drawer">
+          <button type="button" data-sort="length" aria-pressed="true">Longest first</button>
+          <button type="button" data-sort="family" aria-pressed="false">Family tree</button>
+          <button type="button" data-sort="region" aria-pressed="false">Region</button>
+          <button type="button" data-sort="snout" aria-pressed="false">Snout width</button>
+        </div>
       </div>
-      <div class="tries" style="margin-top:1.75rem" id="tries"><span>Best <b class="num" id="best">—</b></span><span>Last <b class="num" id="last">—</b></span><span>Caught <b class="num" id="caught">0</b></span></div>
+      <div class="plate-scroll"><svg id="sz-drawer" role="img" aria-label="All twelve true crocodiles drawn to one scale beside a person lying down, with a movable measuring tape."></svg></div>
+      <div class="plate-foot">
+        <div class="sz-read"><b id="sz-read" class="num">4.60 m</b><span id="sz-sentence">7 of 12 species reach 4.60 m</span></div>
+        <div class="sz-presets" id="sz-presets" aria-label="Put the tape at"></div>
+      </div>
+      <p class="plate-key"><span><i class="k-ink"></i>Largest reliably reported</span><span><i class="k-typ"></i>Typical large male</span><span><i class="k-rec"></i>Record</span><span>Females of every species are smaller. Tap a row to study it.</span></p>
     </div>
-    <div>
-      <div class="edge-box" id="edge-box" tabindex="0" role="button" aria-label="Reaction test. Press to start, then press again when the crocodile strikes.">
-        <canvas id="edge-c" aria-hidden="true"></canvas>
-        <div class="edge-msg"><div class="big" id="edge-big">Tap to start</div><div class="small" id="edge-small">Watch the eyes. Don't press early.</div></div>
+
+    <div class="plate plate-2">
+      <div class="sz-card" aria-live="polite">
+        <p class="plate-id">Specimen<span id="sz-where"></span></p>
+        <h3 id="sz-name"></h3>
+        <p class="sz-latin" id="sz-latin"></p>
+        <dl class="sz-dl">
+          <div><dt>Typical large male</dt><dd id="sz-typ" class="num"></dd></div>
+          <div><dt>Largest reported</dt><dd id="sz-max" class="num"></dd></div>
+          <div><dt>Weight at the top of typical</dt><dd id="sz-kg" class="num"></dd></div>
+        </dl>
+        <p class="sz-note" id="sz-note"></p>
+        <p class="sz-fact" id="sz-fact"></p>
       </div>
+      <div class="sz-bal">
+        <p class="plate-id">The balance<span>How many people for <em id="sz-bal-for"></em>?</span></p>
+        <svg id="sz-balance" role="img" aria-label="A balance scale with the crocodile on the left and people on the right."></svg>
+        <div class="sz-bal-ctl">
+          <button type="button" id="sz-minus" aria-label="Remove a person">−</button>
+          <b id="sz-bal-n" class="num">1</b>
+          <button type="button" id="sz-plus" aria-label="Add a person">+</button>
+          <span id="sz-bal-text" aria-live="polite"></span>
+        </div>
+        <p class="sz-small">Each person is 70 kg. Crocodile weight is estimated from length with a cube law, checked against Lolong, who was weighed at 1,075 kg.</p>
+      </div>
+    </div>
+
+    <div class="plate plate-3">
+      <div class="sz-heads-col">
+        <p class="plate-id">Twelve heads<span>Seen from above, narrowest to broadest, all drawn the same length</span></p>
+        <div class="sz-heads" id="sz-heads"></div>
+      </div>
+      <figure class="sz-over-fig">
+        <svg id="sz-over" role="img" aria-label="The selected crocodile's head drawn over the Nile crocodile's outline."></svg>
+        <figcaption id="sz-over-text"></figcaption>
+      </figure>
+    </div>
+
+    <div class="sz-notes">
+      <article class="fade"><span class="n-k">I</span><h3>Big water, big bodies</h3><p>The four giants (saltwater, Nile, Orinoco and American crocodiles) live in large rivers, estuaries and along coasts, where big prey comes to the water and a big body has room to hunt. The smallest species live in forest swamps, small lakes and on islands: the Philippine crocodile, the Cuban crocodile, Morelet's in the Yucatán.</p></article>
+      <article class="fade"><span class="n-k">II</span><h3>Twice as long, eight times as heavy</h3><p>Length is a poor guide to weight. Weight rises roughly with the cube of length, so a 6 m crocodile weighs about eight times as much as a 3 m one. A 3 m crocodile weighs about as much as two people. Lolong, 6.17 m, weighed 1,075 kg.</p></article>
+      <article class="fade"><span class="n-k">III</span><h3>The head is the diet</h3><p>A narrow snout cuts through water fast and sideways, and suits fish. The Australian freshwater crocodile is the extreme. A broad snout resists the twisting of large, struggling prey: the mugger and the saltwater crocodile take deer, pigs and cattle. Most species sit in between and eat both.</p></article>
+      <article class="fade"><span class="n-k">IV</span><h3>Records are slippery</h3><p>Males of every species grow much larger than females and keep growing slowly for decades, so a few old males set every record. Many famous lengths came from tanned skins, which stretch, or from guesses at animals in the water. The numbers on this sheet are cautious ones.</p></article>
     </div>
   </div>
 </section>
@@ -1239,6 +1383,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <li>Fish, F. et al. (2007). Death roll of the alligator: mechanics of twist feeding in water. <em>J. Exp. Biol.</em> 210.</li>
           <li>Drumheller, S. et al. (2019). Surveying death roll behavior across Crocodylia. <em>Ethology Ecology &amp; Evolution</em> 31.</li>
           <li>Dinets, V. (2015). Apparent coordination and collaboration in cooperatively hunting crocodilians. <em>Ethology Ecology &amp; Evolution</em> 27.</li>
+          <li>Manolis, S.C. &amp; Stevenson, C. (eds) (2010). <em>Crocodiles: Status Survey and Conservation Action Plan</em>, 3rd ed. IUCN/SSC Crocodile Specialist Group.</li>
+          <li>Britton, A. Crocodilian species accounts, crocodilian.com. Lolong measured at 6.17 m and weighed at 1,075 kg, 2011.</li>
           <li>Herodotus, <em>Histories</em>, Book II.</li>
         </ol>
       </div>
