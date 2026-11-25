@@ -6,14 +6,15 @@ import { groupThousands } from "./math.mjs";
 
 export const SPAN = [260, 0];
 
+// Colours are the official geologic time scale colours (ICS / CGMW chart).
 export const PERIODS = [
-  { name: "Permian",    short: "P",  from: 260,   to: 251.9 },
-  { name: "Triassic",   short: "Tr", from: 251.9, to: 201.4 },
-  { name: "Jurassic",   short: "J",  from: 201.4, to: 145 },
-  { name: "Cretaceous", short: "K",  from: 145,   to: 66 },
-  { name: "Paleogene",  short: "Pg", from: 66,    to: 23 },
-  { name: "Neogene",    short: "N",  from: 23,    to: 2.6 },
-  { name: "Quaternary", short: "Q",  from: 2.6,   to: 0 },
+  { name: "Permian",    short: "P",  from: 260,   to: 251.9, color: "#F04028" },
+  { name: "Triassic",   short: "Tr", from: 251.9, to: 201.4, color: "#812B92" },
+  { name: "Jurassic",   short: "J",  from: 201.4, to: 145,   color: "#34B2C9" },
+  { name: "Cretaceous", short: "K",  from: 145,   to: 66,    color: "#7FC64E" },
+  { name: "Paleogene",  short: "Pg", from: 66,    to: 23,    color: "#FD9A52" },
+  { name: "Neogene",    short: "N",  from: 23,    to: 2.6,   color: "#FFE619" },
+  { name: "Quaternary", short: "Q",  from: 2.6,   to: 0,     color: "#F9F97F" },
 ];
 
 export const EXTINCTIONS = [
@@ -140,6 +141,8 @@ export function scale(domain, range) {
   return f;
 }
 
+// Colour of the period an age falls in (used to tint branches, ranks and chapters).
+export const periodColor = ma => (periodAt(Math.min(SPAN[0], Math.max(0, ma))) || PERIODS[0]).color;
 export function periodAt(ma, periods = PERIODS) {
   return periods.find(p => ma <= p.from && ma >= p.to) || null;
 }

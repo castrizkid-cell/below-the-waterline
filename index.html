@@ -133,9 +133,9 @@ section{position:relative}
 .fig-key .swipe{display:none;color:var(--iris)}
 @media (max-width:980px){.fig-key .swipe{display:inline-flex}}
 
-#og-tree .t-shade{fill:rgba(232,224,204,.022)}
-#og-tree .t-band{fill:#18221d}
-#og-tree .t-band.alt{fill:#1f2a24}
+#og-tree .t-shade{opacity:.07}
+#og-tree .t-band{opacity:.9}
+#og-tree .t-band-l{fill:#0b0f0c !important;font-weight:500}
 .t-band-l,.t-tick-l,.c-note{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;fill:var(--reed);text-transform:uppercase}
 .t-tick{stroke:var(--line-2)}
 .t-ext{stroke:var(--rust);stroke-dasharray:2 4;opacity:.8}
@@ -144,11 +144,10 @@ section{position:relative}
 #og-tree .br{outline:none}
 #og-tree .conn{fill:none;stroke:rgba(232,224,204,.26);stroke-width:1.2}
 #og-tree .ghost{stroke:rgba(232,224,204,.3);stroke-width:1.5;stroke-dasharray:3 4}
-#og-tree .solid{stroke:rgba(232,224,204,.55);stroke-width:2.4;stroke-linecap:round}
-#og-tree .live .solid{stroke:rgba(232,224,204,.7)}
+#og-tree .solid{stroke-width:3;stroke-linecap:round}
 #og-tree .cap{stroke:rgba(232,224,204,.55);stroke-width:1.4}
 #og-tree .dag{font-family:var(--f-body);font-size:13px;fill:var(--reed)}
-#og-tree .lab{font-family:var(--f-mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;fill:var(--bone);opacity:.82}
+#og-tree .lab{font-family:var(--f-mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;opacity:.95}
 #og-tree .lab.nile{fill:var(--iris);opacity:1;font-weight:500}
 #og-tree .thread{stroke:var(--iris);stroke-width:3.2;stroke-linecap:round}
 #og-tree .node{fill:var(--river);stroke:var(--iris);stroke-width:2}
@@ -156,9 +155,9 @@ section{position:relative}
 #og-tree .node-l{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;fill:var(--iris);opacity:.85}
 #og-tree .br *{transition:opacity .35s,stroke .35s,fill .35s}
 #og-tree.focus .br:not(.on):not(.spine) .solid,#og-tree.focus .br:not(.on):not(.spine) .lab,#og-tree.focus .br:not(.on):not(.spine) .conn,#og-tree.focus .br:not(.on):not(.spine) .ghost{opacity:.42}
-#og-tree .br.on .solid{stroke:var(--bone);opacity:1}
+#og-tree .br.on .solid{stroke-width:4.5;opacity:1;filter:drop-shadow(0 0 6px rgba(255,255,255,.25))}
 #og-tree .br.on .conn{stroke:var(--bone)}
-#og-tree .br.on .lab{fill:var(--iris);opacity:1}
+#og-tree .br.on .lab{opacity:1;font-weight:500}
 #og-tree .br:focus-visible .hit{stroke:var(--iris);stroke-width:1}
 #og-tree .scrub-l{stroke:var(--bone);stroke-width:1;opacity:.35;pointer-events:none}
 #og-tree .scrub-t{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;fill:var(--bone);text-transform:uppercase;pointer-events:none}
@@ -222,26 +221,48 @@ section{position:relative}
 .c-node-l.hot{fill:var(--iris)}
 #og-clade .hit{fill:transparent;cursor:pointer}
 #og-clade .c-tip{outline:none}
-.c-dot{fill:rgba(232,224,204,.6)}
+.c-dot{stroke:#060c0a;stroke-width:2}
 .c-com{font-family:var(--f-body);font-size:16px;fill:var(--bone);transition:fill .3s}
 .c-lat{font-family:var(--f-body);font-style:italic;font-size:14px;fill:var(--reed)}
 .c-tip.nile .c-com{fill:var(--iris)}
-.c-tip.nile .c-dot{fill:var(--iris)}
+
 .c-tip.on .c-com{fill:var(--iris);text-decoration:underline;text-underline-offset:4px}
 .c-tip:focus-visible .hit{stroke:var(--iris)}
-.og-sp{display:grid;gap:.55rem;align-content:start;border-top:1px solid var(--iris);padding-top:1rem;transition:opacity .25s;min-height:20rem}
+.og-sp{display:grid;gap:.55rem;align-content:start;border-top:3px solid var(--rc,var(--iris));padding-top:1rem;transition:opacity .25s;min-height:20rem}
 .og-sp.out{opacity:0}
 .og-sp h3{font-size:clamp(2rem,3.6vw,2.8rem)}
 .og-sp .lat{font-style:italic;color:var(--reed);font-size:1.05rem}
-.og-sp .where{font-family:var(--f-mono);font-size:var(--s-1);color:var(--bone);letter-spacing:.04em}
+.og-sp .where{font-family:var(--f-mono);font-size:var(--s-1);color:var(--rc,var(--bone));letter-spacing:.04em}
 .og-sp .len{display:flex;justify-content:space-between;align-items:baseline;margin-top:.6rem}
 .og-sp .len b{font-family:var(--f-display);font-size:1.9rem;font-weight:700}
 .lenbar{height:4px;background:var(--line);position:relative}
-.lenbar i{position:absolute;inset:0 auto 0 0;width:var(--w,50%);background:var(--iris);transition:width .6s var(--ease)}
+.lenbar i{position:absolute;inset:0 auto 0 0;width:var(--w,50%);background:var(--rc,var(--iris));transition:width .6s var(--ease)}
 .og-sp .fact{color:var(--dim);margin-top:.5rem;line-height:1.55}
 
 .og-close{margin-top:clamp(5rem,10vw,8rem);font-family:var(--f-body);font-size:clamp(1.6rem,3.4vw,2.6rem);line-height:1.25;max-width:30ch;color:var(--dim)}
 .og-close span{color:var(--bone);font-style:italic}
+
+
+@media (min-width:1000px){.nb-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:520px){.nb-tiles{grid-template-columns:1fr}}
+/* Origins: geologic-period colours */
+.og-tiles{margin-bottom:clamp(3.5rem,7vw,5rem)}
+.ranks li{--cl:color-mix(in srgb,var(--c,#e8e0cc) 62%,#ffffff)}
+.ranks li b::before{content:"";display:inline-block;width:.62em;height:.62em;border-radius:50%;background:var(--c);margin-right:.45em;vertical-align:.05em;box-shadow:0 0 0 2px rgba(6,12,10,.9),0 0 0 3px color-mix(in srgb,var(--c) 45%,transparent)}
+.ranks li span{color:var(--cl)}
+.ranks li.me b{color:var(--iris)}
+.k-periods em{font-style:normal;margin-right:.35em}
+.og-chapters .chapters{margin-top:1rem}
+.ch{--cl:color-mix(in srgb,var(--c,#e2a83c) 65%,#ffffff)}
+.ch .ch-mark{border-top:3px solid var(--c)}
+.ch .ch-mark .n{color:var(--cl)}
+.ch .ch-mark .per{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#0b0f0c;background:var(--cl);padding:.2rem .5rem;width:max-content;border-radius:2px}
+.ch-body h3{background:linear-gradient(90deg,var(--bone) 60%,var(--cl));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ch-body p strong{color:var(--cl)}
+.region-key{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.2rem}
+.region-key span{display:inline-flex;align-items:center;gap:.45rem;color:var(--c)}
+.region-key span::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c)}
+.zoom{border-top:0 !important;padding-top:0 !important}
 
 /* ---------- HUNT ---------- */
 #hunt{background:var(--river)}
@@ -339,6 +360,34 @@ section{position:relative}
 .after-line b{font-family:var(--f-display);font-weight:700;font-size:1.5rem;text-transform:uppercase;line-height:.95}
 .after-line span{color:var(--dim);font-size:.95rem}
 @media (prefers-reduced-motion:reduce){.js .spin{animation:none}}
+
+
+/* Hunt field notes: realistic colour */
+.hx-tiles{margin-bottom:clamp(4rem,8vw,6rem)}
+.way{position:relative;border-top:3px solid var(--c);padding-top:.9rem}
+.way-n{position:absolute;top:.55rem;right:0;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--c)}
+.way h4{color:color-mix(in srgb,var(--c) 55%,#fff)}
+.way svg{background:linear-gradient(#3e3520,#2a2415);border-color:color-mix(in srgb,var(--c) 30%,transparent)}
+.w-bank{fill:#a68a56}.w-edge{stroke:rgba(255,236,190,.55)}
+.w-land{fill:#5b5530}.w-water{fill:#3b3a24}.w-shallow{fill:#4a4a2e}.w-water2{fill:#1d302c}
+.w-trail{stroke:#9b7b4e}
+.drinker,.w-herd{fill:#8f9598}.w-fish{fill:#cfd9d4}
+.carcass{fill:#8a4a32;stroke:#4a2518}
+.pc-body{fill:#5b5a2f;stroke:#23240f}
+.pc-leg{stroke:#4c4b27}
+.pc-scute{fill:#2c2d16}
+.pc-eye{fill:#f0c040}
+.b-skull{fill:#5e5c33;stroke:#23240f}.b-jaw{fill:#4d4b29;stroke:#23240f}
+.b-mus{fill:rgba(196,72,72,.78);stroke:#e06a6a}
+.b-down{stroke:#d0683f}
+.t-gum{fill:#b8625c}.t-tooth{fill:#f1e9d2;stroke:#c8b98f}.t-root{fill:#dcc9a0;stroke:#c8b98f}.t-rep{fill:#fff8e8}.t-bud{fill:#fff8e8}
+.xs{fill:#5b5a2f;stroke:#23240f}.xs-belly{fill:#e0d09a}.xs-osteo circle{fill:#2c2d16}.xs-leg{fill:#4c4b27}
+.roll-f svg{border-color:rgba(111,179,173,.35)}
+.after-line{border-top:0;background:linear-gradient(90deg,#d0683f,#e2a83c,#8fb36a) top/100% 3px no-repeat;grid-template-columns:1fr;row-gap:1.5rem;align-items:start}
+@media (min-width:600px){.after-line{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1000px){.after-line{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.after-line li::before{border-color:var(--c);background:color-mix(in srgb,var(--c) 30%,#060c0a)}
+.after-line b{color:color-mix(in srgb,var(--c) 70%,#fff)}
 
 /* full-bleed photo after hunt */
 .bleed{position:relative;margin:0}
@@ -470,7 +519,7 @@ section{position:relative}
 
 /* ---------- NUMBERS: counting crocodiles ---------- */
 #numbers{background:radial-gradient(120% 60% at 80% 0%,#0f1b17,var(--deep) 60%);--c-loss:#d0683f;--c-alive:#8fb36a;--c-prot:#e2a83c;--c-sci:#6fb3ad;--c-cult:#d9b26f}
-.nb-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(4rem,8vw,6rem)}
+.nb-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(4rem,8vw,6rem)}
 .nb-tile{background:#08110e;padding:1.4rem 1.3rem 1.3rem;display:grid;gap:.45rem;position:relative;overflow:hidden}
 .nb-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c)}
 .nb-tile::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(var(--c),transparent 70%);opacity:.12}
@@ -714,16 +763,25 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       <p class="lede fade">People call crocodiles living fossils. That gets it backwards. Over 250 million years, the crocodile's lineage also produced two-legged runners with beaks, armoured plant eaters, and sea hunters with flippers and a tail fin. All of them are gone. The shape in the river is the one that kept working.</p>
     </header>
 
-    <ol class="ranks fade" aria-label="Classification of the Nile crocodile">
-      <li><b>Archosauria</b><span>250 Ma</span></li>
-      <li><b>Pseudosuchia</b><span>249 Ma</span></li>
-      <li><b>Crocodylomorpha</b><span>232 Ma</span></li>
-      <li><b>Crocodyliformes</b><span>205 Ma</span></li>
-      <li><b>Eusuchia</b><span>125 Ma</span></li>
-      <li><b>Crocodylia</b><span>90 Ma</span></li>
-      <li><b>Crocodylidae</b><span>Date debated</span></li>
-      <li><b>Crocodylus</b><span>≈10 Ma</span></li>
-      <li class="me"><b><i>C. niloticus</i></b><span>Laurenti, 1768</span></li>
+    <div class="nb-tiles og-tiles">
+      <div class="nb-tile fade" style="--c:#812B92"><span class="k">On its own branch</span><b class="num">≈250 million</b><span class="s">years since the crocodile and bird lines split</span></div>
+      <div class="nb-tile fade" style="--c:#d0683f"><span class="k">Mass extinctions survived</span><b class="num">2</b><span class="s">end-Triassic and end-Cretaceous</span></div>
+      <div class="nb-tile fade" style="--c:#7FC64E"><span class="k">Living crocodilians</span><b>Under 30</b><span class="s">species: alligators, caimans, gharials and crocodiles</span></div>
+      <div class="nb-tile fade" style="--c:#FFE619"><span class="k">True crocodiles appear</span><b class="num">≈10 Ma</b><span class="s">the genus Crocodylus, give or take a few million years</span></div>
+    </div>
+
+    <article class="nb-block">
+      <div class="nb-label"><span class="nb-letter" style="--c:#812B92">A</span><div><p class="eyebrow">260 million years</p><h3>The family tree</h3></div></div>
+    <ol class="ranks fade" aria-label="Classification of the Nile crocodile, coloured by geologic period">
+      <li style="--c:#812B92"><b>Archosauria</b><span>250 Ma</span></li>
+      <li style="--c:#812B92"><b>Pseudosuchia</b><span>249 Ma</span></li>
+      <li style="--c:#812B92"><b>Crocodylomorpha</b><span>232 Ma</span></li>
+      <li style="--c:#812B92"><b>Crocodyliformes</b><span>205 Ma</span></li>
+      <li style="--c:#7FC64E"><b>Eusuchia</b><span>125 Ma</span></li>
+      <li style="--c:#7FC64E"><b>Crocodylia</b><span>90 Ma</span></li>
+      <li style="--c:#8f9c76"><b>Crocodylidae</b><span>Date debated</span></li>
+      <li style="--c:#FFE619"><b>Crocodylus</b><span>≈10 Ma</span></li>
+      <li class="me" style="--c:#F9F97F"><b><i>C. niloticus</i></b><span>Laurenti, 1768</span></li>
     </ol>
 
     <figure class="tree-fig rv">
@@ -731,13 +789,14 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         <p class="eyebrow"><b>Family tree</b> &nbsp;·&nbsp; 260 million years to today</p>
         <p class="hint">Point along the tree to read the date. Tap a branch to read about it.</p>
       </div>
-      <div class="scroll-x"><svg id="og-tree" role="img" aria-label="Time tree of the crocodile line from 260 million years ago to today. A gold line runs from the first archosaurs to the Nile crocodile. Thirteen side branches split from it. Ten are extinct, three are alive: birds and dinosaurs, alligators and caimans, gharials, and Africa's dwarf crocodiles."></svg></div>
+      <div class="scroll-x"><svg id="og-tree" role="img" aria-label="Time tree of the crocodile line from 260 million years ago to today. A gold line runs from the first archosaurs to the Nile crocodile. Thirteen side branches split from it. Nine are extinct; four are alive: birds and dinosaurs, alligators and caimans, gharials, and Africa's dwarf crocodiles. Branches are coloured by the geologic period of their oldest fossils."></svg></div>
       <figcaption class="fig-key">
         <span><i class="k-thread"></i>Line to the Nile crocodile</span>
         <span><i class="k-solid"></i>Fossil record</span>
         <span><i class="k-ghost"></i>Inferred, no fossils yet</span>
         <span><i class="k-ext"></i>Mass extinction</span>
         <span>† Extinct</span>
+        <span class="k-periods">Colours: <em style="color:#a65bb5">Triassic</em> <em style="color:#34B2C9">Jurassic</em> <em style="color:#7FC64E">Cretaceous</em> <em style="color:#FD9A52">Paleogene</em> <em style="color:#FFE619">Neogene</em>, the official geologic time scale</span>
         <span class="swipe">Swipe sideways →</span>
       </figcaption>
     </figure>
@@ -748,10 +807,14 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       <p class="txt" id="ogc-text"></p>
     </div>
 
+    </article>
+
+    <article class="nb-block og-chapters">
+      <div class="nb-label"><span class="nb-letter" style="--c:#7FC64E">B</span><div><p class="eyebrow">Seven chapters</p><h3>How the line survived</h3></div></div>
     <div class="chapters">
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">I</span><span class="t">≈252–247 Ma</span></div>
+      <article class="ch" style="--c:#812B92">
+        <div class="ch-mark"><span class="n">I</span><span class="t">≈252–247 Ma</span><span class="per">Triassic</span></div>
         <div class="ch-body">
           <h3>Two branches</h3>
           <p class="first">The story starts after the worst extinction the planet has had. About 252 million years ago, at the end of the Permian, volcanic eruptions in what is now Siberia went on for hundreds of thousands of years. They heated the climate and took the oxygen out of the oceans. Most species on Earth died.</p>
@@ -760,8 +823,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         </div>
       </article>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">II</span><span class="t">247–201 Ma</span></div>
+      <article class="ch" style="--c:#812B92">
+        <div class="ch-mark"><span class="n">II</span><span class="t">247–201 Ma</span><span class="per">Triassic</span></div>
         <div class="ch-body">
           <h3>When the croc line ruled</h3>
           <p class="first">For the first fifty million years the dinosaurs were not in charge. The croc line was. The largest predators on Triassic floodplains were rauisuchians such as Postosuchus and Prestosuchus: deep-skulled, serrated-toothed, up to seven metres long, standing with their legs straight under the body. Below them grazed aetosaurs, low armoured plant eaters with spikes along their shoulders.</p>
@@ -770,8 +833,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         </div>
       </article>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">III</span><span class="t">201 Ma</span></div>
+      <article class="ch" style="--c:#34B2C9">
+        <div class="ch-mark"><span class="n">III</span><span class="t">201 Ma</span><span class="per">Triassic → Jurassic</span></div>
         <div class="ch-body">
           <h3>The first filter</h3>
           <p class="first">About 201 million years ago the supercontinent Pangaea began to tear open along the line that became the Atlantic. Lava flooded an area larger than Europe and poured carbon dioxide into the air. In the extinction that followed, the rauisuchians, the aetosaurs, the beaked poposauroids and the phytosaurs all disappeared.</p>
@@ -782,8 +845,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 
       <blockquote class="pull fade"><p>The modern crocodile is not the original design. <span>It is the one that was left.</span></p></blockquote>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">IV</span><span class="t">200–66 Ma</span></div>
+      <article class="ch" style="--c:#7FC64E">
+        <div class="ch-mark"><span class="n">IV</span><span class="t">200–66 Ma</span><span class="per">Jurassic · Cretaceous</span></div>
         <div class="ch-body">
           <h3>Everything else they tried</h3>
           <p class="first">Over the next 135 million years, crocodile relatives lived in places and ways no crocodile does now.</p>
@@ -842,8 +905,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         </div>
       </article>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">V</span><span class="t">66 Ma</span></div>
+      <article class="ch" style="--c:#FD9A52">
+        <div class="ch-mark"><span class="n">V</span><span class="t">66 Ma</span><span class="per">Cretaceous → Paleogene</span></div>
         <div class="ch-body">
           <h3>The second filter</h3>
           <p class="first">When the asteroid hit at Chicxulub, it ended the non-bird dinosaurs, the pterosaurs and the great marine reptiles. Crocodile relatives were hit hard too, but crocodilians, the sea-going dyrosaurids and the land-hunting sebecids came through.</p>
@@ -852,8 +915,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         </div>
       </article>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">VI</span><span class="t">66 Ma – today</span></div>
+      <article class="ch" style="--c:#FD9A52">
+        <div class="ch-mark"><span class="n">VI</span><span class="t">66 Ma – today</span><span class="per">Paleogene · Neogene</span></div>
         <div class="ch-body">
           <h3>Slow, not stuck</h3>
           <p class="first">After the asteroid, crocodilians spread across a warm world. Their variety rises and falls with global temperature. In the hot Eocene, around 50 million years ago, alligator relatives lived on Ellesmere Island, inside the Arctic Circle. As the planet cooled, their range pulled back toward the tropics, and the number of species fell.</p>
@@ -864,8 +927,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 
       <blockquote class="pull fade"><p>Africa didn't just receive the Nile crocodile. <span>It made it, then sent its relatives across an ocean.</span></p></blockquote>
 
-      <article class="ch">
-        <div class="ch-mark"><span class="n">VII</span><span class="t">≈10 Ma – today</span></div>
+      <article class="ch" style="--c:#FFE619">
+        <div class="ch-mark"><span class="n">VII</span><span class="t">≈10 Ma – today</span><span class="per">Neogene · Quaternary</span></div>
         <div class="ch-body">
           <h3>Then, Africa</h3>
           <p class="first">The true crocodiles, the genus Crocodylus, appeared roughly ten million years ago, give or take a few million. Where they appeared is still argued. Early DNA studies pointed to Asia. Fossils have since pulled the answer toward Africa: Crocodylus checchiai, from rocks about seven million years old at As Sahabi in Libya, turns out to be closest to the crocodiles of the Americas.</p>
@@ -876,12 +939,12 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       </article>
     </div>
 
-    <div class="zoom">
-      <header class="sec-head" style="margin-bottom:1.75rem">
-        <p class="eyebrow">Zoom &nbsp;·&nbsp; the last 10 million years</p>
-        <h3 class="zoom-h fade">Twelve crocodiles</h3>
-        <p class="lede fade">Every living true crocodile, and where the Nile crocodile sits among them. Its nearest kin are in the Americas, not next door. Tap a name.</p>
-      </header>
+    </article>
+
+    <article class="nb-block zoom">
+      <div class="nb-label"><span class="nb-letter" style="--c:#FFE619">C</span><div><p class="eyebrow">Zoom · the last 10 million years</p><h3>Twelve crocodiles</h3></div></div>
+      <p class="lede fade" style="margin-bottom:1rem">The living true crocodiles, and where the Nile crocodile sits among them. Its nearest kin are in the Americas, not next door. Tap a name.</p>
+      <p class="region-key"><span style="--c:#e2a83c">Africa</span><span style="--c:#6fb3ad">The Americas</span><span style="--c:#d0683f">Asia</span><span style="--c:#b48ad6">New Guinea and Australia</span></p>
       <div class="zoom-grid">
         <div class="scroll-x small rv"><svg id="og-clade" role="img" aria-label="Family tree of the twelve living Crocodylus species. The Nile crocodile shares its most recent ancestor, about six million years ago, with the four crocodiles of the Americas. The West African crocodile and the six Asian and Australasian species branch off earlier."></svg></div>
         <aside class="og-sp" id="og-sp" aria-live="polite">
@@ -893,8 +956,8 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           <p class="fact" id="ogs-fact"></p>
         </aside>
       </div>
-      <p class="credit" style="margin-top:1.25rem">Branch dates are rounded estimates from molecular and fossil studies, which still disagree by a few million years. The order of the three earliest branches is still debated, so they are drawn as one split.</p>
-    </div>
+      <p class="credit" style="margin-top:1.25rem">Branch dates are rounded estimates from molecular and fossil studies, which still disagree by a few million years. The order of the three earliest branches is still debated, so they are drawn as one split. A thirteenth species, Hall's New Guinea crocodile (<i>Crocodylus halli</i>), was described in 2019 from southern New Guinea; it is not drawn separately here.</p>
+    </article>
 
     <p class="og-close fade">Two eyes and a nostril above the water. Below them, 250 million years of relatives that didn't make it, <span>and the one that did.</span></p>
   </div>
@@ -940,16 +1003,16 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         <p class="lede fade">The lunge at the water's edge is the famous part, and the rarest. A Nile crocodile eats mostly fish, and it has a different method for nearly everything that comes near water. What ties them together is patience, a skin that feels the water, and a bite that does not let go.</p>
       </header>
 
-      <div class="hx-intro">
-        <div class="hx-stat fade"><b>Months</b><span>can pass between large meals for a big adult. Waiting costs a cold-blooded body almost nothing.</span></div>
-        <div class="hx-stat fade"><b>Stones</b><span>turn up in the stomachs of many adults. Whether they grind food or work as ballast is still argued.</span></div>
-        <div class="hx-stat fade"><b>Fish</b><span>were the main food in Hugh Cott's classic study of stomach contents. Large mammals mattered mainly to the biggest crocodiles.</span></div>
+      <div class="nb-tiles hx-tiles">
+        <div class="nb-tile fade" style="--c:#e2a83c"><span class="k">Between big meals</span><b>Months</b><span class="s">for a large adult. Waiting costs a cold-blooded body almost nothing.</span></div>
+        <div class="nb-tile fade" style="--c:#8fb36a"><span class="k">Main food</span><b>Fish</b><span class="s">in Hugh Cott's classic study of stomach contents. Large mammals mattered mainly to the biggest crocodiles.</span></div>
+        <div class="nb-tile fade" style="--c:#d0683f"><span class="k">Strongest bite measured</span><b class="num">16,414 N</b><span class="s">a 4.59 m saltwater crocodile. Nile crocodiles of that size bite about as hard.</span></div>
+        <div class="nb-tile fade" style="--c:#6fb3ad"><span class="k">In the stomach</span><b>Stones</b><span class="s">in many adults. Whether they grind food or act as ballast is still argued.</span></div>
       </div>
 
-      <h3 class="hx-h fade">Six ways to eat</h3>
-      <p class="hx-sub fade">Seen from above. Gold is the crocodile's move.</p>
+      <div class="nb-label"><span class="nb-letter" style="--c:#d0683f">A</span><div><p class="eyebrow">Seen from above · gold is the crocodile's move</p><h3>Six ways to eat</h3></div></div>
       <div class="ways">
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#e2a83c"><span class="way-n">01</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile approaches drinking antelope underwater and lunges at the edge.">
             <path class="w-bank" d="M0,0H320V62C260,70 200,54 150,62S40,72 0,64Z"/><path class="w-edge" d="M0,64C40,72 100,56 150,62S260,70 320,62"/>
             <g class="drinker" transform="translate(118,52) rotate(80)"><ellipse rx="15" ry="7"/><ellipse cx="-17" cy="0" rx="6" ry="3.5"/></g>
@@ -962,7 +1025,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </svg>
           <figcaption><h4>The drinking place</h4><p>The classic ambush. It approaches below the surface and waits a body length out. Most attempts fail: the animal looks up at the wrong moment, or never drinks. It tries again another day.</p></figcaption>
         </figure>
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#d0683f"><span class="way-n">02</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="Wildebeest cross a river in a narrow lane while crocodiles wait downstream of the crossing.">
             <path class="w-bank" d="M0,0H320V48C250,56 120,44 0,52Z"/><path class="w-bank" d="M0,210H320V156C220,150 120,162 0,154Z"/>
             <g id="herd"></g>
@@ -975,7 +1038,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </svg>
           <figcaption><h4>The crossing</h4><p>From about July to October the great migration crosses the Mara River at the same few places, year after year. Dozens of crocodiles gather there. Many animals die in the crush, and the crocodiles take the young, the weak and the drowned.</p></figcaption>
         </figure>
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#6fb3ad"><span class="way-n">03</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="Crocodiles form a curved line across a channel, facing upstream, catching fish carried by the current.">
             <path class="w-bank" d="M0,0H320V40C220,48 160,70 120,62S30,40 0,44Z"/><path class="w-bank" d="M0,210H320V172C220,164 160,140 120,148S30,170 0,166Z"/>
             <g id="fish3"></g>
@@ -989,7 +1052,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </svg>
           <figcaption><h4>The fish wall</h4><p>Nile crocodiles have been seen lining up across a channel or a river mouth, facing the current, and taking the fish that come through. Observers describe them holding their places in the line. It is one of very few kinds of cooperative hunting recorded in reptiles.</p></figcaption>
         </figure>
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#8fb36a"><span class="way-n">04</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile lies still in shallow water and snaps its head sideways at a passing fish.">
             <path class="w-shallow" d="M0,0H320V210H0Z"/>
             <g class="pc" data-x="210" data-y="118" data-h="-12" data-l="150" data-legs="1" data-kh="-6"></g>
@@ -999,7 +1062,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </svg>
           <figcaption><h4>The sideways snap</h4><p>A head moving sideways through water pushes much less water ahead of it than one moving forward, and gives a fish no bow wave to sense. In the shallows a crocodile lies still and whips its head sideways at whatever brushes its jaws. A large share of its fish are caught this way.</p></figcaption>
         </figure>
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#b48ad6"><span class="way-n">05</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="A crocodile waits in grass beside a game trail a short distance from the water.">
             <path class="w-land" d="M0,0H320V210H0Z"/><path class="w-water" d="M0,150C80,140 160,170 320,160V210H0Z"/>
             <path class="w-trail" d="M300,0C260,60 220,90 190,155"/>
@@ -1010,7 +1073,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </svg>
           <figcaption><h4>On land, at night</h4><p>Away from water it is slower, but not harmless. Crocodiles wait beside paths that lead down to the river and occasionally take animals on land, mostly after dark and only a short dash from the edge.</p></figcaption>
         </figure>
-        <figure class="way fade">
+        <figure class="way fade" style="--c:#d9b26f"><span class="way-n">06</span>
           <svg viewBox="0 0 320 210" role="img" aria-label="Several crocodiles converge on a floating carcass; one rolls while another holds.">
             <path class="w-bank" d="M0,0H320V30C220,36 100,24 0,32Z"/>
             <ellipse class="carcass" cx="160" cy="112" rx="26" ry="14"/>
@@ -1026,8 +1089,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 
       <div class="hx-row">
         <div class="hx-col">
-          <p class="eyebrow">The bite</p>
-          <h3 class="hx-h fade">Built to shut</h3>
+          <div class="nb-label"><span class="nb-letter" style="--c:#c9524a">B</span><div><p class="eyebrow">The bite</p><h3>Built to shut</h3></div></div>
           <svg class="bite" viewBox="0 0 560 250" role="img" aria-label="Lever diagram of a crocodile jaw. Huge closing muscles pull up near the hinge; a small opening muscle behind the hinge pulls down.">
             <path class="b-skull" d="M40,118C120,106 300,92 452,86C486,86 512,100 512,118L470,124L40,126Z"/>
             <path class="b-jaw" d="M40,130L470,128L520,140C510,160 480,166 452,162C300,156 120,146 40,138Z"/>
@@ -1049,8 +1111,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
           </div>
         </div>
         <div class="hx-col">
-          <p class="eyebrow">The teeth</p>
-          <h3 class="hx-h fade">Cones that grip</h3>
+          <div class="nb-label"><span class="nb-letter" style="--c:#e8dcc0">C</span><div><p class="eyebrow">The teeth</p><h3>Cones that grip</h3></div></div>
           <svg class="tooth" viewBox="0 0 300 260" role="img" aria-label="Cross-section of a crocodile tooth socket: a working tooth, a replacement tooth growing inside it, and a new tooth starting below.">
             <path class="t-gum" d="M20,150H280V250H20Z"/>
             <path class="t-tooth" d="M110,160C110,90 130,40 150,20C170,40 190,90 190,160Z"/>
@@ -1066,8 +1127,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       </div>
 
       <div class="roll-block">
-        <p class="eyebrow">The death roll</p>
-        <h3 class="hx-h fade">How a spin cuts</h3>
+        <div class="nb-label"><span class="nb-letter" style="--c:#6fb3ad">D</span><div><p class="eyebrow">The death roll</p><h3>How a spin cuts</h3></div></div>
         <div class="roll-grid">
           <figure class="roll-f fade">
             <svg viewBox="0 0 300 200" role="img" aria-label="Seen from above: the crocodile bites and locks its jaws on a carcass."><path class="w-water2" d="M0,0H300V200H0Z"/><rect class="carcass" x="210" y="76" width="70" height="46" rx="12"/><g class="pc" data-x="222" data-y="100" data-h="0" data-l="190" data-legs="1"></g></svg>
@@ -1096,8 +1156,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
 
       <div class="hx-row">
         <div class="hx-col">
-          <p class="eyebrow">A year at the crossing</p>
-          <h3 class="hx-h fade">The feast has a season</h3>
+          <div class="nb-label"><span class="nb-letter" style="--c:#e2a83c">E</span><div><p class="eyebrow">A year at the crossing</p><h3>The feast has a season</h3></div></div>
           <svg class="year" id="year" viewBox="0 0 340 340" role="img" aria-label="Year calendar for the Mara River. Long rains March to May, short rains November and December, and the great migration crossing from July to October."></svg>
           <div class="year-key"><span><i class="k-cross"></i>Herds cross the Mara</span><span><i class="k-rain"></i>Rains</span></div>
         </div>
@@ -1109,15 +1168,14 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
       </div>
 
       <div class="after">
-        <p class="eyebrow">After the meal</p>
-        <h3 class="hx-h fade">What happens next</h3>
+        <div class="nb-label"><span class="nb-letter" style="--c:#8fb36a">F</span><div><p class="eyebrow">After the meal</p><h3>What happens next</h3></div></div>
         <ol class="after-line">
-          <li class="fade"><b>Seconds</b><span>The strike. Jaws close, the animal is pulled off balance.</span></li>
-          <li class="fade"><b>Minutes</b><span>Drowning. Large prey is held under until it stops moving.</span></li>
-          <li class="fade"><b>An hour</b><span>Tearing and swallowing. Pieces go down whole, head held high.</span></li>
-          <li class="fade"><b>Hours to days</b><span>It hauls out to bask. A warmer body digests faster, so it chases the sun.</span></li>
-          <li class="fade"><b>Days</b><span>Very strong stomach acid dissolves bone. Hair, horn and hooves resist it.</span></li>
-          <li class="fade"><b>Weeks to months</b><span>It may not need another large meal. It goes back to waiting.</span></li>
+          <li class="fade" style="--c:#d0683f"><b>Seconds</b><span>The strike. Jaws close, the animal is pulled off balance.</span></li>
+          <li class="fade" style="--c:#d9894a"><b>Minutes</b><span>Drowning. Large prey is held under until it stops moving.</span></li>
+          <li class="fade" style="--c:#e2a83c"><b>An hour</b><span>Tearing and swallowing. Pieces go down whole, head held high.</span></li>
+          <li class="fade" style="--c:#c9b45a"><b>Hours to days</b><span>It hauls out to bask. A warmer body digests faster, so it chases the sun.</span></li>
+          <li class="fade" style="--c:#a9b45f"><b>Days</b><span>Very strong stomach acid dissolves bone. Hair, horn and hooves resist it.</span></li>
+          <li class="fade" style="--c:#8fb36a"><b>Weeks to months</b><span>It may not need another large meal. It goes back to waiting.</span></li>
         </ol>
       </div>
 
@@ -1157,7 +1215,7 @@ footer li::marker{color:var(--reed);font-family:var(--f-mono);font-size:.8em}
         <div class="sz-read"><b id="sz-read" class="num">4.60 m</b><span id="sz-sentence">7 of 12 species reach 4.60 m</span></div>
         <div class="sz-presets" id="sz-presets" aria-label="Put the tape at"></div>
       </div>
-      <p class="plate-key"><span><i class="k-ink"></i>Largest reliably reported</span><span><i class="k-typ"></i>Typical large male</span><span><i class="k-rec"></i>Record</span><span>Colours follow each species' typical adult skin. Females of every species are smaller. Tap a row to study it.</span></p>
+      <p class="plate-key"><span><i class="k-ink"></i>Largest reliably reported</span><span><i class="k-typ"></i>Typical large male</span><span><i class="k-rec"></i>Record</span><span>Colours follow each species' typical adult skin. Females of every species are smaller. Hall's New Guinea crocodile (C. halli, described 2019) is grouped with the New Guinea crocodile. Tap a row to study it.</span></p>
     </div>
 
     <div class="plate plate-2">

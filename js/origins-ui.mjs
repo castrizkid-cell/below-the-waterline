@@ -1,5 +1,6 @@
 // DOM wiring for the Origins section: deep-time tree + Crocodylus cladogram.
-import { SPAN, PERIODS, EXTINCTIONS, SPINE, SPECIES, CROC_TREE, scale, periodAt, formatMa, ticks, layoutBranches, layoutTree } from "./origins.mjs";
+import { SPAN, PERIODS, EXTINCTIONS, SPINE, SPECIES, CROC_TREE, scale, periodAt, periodColor, formatMa, ticks, layoutBranches, layoutTree } from "./origins.mjs";
+import { DATA as SIZE_DATA, REGION_COLOR, REGION_NAME } from "./sizes.mjs";
 
 const NS = "http://www.w3.org/2000/svg";
 let D = null, DEFER = null; // document + timer, injected by mount()
@@ -29,8 +30,8 @@ function deepTree() {
   const back = el("g", { class: "t-back" }, svg);
   PERIODS.forEach((p, i) => {
     const a = x(p.from), b = x(p.to);
-    if (i % 2) el("rect", { x: a, y: top - 30, width: b - a, height: bandY - top + 30, class: "t-shade" }, back);
-    el("rect", { x: a, y: bandY, width: b - a, height: 20, class: "t-band" + (i % 2 ? " alt" : "") }, back);
+    el("rect", { x: a, y: top - 30, width: b - a, height: bandY - top + 30, fill: p.color, class: "t-shade" }, back);
+    el("rect", { x: a, y: bandY, width: b - a, height: 20, fill: p.color, class: "t-band" }, back);
     const w = b - a, label = w > 70 ? p.name : w > 18 ? p.short : "";
     if (label) el("text", { x: (a + b) / 2, y: bandY + 14, class: "t-band-l", "text-anchor": "middle" }, back, label);
   });
@@ -56,13 +57,14 @@ function deepTree() {
     const xf = x(b.from), r = 6;
     el("path", { d: `M${xf},${spineY} V${y + r} Q${xf},${y} ${xf + r},${y}`, class: "conn" }, g);
     if (b.first < b.from) el("line", { x1: xf + r, x2: x(b.first), y1: y, y2: y, class: "ghost" }, g);
-    el("line", { x1: Math.max(xf + r, x(b.first)), x2: x(b.end), y1: y, y2: y, class: "solid" }, g);
+    const col = periodColor(b.first);
+    el("line", { x1: Math.max(xf + r, x(b.first)), x2: x(b.end), y1: y, y2: y, stroke: col, class: "solid" }, g);
     if (b.living) {
-      el("text", { x: X1 + 14, y: y + 4, class: "lab" }, g, b.short || b.name);
+      el("text", { x: X1 + 14, y: y + 4, fill: col, class: "lab" }, g, b.short || b.name);
     } else {
       el("line", { x1: x(b.end), x2: x(b.end), y1: y - 5, y2: y + 5, class: "cap" }, g);
       el("text", { x: x(b.end) + 6, y: y + 4, class: "dag" }, g, "†");
-      el("text", { x: Math.max(xf + 10, x(b.first)), y: y - 7, class: "lab" }, g, b.name);
+      el("text", { x: Math.max(xf + 10, x(b.first)), y: y - 7, fill: col, class: "lab" }, g, b.name);
     }
     groups.push({ g, b });
   });
@@ -164,7 +166,8 @@ function clade() {
     const s = SPECIES[t.id], y = Y(t.y);
     const g = el("g", { class: "c-tip" + (t.id === "niloticus" ? " nile" : ""), tabindex: 0, role: "button", "aria-label": `${s.common}, ${s.latin}` }, svg);
     el("rect", { x: X1 - 4, y: y - rowH / 2, width: W - X1, height: rowH, class: "hit" }, g);
-    el("circle", { cx: X1, cy: y, r: 3, class: "c-dot" }, g);
+    const rc = REGION_COLOR[SIZE_DATA[t.id].region];
+    el("circle", { cx: X1, cy: y, r: 5, fill: rc, class: "c-dot" }, g);
     el("text", { x: X1 + 14, y: y + 5, class: "c-com" }, g, s.common);
     el("text", { x: X1 + 210, y: y + 4, class: "c-lat" }, g, s.latin);
     return { g, id: t.id };
@@ -174,7 +177,9 @@ function clade() {
     groups.forEach(o => o.g.classList.toggle("on", o.id === id));
     card.box.classList.add("out");
     DEFER(() => {
-      card.name.textContent = s.common; card.latin.textContent = s.latin; card.where.textContent = s.where;
+      const reg = SIZE_DATA[id].region;
+      card.name.textContent = s.common; card.latin.textContent = s.latin; card.where.textContent = `${REGION_NAME[reg]} · ${s.where}`;
+      card.box.style.setProperty("--rc", REGION_COLOR[reg]);
       card.len.textContent = `up to ≈${s.len} m`; card.bar.style.setProperty("--w", (s.len / 6.3 * 100).toFixed(1) + "%");
       card.fact.textContent = s.fact; card.box.classList.remove("out");
     }, 160);

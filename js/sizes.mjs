@@ -23,6 +23,7 @@ export const DATA = {
 };
 export const IDS = Object.keys(DATA);
 export const REGION_ORDER = ["africa", "americas", "asia", "australasia"];
+export const REGION_COLOR = { africa: "#e2a83c", americas: "#6fb3ad", asia: "#d0683f", australasia: "#b48ad6" };
 export const REGION_NAME = { africa: "Africa", americas: "The Americas", asia: "Asia", australasia: "New Guinea and Australia" };
 
 // Reference objects for the tape, in metres.
