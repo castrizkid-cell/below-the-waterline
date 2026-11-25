@@ -1,0 +1,23 @@
+{
+  "name": "below-the-waterline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A field guide to the Nile crocodile.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "test:budget": "node scripts/test-budget.mjs 3 2000",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "check:release": "node scripts/check-release.mjs",
+    "commitlint": "commitlint",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "check:agents": "node scripts/check-agents.mjs"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4"
+  }
+}
