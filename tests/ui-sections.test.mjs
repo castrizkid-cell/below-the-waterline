@@ -32,7 +32,7 @@ test("reaction test: press starts a round, the injected clock drives it", () => 
   box.dispatch("pointerdown");
   c.run(1);
   assert.notEqual(ids["edge-big"].textContent, before, "pressing changes the message");
-  c.run(800, 16); // ~13 s of fake time, no real waiting
+  c.run(60, 250); // 15 s of fake time in 60 frames, no real waiting
   assert.ok(ids.caught.textContent !== "" || ids.last.textContent !== "", "round resolved");
 });
 
