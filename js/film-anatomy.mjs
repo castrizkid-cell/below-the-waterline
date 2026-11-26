@@ -9,7 +9,7 @@ import { clamp, lerp } from "./math.mjs";
 import { sideAt, mouthAt, planAt } from "./hunt-model.mjs";
 
 export const HINGE = .165;                 // jaw joint, as a fraction of total length
-export const GAPE = .82;                   // radians at jaw = 1
+export const GAPE = .62;                   // radians at jaw = 1
 const sm = (x, a, b) => { const k = clamp((x - a) / (b - a), 0, 1); return k * k * (3 - 2 * k); };
 
 // ---------- the crocodile ----------
@@ -106,7 +106,7 @@ export function crocFrame(o) {
 
 // Skin colour at (u, φ) before lighting. Nile crocodile adult: dark olive back, bronze-olive flanks
 // with black mottling, dark crossbands on the tail, pale cream-yellow belly.
-const DORSAL = [70, 70, 44], FLANK = [118, 110, 64], BELLY = [214, 202, 156];
+const DORSAL = [66, 67, 42], FLANK = [112, 106, 62], BELLY = [212, 200, 154];
 const hash = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 export function skin(u, phi, i = 0, j = 0) {
   let a = Math.abs(((phi + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
@@ -115,9 +115,9 @@ export function skin(u, phi, i = 0, j = 0) {
   let k = 1;
   const band = sm(Math.sin(u * Math.PI * 2 * 10.5 + 1.2) * .5 + .5, .58, .82) * sm(u, .4, .55) * (1 - sm(a, 1.5, 2.0));
   k *= 1 - .42 * band;
-  if (u > .14 && u < .55 && a > .7 && a < 1.85 && hash(i * 31.7 + j * 7.3) > .8) k *= .58;   // flank mottling
+  if (u > .14 && u < .55 && a > .7 && a < 1.85 && hash(i * 31.7 + j * 7.3) > .86) k *= .7;   // flank mottling
   if (u < .15 && a > 1.3 && a < 2.3 && hash(i * 13.1 + j * 3.7) > .82) k *= .62;            // speckled jaws
-  k *= .91 + .18 * hash(i * 7.1 + j * 13.3);                                                  // scale-to-scale variation
+  k *= .95 + .09 * hash(i * 7.1 + j * 13.3);                                                  // scale-to-scale variation
   return [c[0] * k, c[1] * k, c[2] * k];
 }
 // Lambert + a wet specular sheen. Light from above and slightly toward the viewer.
@@ -134,8 +134,8 @@ export const LOWER_TEETH = [[.01, .026], [.02, .03], [.035, .05], [.048, .028], 
 
 // Limbs: body-frame offsets (forward, down, out) in metres for a 4.5 m animal, tucked vs extended.
 export const LIMBS = {
-  front: { u: .215, phi: 1.95, tucked: [[-.19, .05, .1], [-.36, .07, .1], [-.47, .06, .1]], out: [[.04, .2, .16], [.1, .42, .14], [.2, .45, .14]] },
-  hind: { u: .44, phi: 2.0, tucked: [[-.24, .07, .13], [-.48, .06, .12], [-.64, .05, .12]], out: [[.14, .24, .2], [-.04, .47, .18], [.14, .5, .18]] },
+  front: { u: .215, phi: 1.95, tucked: [[-.19, .05, .1], [-.36, .07, .1], [-.47, .06, .1]], out: [[.06, .16, .16], [.12, .32, .14], [.22, .34, .14]] },
+  hind: { u: .44, phi: 2.0, tucked: [[-.24, .07, .13], [-.48, .06, .12], [-.64, .05, .12]], out: [[.12, .2, .2], [-.02, .38, .18], [.14, .4, .18]] },
 };
 export function limbChain(f, which, near, k, paddle = 0) {
   const d = LIMBS[which], side = near ? 1 : -1, sc = f.L / 4.5;
@@ -178,7 +178,8 @@ export function gnuLegs(p) {
     const brace = (p.brace || 0) * (g.front ? -.42 : .22);
     const dead = 1 - (p.alive ?? 1);
     let th = (g.front ? [.05, -.02, .02, -.25] : [-.35, .55, -.15, -.3]);
-    th = th.map((a, i) => a + (i < 2 ? walk + brace + kick * (i ? .6 : 1) : walk * .4 + kick * .4) + dead * (g.front ? -.5 : .45) * (i < 2 ? 1 : .3));
+    const upright = (p.alive ?? 1) * (1 - (p.kick || 0)) * (g.front ? -1 : 1) * (p.rot || 0);
+    th = th.map((a, i) => a + upright + (i < 2 ? walk + brace + kick * (i ? .6 : 1) : walk * .4 + kick * .4) + dead * (g.front ? -.5 : .45) * (i < 2 ? 1 : .3));
     const pts = [g.root];
     let [x, y] = g.root;
     g.seg.forEach((len, i) => { x += Math.sin(th[i]) * len * (g.front ? -1 : 1) * (i === 3 ? 1 : 1); y += Math.cos(th[i]) * len; pts.push([x, y]); });

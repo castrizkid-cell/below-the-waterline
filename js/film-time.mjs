@@ -73,7 +73,7 @@ export function croc(t) {
     x: cx(t) + Math.sin(t * 7) * .06 * grip, y,
     pitch: cpitch(t) + Math.sin(t * 9) * .07 * thrash + Math.sin(t * 8.5) * .03 * grip,
     jaw: cjaw(t), roll: (croll(t) % (Math.PI * 2)) + Math.sin(t * 6) * .5 * grip,
-    limbs: climbs(t), swim: cswim(t), tailKick: ctail(t) + .5 * Math.abs(Math.sin(t * 5)) * grip,
+    limbs: climbs(t), swim: cswim(t), bend: .45 * pulse(t, 37.4, 45.2, .4), tailKick: ctail(t) + .5 * Math.abs(Math.sin(t * 5)) * grip,
     membrane: clamp((y - .32) / .25, 0, 1), eye: 1, chunk: t > 55.4 && t < 57.1 ? 1 : 0,
   };
 }
@@ -100,7 +100,7 @@ export function gnu(t, cf = crocFrame({ ...croc(t), t })) {
       drop: lerp(.58, .25, k1), brace: (1 - k1) * (t < 29 ? 1 : 0), phase: t * 1.6,
       kick: smooth(t, 26.3, 27) * (1 - smooth(t, 33, 36.5) * .9),
       rot: lerp(free.rot, -.62, k1) + lerp(0, .25, k2) + Math.sin(t * 3.1) * .06 * (1 - k2),
-      axial: t > 37 ? Math.sin(cf.roll) * .9 + (1 - Math.cos(cf.roll)) * .5 : 0,
+      axial: t > 37 ? Math.sin(cf.roll) * .55 : 0,
       alive: 1 - smooth(t, 34.5, 36.5) };
     const gp = cf.grip(), pinned = pinMuzzle(p, gp.x, gp.y), m = smooth(t, 26, 26.15);
     return { ...pinned, x: lerp(free.x, pinned.x, m), y: lerp(free.y, pinned.y, m) };

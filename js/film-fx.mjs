@@ -28,13 +28,13 @@ export function createFx(rng = () => .5) {
     switch (e.type) {
       case "exhale": bubbles(at.nostril.x, at.nostril.y + .02, e.n || 24, .08, .006, .022); ripple(at.nostril.x, .02); break;
       case "erupt":
-        drops(s.x - .1, -.02, 170 * p, -2.6, 3.6, -6.4, -1.6, .014, .06);    // the crown of water thrown up by the lunge
+        drops(s.x - .1, -.02, 260 * p, -2.6, 3.6, -6.4, -1.6, .006, .04);    // the crown of water thrown up by the lunge
         drops(s.x - .8, -.02, 60 * p, -1.4, 1.4, -3.5, -1, .02, .07);
-        foam(s.x - .6, 26, 1); ripple(s.x - .4, .12 * p); ripple(s.x - 1.4, .08 * p);
+        foam(s.x - .6, 26, 1); ripple(s.x - .4, .06 * p); ripple(s.x - 1.4, .04 * p);
         bubbles(s.x - 1, .3, 40, .6, .01, .04); cloud("silt", s.x - 1, .6, 10, .2, .45, 5); break;
       case "bite": drops(s.x, s.y, 50 * p, -1.8, 2.2, -3.4, -.4, .01, .035); break;
       case "plunge":
-        drops(g.x, -.02, 140 * p, -3, 3, -5.2, -1.2, .015, .06); foam(g.x, 30, 1.1); ripple(g.x, .1 * p);
+        drops(g.x, -.02, 200 * p, -3, 3, -5.2, -1.2, .006, .04); foam(g.x, 30, 1.1); ripple(g.x, .05 * p);
         bubbles(g.x, .4, 60, .7, .01, .045); cloud("silt", g.x, .9, 6, .25, .5, 6); break;
       case "churn": bubbles(s.x - .6, s.y, 50 * p, .7, .01, .04); cloud("silt", s.x - 1, s.y + .5, 14 * p, .25, .6, 7); cloud("blood", s.x + .2, s.y, 5 * p, .12, .3, 9); break;
       case "surface": drops(g.x, -.02, 40 * p, -1.2, 1.2, -2.2, -.6); foam(g.x, 18, .9); ripple(g.x, .07); break;
