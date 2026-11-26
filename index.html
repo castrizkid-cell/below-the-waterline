@@ -265,6 +265,21 @@ section{position:relative}
 .zoom{border-top:0 !important;padding-top:0 !important}
 
 
+
+/* ---------- ORIGINS FILM ---------- */
+.film-on #hud,.dt-on #hud{opacity:0;pointer-events:none;transition:opacity .4s}
+.dt-wrap{margin:clamp(1.5rem,4vw,2.5rem) 0 clamp(3rem,6vw,5rem)}
+.dt-wrap .film{margin-top:0}
+.film-chb{--cc:var(--iris)}
+.film-chb i{background:var(--cc)}
+.dt-ch .film-chb.on{border-color:color-mix(in srgb,var(--cc) 60%,transparent)}.dt-ch .film-chb.on .r{color:var(--cc)}
+.dt-text .h-kicker{color:var(--acc)}
+.dt-latin{font-size:.98rem !important;color:var(--reed) !important}
+.dt-facts{display:flex;flex-wrap:wrap;gap:.3rem 1.6rem;margin:.2rem 0 .3rem}
+.dt-facts div{display:grid;gap:.1rem}
+.dt-facts dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--reed)}
+.dt-facts dd{margin:0;color:var(--bone);font-size:1rem}
+.dt-foot{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;color:var(--reed);margin-top:1rem;max-width:80ch}
 /* ---------- HUNT FILM ---------- */
 .film-wrap{padding-block:clamp(3rem,7vw,5.5rem) clamp(2rem,4vw,3rem)}
 .film-lede{color:var(--dim);max-width:44ch;font-size:1rem;line-height:1.5;margin:0}
@@ -311,7 +326,7 @@ section{position:relative}
 .film-chb .d{font-family:var(--f-mono);font-size:10px;color:var(--reed);opacity:.8}
 .film-chb i{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--iris);transform-origin:left;transform:scaleX(var(--p,0))}
 .film-chb.on{border-color:rgba(226,168,60,.55);color:var(--bone)}.film-chb.on .r{color:var(--iris)}
-@media (max-width:720px){.film-ch{grid-template-columns:repeat(4,1fr)}.film-speed{display:none}.film-time{display:none}}
+@media (max-width:720px){.film-chb .n{font-size:9px;letter-spacing:.05em}.film-ch{grid-template-columns:repeat(4,1fr)}.film-speed{display:none}.film-time{display:none}}
 /* ---------- HUNT ---------- */
 #hunt{background:linear-gradient(180deg,#0c0a11 0,var(--river) 30vh)}
 .hunt-track{height:760vh;position:relative}
@@ -913,6 +928,27 @@ footer{background:linear-gradient(180deg,color-mix(in srgb,#13100a 62%,transpare
       <h2 class="fade">The last of its line</h2>
       <p class="lede fade">People call crocodiles living fossils. That gets it backwards. Over 250 million years, the crocodile's lineage also produced two-legged runners with beaks, armoured plant eaters, and sea hunters with flippers and a tail fin. All of them are gone. The shape in the river is the one that kept working.</p>
     </header>
+
+    <div class="dt-wrap">
+      <figure class="film dt" id="dt" tabindex="0" aria-label="Deep time: an animated film of the crocodile line. Space plays and pauses, arrow keys skip, number keys jump to periods.">
+        <canvas id="dt-c" role="img" aria-label="Animated film through 252 million years: fourteen animals of the crocodile line, from Postosuchus and Terrestrisuchus in the Triassic to the Nile crocodile today, each in its own landscape at true size beside a person, with the end-Triassic extinction and the asteroid, ending in a line-up of all fourteen to scale."></canvas>
+        <div class="film-card" id="dt-card" aria-hidden="true"></div>
+        <button class="film-big" id="dt-big" type="button" aria-label="Play the film"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Play · 252 million years in 2:13</span></button>
+        <div class="film-bar">
+          <button class="film-btn" id="dt-play" type="button" aria-label="Play"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="i-replay" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+          <span class="film-time" id="dt-time">0:00 / 2:13</span>
+          <div class="film-scrub" id="dt-scrub" role="slider" aria-label="Film position, seconds" aria-valuemin="0" aria-valuemax="133" aria-valuenow="0"><b class="film-fill" id="dt-fill"></b><b class="film-head" id="dt-head"></b><span class="film-tip" id="dt-tip"></span></div>
+          <div class="film-speed" role="group" aria-label="Speed"><button type="button" data-speed=".5" aria-pressed="false">½×</button><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2" aria-pressed="false">2×</button></div>
+          <button class="film-tog" id="dt-notes" type="button" aria-pressed="true">Labels</button>
+        </div>
+      </figure>
+      <div class="film-ch dt-ch" id="dt-ch" aria-label="Periods"></div>
+      <div class="hunt-text dt-text" aria-live="polite">
+        <div class="roman" id="dt-roman">I</div>
+        <div class="body" id="dt-body"></div>
+      </div>
+      <p class="dt-foot">Sizes are published estimates; where studies disagree, the card gives the range. No fossil preserves colour, so skin colours are reconstructions.</p>
+    </div>
 
     <div class="nb-tiles og-tiles">
       <div class="nb-tile fade" style="--c:#812B92"><span class="k">On its own branch</span><b class="num">≈250 million</b><span class="s">years since the crocodile and bird lines split</span></div>

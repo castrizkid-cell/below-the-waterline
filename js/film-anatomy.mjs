@@ -16,13 +16,22 @@ const sm = (x, a, b) => { const k = clamp((x - a) / (b - a), 0, 1); return k * k
 // o: { x, y (snout tip, m), pitch (rad, negative = nose up), roll, jaw 0..1, swim, tailKick, bend, t, L }
 export function crocFrame(o) {
   const L = o.L || 4.5, N = 72, t = o.t || 0, swim = o.swim || 0;
+  // species shape: head fraction hf, depth/width multipliers for snout (sd, sw), body (bd, bw), tail (td);
+  // bulla (a bulb on the snout tip, Sarcosuchus), fluke (a down-turned shark-like tail, metriorhynchids)
+  const sh = o.shape || {}, H = sh.hf || HINGE;
+  // vent: where the tail begins (Nile ≈ .5 of the length); a larger value gives a shorter tail
+  const B = sh.vent || .5, V = .5;
+  const toN = u => u < H ? u / H * HINGE : u < B ? HINGE + (u - H) / (B - H) * (V - HINGE) : V + (u - B) / (1 - B) * (1 - V);
+  const fromN = un => un < HINGE ? un / HINGE * H : un < V ? H + (un - HINGE) / (V - HINGE) * (B - H) : B + (un - V) / (1 - V) * (1 - B);
+  const dep = un => un < .2 ? lerp(sh.sd ?? 1, sh.bd ?? 1, sm(un, .12, .2)) : un < .6 ? (sh.bd ?? 1) : lerp(sh.bd ?? 1, sh.td ?? sh.bd ?? 1, sm(un, .6, .8));
+  const wid = un => un < .2 ? lerp(sh.sw ?? 1, sh.bw ?? 1, sm(un, .12, .2)) : un < .6 ? (sh.bw ?? 1) : lerp(sh.bw ?? 1, sh.tw ?? sh.bw ?? 1, sm(un, .6, .8));
   const bodyPitch = o.pitch * .12;
   const sp = [];
   let x = o.x, y = o.y, z = 0;
   for (let i = 0; i <= N; i++) {
     const u = i / N;
     // pitch carries through the rigid head, then relaxes toward a near-level trunk and tail
-    const a = lerp(o.pitch, bodyPitch, sm(u, HINGE, .62)) + swim * .045 * Math.sin(u * 7 - t * 4.2) * sm(u, .45, 1);
+    const a = lerp(o.pitch, bodyPitch, sm(u, H, .62)) + swim * .045 * Math.sin(u * 7 - t * 4.2) * sm(u, .45, 1) - (sh.fluke || 0) * .7 * sm(u, .84, 1);
     // lateral angle: tail sweeps (seen from the side as foreshortening), head and tail bend for the roll
     const b = (o.tailKick || 0) * 1.25 * sm(u, .45, 1)
       + swim * .3 * Math.sin(u * 6.5 - t * 4.2) * u * u
@@ -35,30 +44,31 @@ export function crocFrame(o) {
     const f = clamp(u, 0, 1) * N, i = Math.min(N - 1, Math.floor(f)), k = f - i, p = sp[i], q = sp[i + 1];
     return { x: lerp(p.x, q.x, k), y: lerp(p.y, q.y, k), z: lerp(p.z, q.z, k), a: lerp(p.a, q.a, k), b: lerp(p.b, q.b, k) };
   };
-  const hingeP = at(HINGE);
+  const hingeP = at(H);
   const jawA = (o.jaw || 0) * GAPE, skullA = -(o.jaw || 0) * .1, roll = o.roll || 0;
   const cr = Math.cos(roll), sr = Math.sin(roll);
 
   function section(u) {
-    const s = sideAt(u);
-    return { c: (s.top + s.bot) / 2 * L, hd: (s.bot - s.top) / 2 * L, hw: planAt(u) * L, top: s.top * L, bot: s.bot * L };
+    const un = toN(u), s = sideAt(un), k = dep(un), bump = (sh.bulla || 0) * Math.exp(-Math.pow((un - .014) / .013, 2));
+    const top = s.top * k - bump, bot = s.bot * k + bump * .25;
+    return { c: (top + bot) / 2 * L, hd: (bot - top) / 2 * L, hw: (planAt(un) * wid(un) + bump * .7) * L, top: top * L, bot: bot * L };
   }
   // where the mouth line cuts the cross-section (as an angle from the dorsal midline)
   function cutAngle(u) {
-    if (u >= HINGE) return Math.PI / 2 + (Math.PI / 2 - Math.PI / 2);
-    const s = section(u), vm = s.top + (s.bot - s.top) * mouthAt(u);
+    if (u >= H) return Math.PI / 2;
+    const s = section(u), vm = s.top + (s.bot - s.top) * mouthAt(toN(u));
     return Math.acos(clamp((s.c - vm) / s.hd, -.98, .98));
   }
   // body-frame point (s forward of the spine point, v down, w toward the viewer) → world
   function place(u, s, v, w, part) {
     // jaw rotation happens in the head's (s, v) plane, about the jaw joint
-    if (u < HINGE && part) {
-      const sv = section(HINGE), vH = sv.top + (sv.bot - sv.top) * mouthAt(HINGE - .001);
-      const s0 = (HINGE - u) * L + s, ang = part === "lower" ? jawA : skullA;
+    if (u < H && part) {
+      const sv = section(H), vH = sv.top + (sv.bot - sv.top) * mouthAt(HINGE - .001);
+      const s0 = (H - u) * L + s, ang = part === "lower" ? jawA : skullA;
       const ca = Math.cos(ang), sa = Math.sin(ang), dv = v - vH;
-      s = s0 * ca - dv * sa; v = vH + s0 * sa + dv * ca; u = HINGE;
+      s = s0 * ca - dv * sa; v = vH + s0 * sa + dv * ca; u = H;
     }
-    const p = u === HINGE ? hingeP : at(u);
+    const p = u === H ? hingeP : at(u);
     const vr = v * cr - w * sr, wr = v * sr + w * cr;           // roll about the spine
     const cb = Math.cos(p.b), fx = Math.cos(p.a) * cb, fy = Math.sin(p.a) * cb;
     return { x: p.x + fx * s - Math.sin(p.a) * vr, y: p.y + fy * s + Math.cos(p.a) * vr, z: p.z + wr - Math.sin(p.b) * s };
@@ -69,8 +79,8 @@ export function crocFrame(o) {
     const v = sc.c - (sc.hd + lift) * Math.cos(phi), w = (sc.hw + lift) * Math.sin(phi);
     let nv = -Math.cos(phi) / sc.hd, nw = Math.sin(phi) / sc.hw;
     const n = Math.hypot(nv, nw) || 1; nv /= n; nw /= n;
-    if (u < HINGE && part === "lower") { const ca = Math.cos(jawA), sa = Math.sin(jawA); nv = nv * ca; }
-    const p = place(u, 0, v, w, u < HINGE ? part : null);
+    if (u < H && part === "lower") nv *= Math.cos(jawA);
+    const p = place(u, 0, v, w, u < H ? part : null);
     return { ...p, nv: nv * cr - nw * sr, nw: nv * sr + nw * cr };
   }
   // the mesh: rings of points along the body; on the head, an upper arc and a lower (jaw) arc
@@ -78,7 +88,7 @@ export function crocFrame(o) {
     const rings = [];
     for (let i = 0; i <= NU; i++) {
       const u = Math.min(.999, Math.pow(i / NU, 1.08));
-      const pc = u < HINGE ? cutAngle(u) : Math.PI / 2;
+      const pc = u < H ? cutAngle(u) : Math.PI / 2;
       const up = [], lo = [];
       for (let j = 0; j <= K; j++) up.push({ ...surface(u, -pc + 2 * pc * j / K, "upper"), phi: -pc + 2 * pc * j / K });
       for (let j = 0; j <= K; j++) { const phi = pc + (2 * Math.PI - 2 * pc) * j / K; lo.push({ ...surface(u, phi, "lower"), phi }); }
@@ -90,18 +100,20 @@ export function crocFrame(o) {
   function anchor(name) {
     switch (name) {
       case "snout": return place(0, 0, 0, 0);
-      case "eye": return surface(.152, .42, "upper", .02);
-      case "jaw": return surface(.09, 1.9, "lower");
-      case "throat": return surface(.2, 2.8, null);
+      case "eye": return surface(fromN(.152), .42, "upper", .02);
+      case "jaw": return surface(fromN(.09), 1.9, "lower");
+      case "throat": return surface(fromN(.2), 2.8, null);
       case "tail": return surface(.82, 1.5, null);
       case "body": return surface(.36, 1.4, null);
-      case "nostril": return surface(.01, 0, "upper", .01);
+      case "nostril": return surface(fromN(.01), 0, "upper", .01);
       default: return place(.5, 0, 0, 0);
     }
   }
   // the bite point: between the jaws, a little behind the tip
-  const grip = () => { const a = surface(.03, cutAngle(.03), "upper"), b = surface(.03, cutAngle(.03), "lower"); return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; };
-  return { L, sp, at, section, cutAngle, place, surface, mesh, anchor, grip, jawA, roll };
+  const grip = () => { const g = fromN(.03), a = surface(g, cutAngle(g), "upper"), b = surface(g, cutAngle(g), "lower"); return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; };
+  // silhouette outline (top edge forward, belly edge back), for outlines and scale comparisons
+  const outline = (n = 48) => { const top = [], bot = []; for (let i = 0; i <= n; i++) { const u = Math.min(.999, i / n); top.push(surface(u, 0, u < H ? "upper" : null)); bot.push(surface(u, Math.PI, u < H ? "lower" : null)); } return [...top, ...bot.reverse()]; };
+  return { L, sp, at, section, cutAngle, place, surface, mesh, anchor, grip, outline, jawA, roll, hinge: H, fromN, toN };
 }
 
 // Skin colour at (u, φ) before lighting. Nile crocodile adult: dark olive back, bronze-olive flanks
@@ -138,15 +150,15 @@ export const LIMBS = {
   hind: { u: .44, phi: 2.0, tucked: [[-.24, .07, .13], [-.48, .06, .12], [-.64, .05, .12]], out: [[.12, .2, .2], [-.02, .38, .18], [.14, .4, .18]] },
 };
 export function limbChain(f, which, near, k, paddle = 0) {
-  const d = LIMBS[which], side = near ? 1 : -1, sc = f.L / 4.5;
-  const base = f.surface(d.u, side * d.phi, null);
+  const d = LIMBS[which], side = near ? 1 : -1, sc = f.L / 4.5, du = f.fromN ? f.fromN(d.u) : d.u;
+  const base = f.surface(du, side * d.phi, null);
   const pts = [base];
   for (let i = 0; i < 3; i++) {
     const [ts, tv, tw] = d.tucked[i], [os, ov, ow] = d.out[i];
     const wob = paddle * Math.sin(i + paddle * 9) * .03;
     const s = lerp(ts, os, k) * sc + wob, v = lerp(tv, ov, k) * sc, w = lerp(tw, ow, k) * sc * side;
-    const sec = f.section(d.u), bv = sec.c - sec.hd * Math.cos(d.phi), bw = sec.hw * Math.sin(d.phi) * side;
-    pts.push(f.place(d.u, s, bv + v, bw + w));
+    const sec = f.section(du), bv = sec.c - sec.hd * Math.cos(d.phi), bw = sec.hw * Math.sin(d.phi) * side;
+    pts.push(f.place(du, s, bv + v, bw + w));
   }
   return pts;
 }

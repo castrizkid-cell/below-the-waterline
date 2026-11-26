@@ -1,7 +1,7 @@
 // Paints one frame of the hunt film onto a 2D context. No DOM, no clock, no randomness:
 // everything comes in through the frame (film-time.mjs) and the water state (film-fx.mjs).
 import { clamp, lerp } from "./math.mjs";
-import { HINGE, skin, shade, UPPER_TEETH, LOWER_TEETH, limbChain, gnuHead, gnuLegs, gnuToWorld, GNU_AXIS } from "./film-anatomy.mjs";
+import { skin, shade, UPPER_TEETH, LOWER_TEETH, limbChain, gnuHead, gnuLegs, gnuToWorld, GNU_AXIS } from "./film-anatomy.mjs";
 import { groundY, EDGE_X } from "./film-time.mjs";
 
 const TAU = Math.PI * 2;
@@ -207,16 +207,19 @@ function tooth(ctx, v, base, dir, back, len, alpha = 1) {
 export function paintCroc(ctx, v, f, between) {
   const cf = f.cf, c = f.croc, roll = cf.roll, cr = Math.cos(roll);
   const rings = cf.mesh(64, 14), K = 14;
-  const base = [118, 110, 64];
+  const k = cf.L / 4.5, F = cf.fromN, ek = Math.pow(k, .62), tint = c.tint || [1, 1, 1];
+  const T = col => [Math.min(255, col[0] * tint[0]), Math.min(255, col[1] * tint[1]), Math.min(255, col[2] * tint[2])];
+  const base = T([118, 110, 64]);
+  const limbs = near => c.gait ? walkLegs(ctx, v, cf, c, near, base) : c.flippers ? flippers(ctx, v, cf, near, base) : (limb(ctx, v, cf, "front", near, c.limbs, base, c.swim * .2), limb(ctx, v, cf, "hind", near, c.limbs * .7, base, c.swim * .2));
   // far limbs behind the body
   const nearSide = cr >= 0;
-  limb(ctx, v, cf, "front", !nearSide, c.limbs, base, c.swim * .2);
-  limb(ctx, v, cf, "hind", !nearSide, c.limbs * .7, base, c.swim * .2);
+  limbs(!nearSide);
+  if (c.fluke) fluke(ctx, v, cf, base);
   // the inside of the mouth
   if (c.jaw > .015 && Math.abs(cr) > .3) {
     const up = [], lo = [];
-    for (const r of rings) { if (r.u > HINGE + .01) break; up.push(r.up[cr > 0 ? K : 0]); lo.push(r.lo[cr > 0 ? 0 : K]); }
-    const hp = cf.surface(HINGE + .015, Math.PI * .7, null);
+    for (const r of rings) { if (r.u > cf.hinge + .01) break; up.push(r.up[cr > 0 ? K : 0]); lo.push(r.lo[cr > 0 ? 0 : K]); }
+    const hp = cf.surface(cf.hinge + .015, Math.PI * .7, null);
     ctx.beginPath(); [...up, hp, ...lo.reverse()].forEach((p, i) => ctx[i ? "lineTo" : "moveTo"](v.X(p.x), v.Y(p.y))); ctx.closePath();
     const tip = up[0], g = ctx.createLinearGradient(v.X(tip.x), v.Y(tip.y), v.X(hp.x), v.Y(hp.y));
     g.addColorStop(0, "#d9c48e"); g.addColorStop(.45, "#b8946a"); g.addColorStop(.85, "#7a4a3a"); g.addColorStop(1, "#3a2420");
@@ -232,8 +235,8 @@ export function paintCroc(ctx, v, f, between) {
     ctx.fillStyle = "rgba(160,92,74,.9)"; ctx.beginPath(); ctx.ellipse(v.X(hp.x), v.Y(hp.y), v.s * .07, v.s * .05, 0, 0, TAU); ctx.fill();
     ctx.restore();
     // the far row of teeth seen through the gape
-    for (const [u, len] of UPPER_TEETH) { const p = cf.surface(u, -cf.cutAngle(u) * Math.sign(cr), "upper"), q = cf.surface(u, cf.cutAngle(u) * Math.sign(cr), "lower"); const d = norm(q.x - p.x, q.y - p.y); tooth(ctx, v, p, d, fwd(cf, u), len * .8, .55); }
-    for (const [u, len] of LOWER_TEETH) { const q = cf.surface(u, -cf.cutAngle(u) * Math.sign(cr), "lower"), p = cf.surface(u, cf.cutAngle(u) * Math.sign(cr), "upper"); const d = norm(p.x - q.x, p.y - q.y); tooth(ctx, v, q, d, fwd(cf, u), len * .8, .55); }
+    for (const [un, len] of UPPER_TEETH) { const u = F(un), p = cf.surface(u, -cf.cutAngle(u) * Math.sign(cr), "upper"), q = cf.surface(u, cf.cutAngle(u) * Math.sign(cr), "lower"); const d = norm(q.x - p.x, q.y - p.y); tooth(ctx, v, p, d, fwd(cf, u), len * k * .8, .55); }
+    for (const [un, len] of LOWER_TEETH) { const u = F(un), q = cf.surface(u, -cf.cutAngle(u) * Math.sign(cr), "lower"), p = cf.surface(u, cf.cutAngle(u) * Math.sign(cr), "upper"); const d = norm(p.x - q.x, p.y - q.y); tooth(ctx, v, q, d, fwd(cf, u), len * k * .8, .55); }
   }
   if (between) between();
   // the body: shaded quads, far to near; seams between them read as rows of scales
@@ -245,7 +248,7 @@ export function paintCroc(ctx, v, f, between) {
       const nw = (p.nw + q.nw + r.nw + s.nw) / 4; if (nw < -.08) continue;
       const nv = (p.nv + q.nv + r.nv + s.nv) / 4, u = (A.u + B.u) / 2, phi = (p.phi + q.phi) / 2;
       const wet = (p.y + r.y) / 2 < 0 ? 1 : .15;
-      quads.push({ pts: [p, q, r, s], z: (p.z + r.z) / 2 + nw * .1, col: shade(skin(u, phi, i, j + (arc === "lo" ? 40 : 0)), nv, nw, wet) });
+      quads.push({ pts: [p, q, r, s], z: (p.z + r.z) / 2 + nw * .1, col: shade(T(skin(u, phi, i, j + (arc === "lo" ? 40 : 0))), nv, nw, wet * (c.smooth ? 1.4 : 1)) });
     }
   }
   quads.sort((a, b) => a.z - b.z);
@@ -257,47 +260,52 @@ export function paintCroc(ctx, v, f, between) {
     ctx.strokeStyle = size > 9 ? rgb(mul(qd.col, .84)) : rgb(qd.col); ctx.lineWidth = size > 9 ? Math.min(1.1, size * .045) : .8; ctx.stroke();
   }
   // osteoderms: keeled knobs in rows down the back and neck
-  for (let u = .19; u < .52; u += .0155) for (const ph of [-.52, -.3, -.1, .1, .3, .52]) {
-    const p = cf.surface(u, ph, null, .012); if (p.nw < -.25) continue;
-    const col = shade(mul([78, 76, 48], .9 + hash(u * 900 + ph) * .2), p.nv, p.nw, p.y < 0 ? 1 : .2);
-    ctx.fillStyle = rgb(col); ctx.strokeStyle = rgb(mul(col, .6)); ctx.lineWidth = Math.max(.5, v.s * .004);
-    ctx.beginPath(); ctx.ellipse(v.X(p.x), v.Y(p.y), v.s * .026, v.s * .017 * (.5 + .5 * Math.abs(cr)), (f.croc.pitch || 0) * .3, 0, TAU); ctx.fill(); ctx.stroke();
+  if (!c.smooth) for (let un = .19; un < .52; un += .0155) for (const ph of [-.52, -.3, -.1, .1, .3, .52]) {
+    const u = F(un), p = cf.surface(u, ph, null, .012 * k); if (p.nw < -.25) continue;
+    const col = shade(T(mul([78, 76, 48], .9 + hash(un * 900 + ph) * .2)), p.nv, p.nw, p.y < 0 ? 1 : .2);
+    ctx.fillStyle = rgb(col); ctx.strokeStyle = rgb(mul(col, .6)); ctx.lineWidth = Math.max(.5, v.s * .004 * k);
+    ctx.beginPath(); ctx.ellipse(v.X(p.x), v.Y(p.y), v.s * .026 * k, v.s * .017 * k * (.5 + .5 * Math.abs(cr)), (f.croc.pitch || 0) * .3, 0, TAU); ctx.fill(); ctx.stroke();
   }
   // tail crests: a double row of upright scales that merges into one
-  for (let u = .5; u < .99; u += .0145) {
+  if (!c.smooth) for (let u = .5; u < .99; u += .0145) {
     const rows = u < .78 ? [-.2, .2] : [0];
     for (const ph of rows) {
       const a = cf.surface(u, ph, null), b = cf.surface(u + .0145, ph, null), h = .06 * (1.15 - u) * cf.L / 4.5;
       const tip = cf.surface(u + .007, ph, null, h); if (a.nw < -.6) continue;
-      const col = shade([66, 66, 42], a.nv, a.nw, a.y < 0 ? 1 : .2);
+      const col = shade(T([66, 66, 42]), a.nv, a.nw, a.y < 0 ? 1 : .2);
       ctx.fillStyle = rgb(col); ctx.beginPath(); ctx.moveTo(v.X(a.x), v.Y(a.y)); ctx.lineTo(v.X(tip.x), v.Y(tip.y)); ctx.lineTo(v.X(b.x), v.Y(b.y)); ctx.closePath(); ctx.fill();
     }
   }
-  // near limbs
-  limb(ctx, v, cf, "front", nearSide, c.limbs, base, c.swim * .2);
-  limb(ctx, v, cf, "hind", nearSide, c.limbs * .7, base, c.swim * .2);
+  // near limbs, horns
+  limbs(nearSide);
+  if (c.horns) for (const sg of [-1, 1]) {
+    const hb = cf.surface(F(.178), .5 * sg, "upper"), ht = cf.surface(F(.183), .5 * sg, "upper", c.horns * k);
+    if (hb.nw < -.3) continue;
+    ctx.fillStyle = rgb(shade(T([92, 88, 58]), hb.nv, hb.nw)); ctx.beginPath(); ctx.moveTo(v.X(hb.x - .05 * k), v.Y(hb.y)); ctx.lineTo(v.X(ht.x - .02 * k), v.Y(ht.y)); ctx.lineTo(v.X(hb.x + .06 * k), v.Y(hb.y + .01 * k)); ctx.closePath(); ctx.fill();
+  }
   // near teeth: interlocking along the lips, the big 4th lower tooth showing when shut
   if (Math.abs(cr) > .35) {
     const sg = Math.sign(cr);
-    for (const [u, len] of UPPER_TEETH) {
-      const p = cf.surface(u, cf.cutAngle(u) * sg, "upper"), q = cf.surface(u, cf.cutAngle(u) * sg, "lower");
+    const tusk = un => c.tusks && un < .07 ? c.tusks : 1;
+    for (const [un, len] of UPPER_TEETH) {
+      const u = F(un), p = cf.surface(u, cf.cutAngle(u) * sg, "upper"), q = cf.surface(u, cf.cutAngle(u) * sg, "lower");
       const d = c.jaw > .05 ? norm(q.x - p.x, q.y - p.y) : downOf(cf, -(c.jaw || 0) * .1, cr);
-      tooth(ctx, v, p, d, fwd(cf, u), len * (c.jaw > .05 ? 1 : .8));
+      tooth(ctx, v, p, d, fwd(cf, u), len * k * (c.teeth || 1) * tusk(un) * (c.jaw > .05 ? 1 : .8));
     }
-    for (const [u, len] of LOWER_TEETH) {
-      const q = cf.surface(u, cf.cutAngle(u) * sg, "lower"), p = cf.surface(u, cf.cutAngle(u) * sg, "upper");
+    for (const [un, len] of LOWER_TEETH) {
+      const u = F(un), q = cf.surface(u, cf.cutAngle(u) * sg, "lower"), p = cf.surface(u, cf.cutAngle(u) * sg, "upper");
       const d = c.jaw > .05 ? norm(p.x - q.x, p.y - q.y) : downOf(cf, cf.jawA, -cr);
-      tooth(ctx, v, q, d, fwd(cf, u), len * (c.jaw > .05 ? 1 : .75));
+      tooth(ctx, v, q, d, fwd(cf, u), len * k * (c.teeth || 1) * tusk(un) * (c.jaw > .05 ? 1 : .75));
     }
   }
   // nostrils on their raised disc
-  const n = cf.surface(.012, 0, "upper", .012);
-  if (n.nv < .3) { ctx.fillStyle = rgb(shade([84, 80, 52], n.nv, n.nw)); ctx.beginPath(); ctx.ellipse(v.X(n.x), v.Y(n.y), v.s * .045, v.s * .025, f.croc.pitch, 0, TAU); ctx.fill(); ctx.fillStyle = "#14120c"; ctx.beginPath(); ctx.ellipse(v.X(n.x), v.Y(n.y), v.s * .02, v.s * .007, f.croc.pitch, 0, TAU); ctx.fill(); }
+  const n = cf.surface(F(.012), 0, "upper", .012 * k);
+  if (n.nv < .3 && !c.noNostril) { ctx.fillStyle = rgb(shade(T([84, 80, 52]), n.nv, n.nw)); ctx.beginPath(); ctx.ellipse(v.X(n.x), v.Y(n.y), v.s * .045 * k, v.s * .025 * k, f.croc.pitch, 0, TAU); ctx.fill(); ctx.fillStyle = "#14120c"; ctx.beginPath(); ctx.ellipse(v.X(n.x), v.Y(n.y), v.s * .02 * k, v.s * .007 * k, f.croc.pitch, 0, TAU); ctx.fill(); }
   // eyes: raised orbits, yellow-green iris, vertical slit; third eyelid under water
   for (const sg of [1, -1]) {
-    const e = cf.surface(.152, .42 * sg, "upper", .02); if (e.nw < -.15) continue;
-    const r = v.s * .022, sq = clamp(.35 + e.nw, .3, 1);
-    ctx.fillStyle = rgb(shade([96, 92, 58], e.nv, e.nw)); ctx.beginPath(); ctx.ellipse(v.X(e.x), v.Y(e.y), r * 1.7 * sq, r * 1.25, 0, 0, TAU); ctx.fill();
+    const e = cf.surface(F(c.eyeU || .152), (c.eyePhi || .42) * sg, "upper", .02 * k); if (e.nw < -.15) continue;
+    const r = v.s * .022 * ek * (c.eyeSize || 1), sq = clamp(.35 + e.nw, .3, 1);
+    ctx.fillStyle = rgb(shade(T([96, 92, 58]), e.nv, e.nw)); ctx.beginPath(); ctx.ellipse(v.X(e.x), v.Y(e.y), r * 1.7 * sq, r * 1.25, 0, 0, TAU); ctx.fill();
     const ig = ctx.createRadialGradient(v.X(e.x), v.Y(e.y), 0, v.X(e.x), v.Y(e.y), r);
     ig.addColorStop(0, "#d9c656"); ig.addColorStop(.75, "#9c8a2c"); ig.addColorStop(1, "#4b4114");
     ctx.fillStyle = ig; ctx.beginPath(); ctx.ellipse(v.X(e.x), v.Y(e.y), r * sq, r * .9, 0, 0, TAU); ctx.fill();
@@ -315,6 +323,49 @@ export function paintCroc(ctx, v, f, between) {
     ctx.strokeStyle = "#2a2624"; ctx.lineWidth = .012 * k; ctx.beginPath(); ctx.moveTo(.1 * k, -.08 * k); ctx.lineTo(.12 * k, .07 * k); ctx.moveTo(.16 * k, -.07 * k); ctx.lineTo(.17 * k, .06 * k); ctx.stroke();
     ctx.restore();
   }
+}
+// upright legs for the land walkers: two-bone legs planted on the ground, a diagonal gait
+function walkLegs(ctx, v, cf, c, near, base) {
+  const g = c.gait, col = mul(base, near ? .8 : .48), sc = cf.L;
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  for (const which of ["hind", "front"]) {
+    const u = cf.fromN(which === "front" ? .215 : .44), root = cf.surface(u, (near ? 1 : -1) * 1.75, null);
+    const len = g.leg * (which === "hind" ? 1.12 : 1);
+    const ph = (g.phase || 0) + (which === "front" ? 0 : Math.PI) + (near ? 0 : Math.PI);
+    const reach = Math.sin(ph) * g.stride * .5, lift = Math.max(0, Math.cos(ph)) * len * .16 * (g.moving ?? 1);
+    const fx = root.x + reach * (g.moving ?? 1) + (which === "front" ? .02 : -.02) * sc;
+    const foot = { x: fx, y: (g.ground ? g.ground(fx) : root.y + len) - lift };
+    const a = len * .54, b = len * .54, dx = foot.x - root.x, dy = foot.y - root.y, d = Math.min(a + b - 1e-4, Math.hypot(dx, dy));
+    const ang = Math.atan2(dy, dx), A = Math.acos(clamp((a * a + d * d - b * b) / (2 * a * d), -1, 1)), bend = which === "front" ? 1 : -1;
+    const knee = { x: root.x + Math.cos(ang + bend * A) * a, y: root.y + Math.sin(ang + bend * A) * a };
+    const end = { x: root.x + Math.cos(ang) * d, y: root.y + Math.sin(ang) * d };
+    const w0 = (which === "hind" ? .05 : .036) * sc, w1 = w0 * .6;
+    ctx.strokeStyle = rgb(col);
+    ctx.lineWidth = w0 * v.s; ctx.beginPath(); ctx.moveTo(v.X(root.x), v.Y(root.y)); ctx.lineTo(v.X(knee.x), v.Y(knee.y)); ctx.stroke();
+    ctx.lineWidth = w1 * v.s; ctx.beginPath(); ctx.moveTo(v.X(knee.x), v.Y(knee.y)); ctx.lineTo(v.X(end.x), v.Y(end.y)); ctx.stroke();
+    // foot and toes, pointing forward
+    ctx.lineWidth = w1 * .4 * v.s;
+    for (let i = 0; i < 4; i++) { const tl = (which === "hind" ? .045 : .035) * sc * (i === 1 || i === 2 ? 1.15 : .85), ta = -.12 + i * .1 - lift * 2 / sc;
+      ctx.beginPath(); ctx.moveTo(v.X(end.x), v.Y(end.y)); ctx.lineTo(v.X(end.x + Math.cos(ta) * tl), v.Y(end.y + Math.sin(ta) * tl * .4)); ctx.stroke(); }
+  }
+}
+// paddle limbs for the sea crocodiles
+function flippers(ctx, v, cf, near, base) {
+  const col = mul(base, near ? .9 : .5), sc = cf.L;
+  for (const [un, len, w] of [[.215, .075, .018], [.44, .11, .026]]) {
+    const r = cf.surface(cf.fromN(un), (near ? 1 : -1) * 1.85, null), a = cf.at(cf.fromN(un)).a + Math.PI * .9;
+    const cx = r.x + Math.cos(a) * len * sc * .5, cy = r.y + Math.sin(a) * len * sc * .5;
+    ctx.fillStyle = rgb(col); ctx.beginPath(); ctx.ellipse(v.X(cx), v.Y(cy), len * sc * .55 * v.s, w * sc * v.s, a, 0, TAU); ctx.fill();
+    ctx.strokeStyle = rgb(mul(col, .7)); ctx.lineWidth = Math.max(.6, v.s * .004 * sc); ctx.stroke();
+  }
+}
+// the shark-like tail fin of metriorhynchids: the spine turns down into the lower lobe, skin forms the upper
+function fluke(ctx, v, cf, base) {
+  const a = cf.surface(.84, 0, null), tip = cf.at(.999), sc = cf.L;
+  const top = { x: tip.x + .02 * sc, y: tip.y - .14 * sc };
+  ctx.fillStyle = rgb(shade(base, -.6, .5)); ctx.beginPath();
+  ctx.moveTo(v.X(a.x), v.Y(a.y)); ctx.quadraticCurveTo(v.X(top.x - .06 * sc), v.Y(top.y + .02 * sc), v.X(top.x), v.Y(top.y));
+  ctx.quadraticCurveTo(v.X(tip.x - .015 * sc), v.Y(tip.y - .05 * sc), v.X(tip.x), v.Y(tip.y)); ctx.closePath(); ctx.fill();
 }
 const norm = (x, y) => { const d = Math.hypot(x, y) || 1; return [x / d, y / d]; };
 const fwd = (cf, u) => { const p = cf.at(u); return [Math.cos(p.a), Math.sin(p.a)]; };
@@ -423,11 +474,11 @@ function paintHerd(ctx, v, t) {
 }
 
 // ---------------------------------------------------------------- annotations
-function paintNotes(ctx, v, f, font) {
+export function paintNotes(ctx, v, f, font) {
   const k = v.H / 620;
   for (const n of f.notes) {
     const an = n.at === "gnu" ? (([x, y]) => ({ x, y }))(gnuMuzzleWorld(f.gnu)) : f.cf.anchor(n.at);
-    const ax = v.X(an.x), ay = v.Y(an.y), lx = ax + n.dx * k * n.a, ly = clamp(ay + n.dy * k * n.a, 24 * k, v.H - 96 * k);
+    const ax = v.X(an.x), ay = v.Y(an.y), lx = ax + n.dx * k * n.a, ly = clamp(ay + n.dy * k * n.a, 24 * k, f.noteMaxY || v.H - 96 * k);
     ctx.globalAlpha = n.a;
     ctx.strokeStyle = "#e2a83c"; ctx.lineWidth = Math.max(1, 1.2 * k);
     ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(lx, ly); ctx.stroke();
@@ -446,7 +497,7 @@ function paintNotes(ctx, v, f, font) {
 }
 
 // ---------------------------------------------------------------- grade
-function paintGrade(ctx, v, grain, t) {
+export function paintGrade(ctx, v, grain, t) {
   const { W, H } = v;
   ctx.globalCompositeOperation = "soft-light";
   const g = ctx.createLinearGradient(0, 0, 0, H);

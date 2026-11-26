@@ -4,7 +4,9 @@ import { DURATION, CHAPTERS, frame, gnu, croc, groundY, track, timeScale, events
 import { crocFrame, skin, shade, limbChain, gnuHead, gnuToWorld, pinMuzzle, gnuLegs, HINGE } from "../js/film-anatomy.mjs";
 import { createFx } from "../js/film-fx.mjs";
 import { paint, viewOf, gnuMuzzleWorld } from "../js/film-paint.mjs";
-import { mount } from "../js/film-ui.mjs";
+import { mount as mountPlayer } from "../js/player-ui.mjs";
+import { huntFilm } from "../js/hunt-film.mjs";
+const mount = o => mountPlayer({ prefix: "film", film: huntFilm, caption: ["h-roman", "h-body"], ...o });
 import { mulberry32 } from "../js/rng.mjs";
 import { el, fakeDocument, fakeCanvas } from "./helpers/fake-dom.mjs";
 
