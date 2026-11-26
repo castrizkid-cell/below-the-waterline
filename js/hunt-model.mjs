@@ -171,7 +171,8 @@ export function pose(s, T = 0) {
     const a = ease(st(4));
     c.x = lerp(938, 640, a); c.y = lerp(WY - 6, WY + 110, a); c.pitch = lerp(-.165, .08, a); c.jaw = 0; c.limbs = 0; c.swim = .6; c.tailKick = 0;
     c.eye = 1 - seg(a, 0, .3); c.membrane = seg(a, .1, .3);
-    g.x = lerp(1012, 790, a); g.y = lerp(268, WY + 150, a); g.rot = lerp(0, -.95, a); g.drop = 1;
+    g.x = lerp(1012, c.x + 78, a); g.y = lerp(268, c.y + 52, a); g.rot = lerp(0, -.42, a) + Math.sin(T * 11) * .06 * (1 - a); g.drop = 1;
+    c.pitch += Math.sin(T * 9) * .05 * (1 - a); // head shakes as it drags
     g.kick = 1 - seg(a, .5, 1) * .8; g.brace = 1 - a; g.sub = seg(a, .1, .5);
     fx.bubbles = seg(a, .3, .6); fx.splash = 1 - seg(a, 0, .25);
   }
@@ -179,17 +180,23 @@ export function pose(s, T = 0) {
   if (s >= 5) {
     const a = st(5);
     c.x = 640 + Math.sin(a * Math.PI) * 14; c.y = WY + 110; c.pitch = .08 * (1 - a); c.roll = ease(seg(a, .1, .9)) * Math.PI * 4;
-    g.x = 790 + Math.sin(a * Math.PI * 8) * 6; g.y = WY + 150 - a * 20; g.rot = -.95 - Math.sin(a * Math.PI * 8) * .14; g.kick = 0; g.sub = 1; g.drop = 1;
+    g.x = c.x + 78 + Math.sin(a * Math.PI * 8) * 6; g.y = c.y + 48; g.rot = -.42 - Math.sin(a * Math.PI * 8) * .3; g.kick = 0; g.sub = 1; g.drop = 1;
     c2.on = ease(seg(a, .2, .9)); c2.x = lerp(-250, 450, c2.on); c2.y = WY + 150; c2.jaw = seg(a, .75, .85) * (1 - seg(a, .9, 1));
     fx.bubbles = .6; fx.swirl = Math.sin(seg(a, .05, .95) * Math.PI);
   }
   // VII swallow: surface, head tipped back
   if (s >= 6) {
     const a = ease(st(6));
-    c.x = lerp(640, 600, a); c.y = lerp(WY + 110, WY + .01 * L, a); c.roll = 0;
-    c.pitch = -lerp(0, .38, seg(a, .45, .8)) * (1 - seg(a, .92, 1) * .4);
-    c.jaw = seg(a, .55, .66) * (1 - seg(a, .76, .86)) * .7; c.eye = seg(a, .3, .6); c.membrane = 1 - c.eye; c.swim = .2;
-    g.x = lerp(790, 820, a); g.y = lerp(WY + 130, WY + 40, a); g.rot = lerp(-.95, -1.5, a); g.sub = 1; g.drop = 1;
+    c.x = lerp(640, 660, a); c.y = lerp(WY + 110, WY + .006 * L, a); c.roll = 0;
+    const tear = seg(a, .35, 1);
+    c.pitch = -lerp(0, .34, seg(a, .3, .55)) + Math.sin(T * 10) * .07 * tear;          // head up, thrashing
+    c.jaw = tear > 0 ? .45 + .5 * Math.abs(Math.sin(a * Math.PI * 4)) : 0;            // gaping, tearing bites
+    c.eye = 1; c.membrane = 0; c.swim = .9; c.tailKick = .5 * Math.abs(Math.sin(T * 4)) * tear;
+    // the drowned animal rolls belly-up and floats, legs out of the water; the crocodile tears at its flank
+    const over = ease(seg(a, 0, .5)), S = 1.3 * SCENE.M;
+    g.x = c.x + lerp(78, 150, over); g.y = lerp(c.y + 48, WY - .25 * S, over);
+    g.rot = lerp(-.42, Math.PI * .93, over) + Math.sin(T * 10) * .04 * tear; g.sub = 1; g.drop = 1;
+    fx.splash = .6 * Math.abs(Math.sin(T * 5)) * tear;
     c2.on = 1; c2.x = lerp(450, 520, a); c2.y = lerp(WY + 150, WY + 120, a);
     fx.bubbles = .2 * (1 - a); fx.swirl = 0;
   }

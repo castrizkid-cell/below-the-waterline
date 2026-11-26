@@ -117,7 +117,7 @@ function drawCroc(ctx, o, anchors) {
 
   // ---- head (u 0 → .2), hinged at the back of the jaw ----
   const hx = X(.192), hy = Y(.192, mouthAt(.192));
-  const jaw = o.jaw || 0, upA = -jaw * .2, loA = jaw * .62;
+  const jaw = o.jaw || 0, upA = -jaw * .3, loA = jaw * .8; // wide, aggressive gape
   const rot = (a, f) => { ctx.save(); ctx.translate(hx, hy); ctx.rotate(a); ctx.translate(-hx, -hy); f(); ctx.restore(); };
   const hu = [], hl = [];
   for (let i = 0; i <= 40; i++) { const u = i / 40 * .2; hu.push([X(u), Y(u, 0)]); hl.push([X(u), Y(u, 1)]); }
