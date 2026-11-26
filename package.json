@@ -14,7 +14,8 @@
     "check:release": "node scripts/check-release.mjs",
     "commitlint": "commitlint",
     "prepare": "git config core.hooksPath .githooks || true",
-    "check:agents": "node scripts/check-agents.mjs"
+    "check:agents": "node scripts/check-agents.mjs",
+    "verify": "node scripts/verify.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.4",

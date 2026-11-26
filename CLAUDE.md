@@ -3,8 +3,8 @@
 ## Rules
 - **Never spend usage credits.** Subscription only. No cloud/remote agents, no billed API calls, no `/code-review ultra`.
 - **Conventional Commits** for every commit and PR title: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `ci`, `build`, `style`, `revert`; breaking = `feat!:` or a `BREAKING CHANGE:` footer. Work-in-progress: `chore(wip): …`.
-- **Never push to main.** Work on a branch; ship with `/iterate` → `ship.sh` (PR → required checks → auto squash-merge → release-please).
-- Local hooks are convenience only. CI (`.github/workflows/test.yml`) is the gate.
+- **Never push to main.** Work on a branch; ship with `/iterate` → `ship.sh` (local `npm run verify` → PR → auto squash-merge → release-please).
+- **CI is off on GitHub for now** (the `test` workflow is disabled and main requires no status checks). The gate is local: `npm run verify`, run automatically by the pre-push hook and by `ship.sh`. Main still requires a PR, blocks force-pushes and binds admins.
 
 ## Architecture (enforced by `npm run check:boundaries`)
 - `js/*.mjs` = **pure** modules: no `document`, `window`, `fetch`, timers, `Math.random`, `Date.now`, `performance.now`, `Path2D`. Time and randomness come in as arguments (`js/rng.mjs` gives a seeded `mulberry32`).
@@ -20,6 +20,7 @@
 | `npm run test:budget` | 3 runs, flaky + time-budget gate |
 | `npm run check:boundaries` | module-boundary gate |
 | `npm run check:release` | release config gate |
+| `npm run verify` | **the local gate**: all of the above + commit lint vs origin/main |
 
 ## Agent routing (which request goes where)
 | Request | Route | Why |

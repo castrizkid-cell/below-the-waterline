@@ -1,0 +1,3 @@
+#!/bin/sh
+# Local gate before every push (CI is off on GitHub). Skip only deliberately: git push --no-verify
+exec node scripts/verify.mjs origin/main
