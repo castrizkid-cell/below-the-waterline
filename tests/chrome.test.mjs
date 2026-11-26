@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { activeIndex, startsHidden, revealDelay, INDEX_LINE, PRE_LINE, REVEAL_STEP_MS, REVEAL_ROOT_MARGIN } from "../js/chrome.mjs";
+import { activeIndex, startsHidden, revealDelay, INDEX_LINE, PRE_LINE, REVEAL_STEP_MS, REVEAL_ROOT_MARGIN, pageProgress, barState, centreTab } from "../js/chrome.mjs";
 import { mount, mountIndex, mountReveals } from "../js/chrome-ui.mjs";
 
 test("constants match the original page", () => {
@@ -29,6 +29,27 @@ test("revealDelay staggers fade siblings and treats -1 as 0", () => {
   assert.equal(revealDelay(2, 10), 20);
 });
 
+test("pageProgress runs 0..1 and is safe on short pages", () => {
+  assert.equal(pageProgress(0, 5000, 1000), 0);
+  assert.equal(pageProgress(2000, 5000, 1000), .5);
+  assert.equal(pageProgress(9000, 5000, 1000), 1);
+  assert.equal(pageProgress(-40, 5000, 1000), 0);   // iOS overscroll
+  assert.equal(pageProgress(100, 800, 1000), 0);    // page shorter than the viewport
+});
+
+test("barState: solid once scrolled, brand once past the hero", () => {
+  assert.deepEqual(barState(0, 0), { solid: false, past: false });
+  assert.deepEqual(barState(9, 0), { solid: true, past: false });
+  assert.deepEqual(barState(3000, 2), { solid: true, past: true });
+});
+
+test("centreTab centres a tab and clamps to the rail", () => {
+  assert.equal(centreTab(400, 100, 300, 1000), 300);  // 450 - 150
+  assert.equal(centreTab(20, 80, 300, 1000), 0);      // can't go below 0
+  assert.equal(centreTab(950, 50, 300, 1000), 700);   // can't pass the end
+  assert.equal(centreTab(100, 50, 400, 300), 0);      // rail doesn't scroll
+});
+
 // --- tiny fakes ---
 function fakeClassList(...init) {
   const s = new Set(init);
@@ -55,6 +76,33 @@ test("mountIndex highlights the current section and follows scroll", () => {
   assert.deepEqual(links.map(l => l.classList.contains("on")), [false, true, false]);
   secs["#c"]._top = 200; env.fire("scroll");
   assert.deepEqual(links.map(l => l.classList.contains("on")), [false, false, true]);
+});
+
+test("mountIndex drives the top bar: solid, past, progress, tint, tab scrolling", () => {
+  const secs = { "#a": fakeEl({ top: 0 }), "#b": fakeEl({ top: 600 }) };
+  const links = Object.keys(secs).map((href, i) => Object.assign(fakeEl({ href }), {
+    offsetLeft: 200 + i * 300, offsetWidth: 100, style: { getPropertyValue: k => (k === "--acc" ? ["#111", "#b98ad0"][i] : "") } }));
+  const props = el => ({ classList: fakeClassList(), style: { setProperty(k, v) { el[k] = v; } } });
+  const bar = {}; Object.assign(bar, props(bar));
+  const prog = {}; Object.assign(prog, props(prog));
+  const scrolled = [];
+  const rail = { clientWidth: 300, scrollWidth: 1200, scrollTo: o => scrolled.push(o) };
+  const byId = { topbar: bar, index: rail, "tb-prog": prog };
+  const doc = { querySelectorAll: () => links, querySelector: s => secs[s], getElementById: id => byId[id], documentElement: { scrollHeight: 5000 } };
+  const env = { ...fakeEnv(1000), scrollY: 0 };
+  mountIndex({ doc, env });
+  assert.equal(bar.classList.contains("solid"), false);
+  assert.equal(prog["--p"], "0.0000");
+  assert.equal(scrolled.length, 0);                    // first section: no tab scroll
+  secs["#a"]._top = -900; secs["#b"]._top = 100; env.scrollY = 2000;
+  env.fire("scroll");
+  assert.equal(bar.classList.contains("solid"), true);
+  assert.equal(bar.classList.contains("past"), true);
+  assert.equal(prog["--p"], "0.5000");
+  assert.equal(bar["--tb-acc"], "#b98ad0");
+  assert.deepEqual(scrolled, [{ left: 400, behavior: "smooth" }]);
+  env.fire("scroll");                                  // same section: no repeat scroll
+  assert.equal(scrolled.length, 1);
 });
 
 function revealFixture() {
