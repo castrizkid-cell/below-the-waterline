@@ -12,6 +12,7 @@ import { mount as mountSurvey } from "./survey-ui.mjs";
 import { mount as mountNest } from "./nest-ui.mjs";
 import { mount as mountHud } from "./hud-ui.mjs";
 import { mount as mountLore } from "./lore-ui.mjs";
+import { mount as mountBackdrop } from "./backdrop-ui.mjs";
 import { mount as mountChrome } from "./chrome-ui.mjs";
 
 mountHero();
@@ -27,4 +28,5 @@ mountNest();
 mountGrow();
 mountHud();
 mountLore();
+mountBackdrop();
 mountChrome(); // last: reveals measure layout after everything else has rendered
