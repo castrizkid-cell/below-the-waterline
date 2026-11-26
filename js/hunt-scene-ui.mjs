@@ -182,6 +182,15 @@ function drawCroc(ctx, o, anchors) {
   });
   rot(upA, () => teeth(true));
   rot(loA, () => teeth(false));
+  if (o.chunk) {
+    // a torn piece of the carcass, held across the front of the jaws: dark hide, raw edge
+    const cx = X(.06), cy = (Y(.06, mouthAt(.06)) + Y(.06, .9)) / 2;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(.18);
+    ctx.fillStyle = "#3b3632"; ctx.beginPath(); ctx.ellipse(0, 0, .045 * L, .016 * L, 0, 0, TAU); ctx.fill();
+    ctx.fillStyle = "#7a2b20"; ctx.beginPath(); ctx.ellipse(-.012 * L, .006 * L, .03 * L, .008 * L, -.1, 0, TAU); ctx.fill();
+    ctx.strokeStyle = "#2a2522"; ctx.lineWidth = .004 * L; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(.03 * L, .01 * L); ctx.quadraticCurveTo(.05 * L, .04 * L, .035 * L, .07 * L); ctx.stroke();
+    ctx.restore();
+  }
 
   // belly / back showing during the roll
   if (roll) {
@@ -373,6 +382,11 @@ function paintWater(ctx, T, ripples, fx, dt) {
     for (let k = 0; k < 26 * fx.bubbles; k++) { const bx = fx.bx - 60 + rnd(k) * 140 + Math.sin(T * 3 + k) * 4, by = fx.by - ((T * (50 + rnd(k + 1) * 40) + k * 37) % 240); if (by > WY + 3) { ctx.beginPath(); ctx.arc(bx, by, 1.2 + rnd(k + 2) * 3, 0, TAU); ctx.stroke(); } }
   }
   // swirl during the roll
+  if (fx.blood > 0) {
+    const r = ctx.createRadialGradient(fx.gx, fx.gy, 10, fx.gx, fx.gy, 260);
+    r.addColorStop(0, `rgba(110,34,22,${.22 * fx.blood})`); r.addColorStop(1, "rgba(110,34,22,0)");
+    ctx.fillStyle = r; ctx.fillRect(fx.gx - 280, WY, 560, 300);
+  }
   if (fx.swirl > 0) {
     ctx.strokeStyle = `rgba(232,224,204,${.16 * fx.swirl})`; ctx.lineWidth = 1.3;
     for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.ellipse(fx.sx, fx.sy, 160 + k * 26, 36 + k * 9, 0, T * 4 + k, T * 4 + k + 1.4); ctx.stroke(); }
@@ -463,12 +477,12 @@ export function mount({ doc = globalThis.document, env = globalThis, now = () =>
 
     const { c, g, c2, fx } = pose(s, T);
     // second crocodile (behind)
-    if (c2.on > 0) drawCroc(ctx, { L: L * .82, x: c2.x, y: c2.y, T, swim: .9, jaw: c2.jaw, alpha: c2.on, eye: 0, membrane: 1, shade: .1 });
     // wildebeest: on the bank, then dragged in
     const gm = drawGnu(ctx, { x: g.x, y: g.y, s: 1.3 * M, T, drop: g.drop, kick: g.kick, brace: g.brace, walk: g.walk, rot: g.rot, pull: g.brace * .12 });
     const anchors = {};
-    drawCroc(ctx, { L, x: c.x, y: c.y, pitch: c.pitch, jaw: c.jaw, roll: c.roll, limbs: c.limbs, swim: c.swim, eye: c.eye, membrane: c.membrane, tailKick: c.tailKick, T }, anchors);
+    drawCroc(ctx, { L, x: c.x, y: c.y, pitch: c.pitch, jaw: c.jaw, chunk: c.chunk, roll: c.roll, limbs: c.limbs, swim: c.swim, eye: c.eye, membrane: c.membrane, tailKick: c.tailKick, T }, anchors);
     // re-draw the wildebeest head over the jaws during the strike so the grip reads
+    fx.gx = g.x - 70; fx.gy = WY + 70;
     fx.bx = gm.mx; fx.by = Math.max(gm.my, WY + 20); fx.sx = c.x - 120; fx.sy = c.y + 10;
     if (fx.ripple && T > nextRipple && !RM) { ripples.add(gm.mx, 60, 2.6); nextRipple = T + 1.1 + rng(); }
     if (s < 1 && T > nextRipple - .5 && !RM && rng() < dt * .5) ripples.add(c.x - .14 * L, 40, 2.2);

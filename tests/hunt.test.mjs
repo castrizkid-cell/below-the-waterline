@@ -32,7 +32,7 @@ test("the strike reaches the drinking wildebeest", () => {
 test("roll happens only in stage VI", () => {
   assert.equal(pose(4.5).c.roll, 0);
   assert.ok(pose(5.5).c.roll > 1);
-  assert.equal(pose(6.5).c.roll, 0);
+  assert.ok(Math.abs(pose(6.5, 1).c.roll) <= .5, "only a twisting tear in VII, no full roll");
 });
 
 test("profiles: body is deeper than the snout; mouth stays inside the head", () => {
@@ -56,4 +56,13 @@ test("plan view: straight crocodile is as long as L and bends when asked", () =>
 test("calendar arcs", () => {
   assert.equal(monthAngle(0), -Math.PI / 2);
   assert.match(arc(0, 0, 10, 0, Math.PI / 2), /^M10,0A10,10 0 0 1 0,10$/);
+});
+
+test("feeding: carcass floats belly-up, crocodile bites its flank, then lifts a torn piece", () => {
+  const mid = pose(6.5, 0), end = pose(6.95, 0);
+  assert.ok(mid.g.rot > 2.5, "belly-up");
+  assert.ok(mid.g.x - mid.c.x < 160 && mid.g.x > mid.c.x, "snout at the carcass");
+  assert.ok(mid.c.jaw < .15, "jaws clamped while tearing");
+  assert.equal(end.c.chunk, 1); assert.ok(end.c.pitch < -.2, "head up to swallow");
+  assert.ok(pose(6.5).fx.blood > 0);
 });

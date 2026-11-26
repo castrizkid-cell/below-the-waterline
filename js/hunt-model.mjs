@@ -131,7 +131,7 @@ export function pose(s, T = 0) {
   const c = { x: 330, y: WY + .02 * L + bob, pitch: 0, jaw: 0, roll: 0, limbs: 0, swim: .2, eye: 1, membrane: 0, tailKick: 0 };
   const g = { x: 1150, y: 262, rot: 0, drop: 0, kick: 0, brace: 0, walk: 1, alpha: 1, sub: 0 };
   const c2 = { on: 0, x: -200, y: WY + 60, pitch: 0, jaw: 0, roll: 0 };
-  const fx = { splash: 0, bubbles: 0, swirl: 0, ripple: 0 };
+  const fx = { splash: 0, bubbles: 0, swirl: 0, ripple: 0, blood: 0 };
 
   // I watch: wildebeest walks down to the edge and drinks
   const a1 = ease(seg(s, 0, .8));
@@ -181,24 +181,24 @@ export function pose(s, T = 0) {
     const a = st(5);
     c.x = 640 + Math.sin(a * Math.PI) * 14; c.y = WY + 110; c.pitch = .08 * (1 - a); c.roll = ease(seg(a, .1, .9)) * Math.PI * 4;
     g.x = c.x + 78 + Math.sin(a * Math.PI * 8) * 6; g.y = c.y + 48; g.rot = -.42 - Math.sin(a * Math.PI * 8) * .3; g.kick = 0; g.sub = 1; g.drop = 1;
-    c2.on = ease(seg(a, .2, .9)); c2.x = lerp(-250, 450, c2.on); c2.y = WY + 150; c2.jaw = seg(a, .75, .85) * (1 - seg(a, .9, 1));
     fx.bubbles = .6; fx.swirl = Math.sin(seg(a, .05, .95) * Math.PI);
   }
-  // VII swallow: surface, head tipped back
+  // VII feed: the drowned animal rolls belly-up and floats; the crocodile clamps onto its flank,
+  // twists its body to wrench a piece free, then pulls back and tosses its head up to swallow.
   if (s >= 6) {
-    const a = ease(st(6));
-    c.x = lerp(640, 660, a); c.y = lerp(WY + 110, WY + .006 * L, a); c.roll = 0;
-    const tear = seg(a, .35, 1);
-    c.pitch = -lerp(0, .34, seg(a, .3, .55)) + Math.sin(T * 10) * .07 * tear;          // head up, thrashing
-    c.jaw = tear > 0 ? .45 + .5 * Math.abs(Math.sin(a * Math.PI * 4)) : 0;            // gaping, tearing bites
-    c.eye = 1; c.membrane = 0; c.swim = .9; c.tailKick = .5 * Math.abs(Math.sin(T * 4)) * tear;
-    // the drowned animal rolls belly-up and floats, legs out of the water; the crocodile tears at its flank
-    const over = ease(seg(a, 0, .5)), S = 1.3 * SCENE.M;
-    g.x = c.x + lerp(78, 150, over); g.y = lerp(c.y + 48, WY - .25 * S, over);
-    g.rot = lerp(-.42, Math.PI * .93, over) + Math.sin(T * 10) * .04 * tear; g.sub = 1; g.drop = 1;
-    fx.splash = .6 * Math.abs(Math.sin(T * 5)) * tear;
-    c2.on = 1; c2.x = lerp(450, 520, a); c2.y = lerp(WY + 150, WY + 120, a);
-    fx.bubbles = .2 * (1 - a); fx.swirl = 0;
+    const a = st(6), S = 1.3 * SCENE.M;
+    const over = ease(seg(a, 0, .4)), grip = seg(a, .3, .45) * (1 - seg(a, .62, .7)), pull = ease(seg(a, .62, 1));
+    g.x = lerp(718, 880, over); g.y = lerp(WY + 158, WY - .25 * S, over);
+    g.rot = lerp(-.42, Math.PI * .93, over) + Math.sin(T * 6) * .06 * grip; g.sub = 1; g.drop = 1; g.kick = 0;
+    c.x = lerp(640, g.x - 118, over) + Math.sin(T * 7) * 5 * grip - 80 * pull;
+    c.y = lerp(WY + 110, WY + 12, over) - 6 * pull;
+    c.roll = Math.sin(T * 6) * .5 * grip;                                   // twisting tear, not a full roll
+    c.pitch = .03 * grip - .36 * pull + Math.sin(T * 9) * .05 * pull;      // then head up and toss
+    c.jaw = over < .98 ? 0 : grip > 0 ? .08 : .1 + .32 * pull;             // clamped shut while tearing
+    c.chunk = pull > .05 ? 1 : 0;                                           // a torn piece in the jaws
+    c.eye = 1; c.membrane = 0; c.swim = .5 + .5 * grip; c.tailKick = .6 * Math.abs(Math.sin(T * 5)) * grip;
+    fx.splash = .7 * Math.abs(Math.sin(T * 5)) * grip + .3 * pull * (1 - pull);
+    fx.blood = over; fx.bubbles = .2 * (1 - over); fx.swirl = 0;
   }
   return { c, g, c2, fx };
 }
